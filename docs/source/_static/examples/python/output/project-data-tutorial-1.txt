@@ -1,0 +1,38 @@
+===========================
+  D1 screen 2 (ID: 29652)
+===========================
+
+URL: https://photosynq.org/projects/d1-screen-2
+
+Basic Info:
+-----------
+Datasets:    399
+Created:     2024-09-09T13:59:57.452Z
+Last Update: 2024-09-10T06:59:47.674Z
+Locations:
+ - Wageningen, NL (51.97, 5.6667)
+
+Project Creator:
+----------------
+Name:      Thekla von Bismarck
+Institute: Jan IngenHousz Institute
+URL:       https://photosynq.org/users/thekla-von-bismarck
+
+Project Details:
+----------------
+PIRK screen in D1
+Directions: 
+None
+
+Meta Data:
+----------
+ * Plant? - Short Answer
+   Unique Inputs: 38
+ * Replicate # - Short Answer
+   Unique Inputs: 8
+
+Protocol(s):
+------------
+ * PIRK - FIELD Fluor red act orange PIRK wPSI DMK 2024_TB3 (ID: 3356)
+   Post-illumination relaxation kinetics with fluorescence and P700 with fixed 
+   intensities (100, 500)

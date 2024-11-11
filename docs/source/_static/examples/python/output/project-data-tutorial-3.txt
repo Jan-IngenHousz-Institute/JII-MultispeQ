@@ -1,0 +1,21 @@
+<class 'pandas.core.frame.DataFrame'>
+Int64Index: 399 entries, 0 to 398
+Data columns (total 14 columns):
+#   Column       Non-Null Count  Dtype 
+---  ------       --------------  ----- 
+0   datum_id     399 non-null    object
+1   time         399 non-null    object
+2   user_id      399 non-null    object
+3   device_id    399 non-null    object
+4   status       399 non-null    object
+5   notes        399 non-null    object
+6   longitude    399 non-null    object
+7   latitude     399 non-null    object
+8   Plant?       399 non-null    object
+9   Replicate #  399 non-null    object
+10  set_repeats  399 non-null    object
+11  v_arrays     399 non-null    object
+12  ri           399 non-null    object
+13  set          399 non-null    object
+dtypes: object(14)
+memory usage: 46.8+ KB

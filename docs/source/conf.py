@@ -19,8 +19,11 @@ config = toml.load("../../pyproject.toml")
 project = config["tool"]["sphinx"]["project"]
 copyright = "%Y - "  + config["tool"]["sphinx"]["copyright"]
 author = config["tool"]["sphinx"]["author"]
-release = get_version(root='../../', relative_to=__file__)
+# release = get_version(root=os.path.dirname(__file__), relative_to=__file__)
+# release = get_version(root='../../', relative_to=__file__)
+# release = get_version(root='./', relative_to=__file__)
 # release = get_version("jii_multispeq")
+release = "0.0.2"
 version = ".".join(release.split('.')[:2])
 
 # -- General configuration ---------------------------------------------------

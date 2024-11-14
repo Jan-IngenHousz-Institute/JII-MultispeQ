@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools", "setuptools-scm"]
+requires = ["setuptools>=64", "setuptools_scm>=8"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -32,6 +32,8 @@ docs = ["sphinx", "sphinx-rtd-theme", "myst-parser"]
 Source = "https://github.com/SeBassTian/jii_multispeq"
 Documentation = "https://github.com/SeBassTian/jii_multispeq/docs"
 Changelog = "https://github.com/SeBassTian/jii_multispeq/history.md"
+
+[tool.setuptools_scm]
 
 [tool.setuptools.packages.find]
 where = ["src"]

@@ -2,11 +2,13 @@
 JII MultispeQ package initialization
 """
 
+from importlib.metadata import version, PackageNotFoundError
+
 try:
-    from jii_multispeq import __version__
-except ImportError:
-    # Fallback version
-    __version__ = "0.0.0"
+    __version__ = version("jii_multispeq")
+except PackageNotFoundError:
+    # package is not installed
+    pass
 
 # Make sure to expose __version__ at package level
 __all__ = ['__version__']

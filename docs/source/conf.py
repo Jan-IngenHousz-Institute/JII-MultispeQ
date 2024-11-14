@@ -6,7 +6,7 @@
 import os
 import sys
 import toml
-from jii_multispeq import __version__
+from importlib.metadata import version as get_version
 
 sys.path.insert(0, os.path.abspath('../../src/jii_multispeq'))
 
@@ -18,8 +18,9 @@ config = toml.load("../../pyproject.toml")
 project = config["tool"]["sphinx"]["project"]
 copyright = "%Y - "  + config["tool"]["sphinx"]["copyright"]
 author = config["tool"]["sphinx"]["author"]
-version = __version__
-release = version
+# version = get_version(root='../../', relative_to=__file__)
+release = get_version("jii_multispeq")
+version = ".".join(release.split('.')[:2])
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration

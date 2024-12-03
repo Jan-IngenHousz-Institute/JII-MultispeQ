@@ -17,7 +17,7 @@ def get_v_arrays ( protocol=None ):
   :param protocol: Single MultispeQ Protocol
   :type protocol: dict
   
-  :returns: ``v_arrays`` content
+  :return: ``v_arrays`` content
   :rtype: dict
   
   :raises ValueError: If no protocol is provided.

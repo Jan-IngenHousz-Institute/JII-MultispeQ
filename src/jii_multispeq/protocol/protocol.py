@@ -17,7 +17,7 @@ def get_protocol( project=None, index=0 ):
   :param index: Protocol position in list of project protocols. The default protocol position is 0.
   :type index: int
 
-  :returns: The code of the selected protocol.
+  :return: The code of the selected protocol.
   :rtype: dict
 
   :raises ValueError: if no project information is provided
@@ -58,7 +58,7 @@ def get_protocol_name(project=None, index=0 ):
   :param index: Protocol position in list of project protocols. The default protocol position is 0.
   :type index: int
 
-  :returns: a string with the protocol name
+  :return: a string with the protocol name
   :rtype: string
   
   :raises ValueError: if no project information is provided
@@ -87,7 +87,7 @@ def get_subprotocol_labels( protocol=None ):
   :param protocol: Protocol as returned by :func:`jii_multispeq.protocol.get_protocol`
   :type protocol: dict
 
-  :returns: list of sub-protocols label
+  :return: list of sub-protocols label
   :rtype: list[str]
 
   :raises ValueError: If no protocol is provided
@@ -125,7 +125,7 @@ def get_subprotocols_by_label( protocol=None, label="" ):
   :param label: Protocol label to search
   :type label: string
 
-  :returns: list of sub-protocols with matching label
+  :return: list of sub-protocols with matching label
   :rtype: list[dict]
 
   :raises ValueError: If no protocol is provided
@@ -158,7 +158,7 @@ def get_subprotocol_by_index( protocol=None, index=0 ):
   :param subidx: index of the selected sub-protocol
   :param index: protocol position in the list of protocols (default: 0)
 
-  :returns: single sub-protocol as a dictionary
+  :return: single sub-protocol as a dictionary
   :rtype: dict
 
   :raises ValueError: If no protocol is provided

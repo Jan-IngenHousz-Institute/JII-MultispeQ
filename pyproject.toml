@@ -23,6 +23,7 @@ dependencies = [
   "pandas",
   "numpy",
   "photosynq_py @ git+https://github.com/Photosynq/PhotosynQ-Python.git",
+  "tabulate",
 ]
 
 [project.optional-dependencies]

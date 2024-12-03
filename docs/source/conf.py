@@ -35,7 +35,7 @@ extensions = [
   'sphinx.ext.duration',
   "sphinx.ext.napoleon",
   "sphinx.ext.viewcode",
-  "myst_parser",
+  # "myst_parser", # For markdown files
   # "nbsphinx" # Implement Jupyter notebooks later
 ]
 

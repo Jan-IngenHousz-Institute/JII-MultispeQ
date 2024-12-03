@@ -1,5 +1,5 @@
-Projects
-========
+Project
+=======
 
 .. automodule:: jii_multispeq.project
 
@@ -13,7 +13,7 @@ Data
 
 .. note::
 
-   If you don't have the local data available, you need an account for https://photosynq.org to download the data.
+   If you don't have the local data available, you need an account for `PhotosynQ, Inc. <https://photosynq.org>`_ to download the data.
 
 View Info
 ---------

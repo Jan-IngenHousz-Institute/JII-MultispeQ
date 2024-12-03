@@ -5,7 +5,7 @@ If you have successfully installed the ``JII-MultispeQ`` library, you can start 
 All you need to access your data is the ``ID`` of the project you are interested in. You can find this ``ID`` on the project's page.
 
 .. important::
-   To access MultispeQ data, you just need a `PhotosynQ Account <https://photosynq.org>`_ and the project's ``ID``.
+   To access MultispeQ data, you just need a `PhotosynQ, Inc. Account <https://photosynq.org>`_ and the project's ``ID``.
 
 Project Data & Information
 --------------------------

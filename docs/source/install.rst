@@ -10,7 +10,7 @@ First we must make sure we have the ``JII MultispeQ`` library installed:
 Now you have all the tools available to download your ``Project`` data and information to get started.
 
 .. important::
-  `PhotosynQ Inc. <https://photosynq.inc>`_ is offering a library called `PhotosynQ-Python <https://github.com/Photosynq/PhotosynQ-Python>`_ which supports donwloading ``Project`` data and information as well. It is actually running in the background of this library.
+  `PhotosynQ Inc. <https://photosynq.com>`_ is offering a library called `PhotosynQ-Python <https://github.com/Photosynq/PhotosynQ-Python>`_ which supports donwloading ``Project`` data and information as well. It is actually running in the background of this library.
 
   ``JII MultispeQ`` is providing more functionality, including saving data locally, so you don't have to download the ``Project`` every time or you can work offline. Also, it provides additional functions on viewing the Project's information and gives you access to the measurement ``Protocol`` and all the information related to your analysis.
 
@@ -23,7 +23,7 @@ The ``JII-MultispeQ`` library will work using a regular ``Python`` file you exec
 Most convinently, ``Jupyter Notebooks`` can be used in combination with `Anaconda <https://anaconda.com/>`_ to manage ``packages`` and ``environments``. You have two options, using the Anaconda Distribution including a GUI (Graphical User Interface) or Miniconda (without the GUI to be used with the Terminal): `Download and Install <https://docs.anaconda.com/distro-or-miniconda/>`_.
 
 Conda Environments
-^^^^^^^^^^^^^^^^^^
+------------------
 
 With ``Conda`` it is beneficial, to use an ``environment`` when performing your data analysis.
 This environment will contain all the libraries like ``JII MultispeQ`` including a specific version of ``Python``.
@@ -37,7 +37,7 @@ which libraries need to be installed to run your analysis.
     Find the detailed documentation on `Environments` in the `Anaconda Documentation <https://docs.anaconda.com/working-with-conda/environments/>`_.
 
 Miniconda (Terminal)
-""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^
 
 When you are using ``Conda`` and you open a Terminal, you will most likely see a ``(base)`` in your command prompt. That is the currently active environment.
 If it is not showing ``(base)`` or any other name, make sure to ``activate`` the environment, before installing any libraries.
@@ -67,6 +67,6 @@ To deactivate an `environment` use the following command. You don't have to add 
       conda config --set auto_activate_base false
 
 Anaconda (GUI)
-""""""""""""""
+^^^^^^^^^^^^^^
 
 For how to use ``environments`` with Anaconda, please refer to the `official documentation <https://docs.anaconda.com/working-with-conda/environments/>`_.

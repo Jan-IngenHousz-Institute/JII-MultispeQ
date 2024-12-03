@@ -1,5 +1,5 @@
-Protocols
-=========
+Protocol
+========
 
 .. automodule:: jii_multispeq.protocol
 

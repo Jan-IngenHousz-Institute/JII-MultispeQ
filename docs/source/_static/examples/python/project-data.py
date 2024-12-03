@@ -1,5 +1,5 @@
 """
-Download Project Data from PhotosynQ
+Download Project Data from PhotosynQ, Inc.
 
 A local copy of the data frames and the Project Information
 gets saved in the same directory as the file executed by default.

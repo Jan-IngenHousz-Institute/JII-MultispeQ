@@ -14,7 +14,7 @@ def print_info(project=None, show_code=False):
   :param show_code: Display the protocol's code in addition to the description. Defaults to False.
   :type show_code: bool
   
-  :returns: None
+  :return: None
   :rtype: NoneType
   
   :raises ValueError: if no project data is provided or the project data has the wrong format

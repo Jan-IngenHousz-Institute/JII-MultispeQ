@@ -1,6 +1,6 @@
 """
-The :mod:`~jii_multispeq.project` module helps downloading the data from the PhotosynQ platform, as well
-as managing files locally and display information about a locally saved project.
+The :mod:`~jii_multispeq.project` module helps downloading the data from the PhotosynQ, Inc.
+platform, as well as managing files locally and display information about a locally saved project.
 
 The **Data** related functions are loading the data either from a cloud or local source.
 **View Info** functions display the information about the project and the **File Functions**

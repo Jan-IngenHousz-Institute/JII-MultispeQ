@@ -23,7 +23,7 @@ def get ( email=None, projectId=None, directory='.', processed_data=True, raw_tr
   :type raw_traces: bool
   :param force: If True a download is forced, overwriting existing files. Defaults to False.
   :type force: bool
-  :returns: A list of DataFrames representing the project's data and the project's information. Each will be set to None if the corresponding file is not found.
+  :return: A list of DataFrames representing the project's data and the project's information. Each will be set to None if the corresponding file is not found.
   :rtype: list[pandas.DataFrame], dict
   
   :raises ValueError: If no project ID is provided.

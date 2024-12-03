@@ -85,7 +85,7 @@ def save (projectId, directory='.', df=None, info=None):
   :param info: Project information as returned by :func:`~jii_multispeq.project.get`
   :type info: dict
   
-  :returns: None
+  :return: None
   :rtype: NoneType
 
   :raises ValueError: If no project ID is provided.
@@ -117,7 +117,7 @@ def load (projectId, directory='.'):
     :param directory: The file location. Defaults to the current directory (".").
     :type directory: str
     
-    :returns: A list of DataFrames representing the project's data and the project's information. Each will be set to None if the corresponding file is not found.
+    :return: A list of DataFrames representing the project's data and the project's information. Each will be set to None if the corresponding file is not found.
     :rtype: list[pandas.DataFrame], dict
   """
 

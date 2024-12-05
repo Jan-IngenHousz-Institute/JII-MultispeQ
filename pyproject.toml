@@ -5,18 +5,18 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "jii_multispeq"
 authors = [
-  {name = "Sebastian Kuhlgert", email = "sebastian.kuhlgert@jan-ingenhousz-institute.org"},
-  {name = "David M. Kramer", email = "david.kramer@jan-ingenhousz-institute.org"},
+  { name = "Sebastian Kuhlgert", email = "sebastian.kuhlgert@jan-ingenhousz-institute.org" },
+  { name = "David M. Kramer", email = "david.kramer@jan-ingenhousz-institute.org" },
 ]
 description = "MultispeQ Data Analysis Library - Jan Ingenhousz Institut"
 readme = "README.md"
 requires-python = ">=3.8"
 keywords = ["MultispeQ Data Analysis"]
-license = {text = "MIT"}
+license = { text = "MIT" }
 dynamic = ["version"]
 classifiers = [
-	"Intended Audience :: Scientists",
-	"Programming Language :: Python :: 3",
+  "Intended Audience :: Scientists",
+  "Programming Language :: Python :: 3",
 ]
 dependencies = [
   "requests",
@@ -30,18 +30,15 @@ dependencies = [
 docs = ["sphinx", "sphinx-rtd-theme", "myst-parser"]
 
 [project.urls]
-Source = "https://github.com/SeBassTian/jii_multispeq"
-Documentation = "https://github.com/SeBassTian/jii_multispeq/docs"
-Changelog = "https://github.com/SeBassTian/jii_multispeq/history.md"
+Source = "https://github.com/Jan-IngenHousz-Institute/JII-MultispeQ"
+Documentation = "https://jan-ingenhousz-institute.github.io/JII-MultispeQ/"
+Changelog = "https://github.com/Jan-IngenHousz-Institute/JII-MultispeQ"
 
 [tool.setuptools_scm]
 
 [tool.setuptools.packages.find]
 where = ["src"]
-exclude = [
-  "*.tests*", 
-  "*.tests.*",
-]
+exclude = ["*.tests*", "*.tests.*"]
 # namespaces = false  # true by default
 
 [tool.sphinx]

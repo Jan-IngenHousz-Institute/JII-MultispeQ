@@ -257,8 +257,10 @@
 <span class="sd">Checksum handeling and calculation for MultispeQ Measurements.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
+<span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">zlib</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">jii_multispeq.constants</span> <span class="kn">import</span> <span class="n">REGEX_CHECKSUM</span>
 
 <div class="viewcode-block" id="get_crc32">
 <a class="viewcode-back" href="../../../measurement.html#jii_multispeq.measurement.checksum.get_crc32">[docs]</a>
@@ -308,9 +310,16 @@
   
   <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Provided data needs to be a string&quot;</span><span class="p">)</span>
-  
-  <span class="c1"># Decode received data</span>
+
+  <span class="c1"># Remove trailing spaces or line breaks</span>
   <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+  <span class="c1"># Check if there is an attached checksum </span>
+  <span class="n">prog</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span> <span class="n">REGEX_CHECKSUM</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">I</span> <span class="p">)</span>
+  <span class="n">result</span> <span class="o">=</span> <span class="n">prog</span><span class="o">.</span><span class="n">search</span><span class="p">(</span> <span class="n">data</span> <span class="p">)</span>
+
+  <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="kc">None</span>  
   
   <span class="n">crc32</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="o">-</span><span class="mi">8</span><span class="p">:]</span>
   <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:</span><span class="o">-</span><span class="mi">8</span><span class="p">]</span>
@@ -352,7 +361,7 @@
       
     </aside>
   </div>
-</div><script src="../../../_static/documentation_options.js?v=e3a6060d"></script>
+</div><script src="../../../_static/documentation_options.js?v=01f34227"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=5fa4622c"></script>

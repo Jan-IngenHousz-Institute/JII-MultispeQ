@@ -298,11 +298,11 @@ using protocols and send commands.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="jii_multispeq.device.connection.disconnect">
-<span class="sig-name descname"><span class="pre">disconnect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jii_multispeq/device/connection.html#disconnect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jii_multispeq.device.connection.disconnect" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">disconnect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jii_multispeq/device/connection.html#disconnect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jii_multispeq.device.connection.disconnect" title="Link to this definition">¶</a></dt>
 <dd><p>Disconnect device from serial port.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>port</strong> (<em>str</em>) – Port the MultisepQ is connected to.</p>
+<dd class="field-odd"><p><strong>connection</strong> (<em>serial</em>) – Connection to the MultispeQ.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>None</p>
@@ -327,28 +327,28 @@ using protocols and send commands.</p>
 <p>Commands are raw communication with the MultispeQ device.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="jii_multispeq.device.command.is_connected">
-<span class="sig-name descname"><span class="pre">is_connected</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jii_multispeq/device/command.html#is_connected"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jii_multispeq.device.command.is_connected" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">is_connected</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jii_multispeq/device/command.html#is_connected"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jii_multispeq.device.command.is_connected" title="Link to this definition">¶</a></dt>
 <dd><p>Test the connection to a MultispeQ.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>port</strong> (<em>str</em>) – Port the MultisepQ is connected to.</p>
+<dd class="field-odd"><p><strong>connection</strong> (<em>serial</em>) – Connection to the MultispeQ.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Instrument data and CRC32 checksum</p>
+<dd class="field-even"><p>True if a MultispeQ is connected, otherwise False</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>dict, str</p>
+<dd class="field-odd"><p>bool</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="jii_multispeq.device.command.get_memory">
-<span class="sig-name descname"><span class="pre">get_memory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jii_multispeq/device/command.html#get_memory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jii_multispeq.device.command.get_memory" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_memory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jii_multispeq/device/command.html#get_memory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jii_multispeq.device.command.get_memory" title="Link to this definition">¶</a></dt>
 <dd><p>Get the MultispeQ setting saved in its memory (EEPROM).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>port</strong> (<em>str</em>) – Port the MultisepQ is connected to.</p>
+<dd class="field-odd"><p><strong>connection</strong> (<em>serial</em>) – Connection to the MultispeQ.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Instrument data and CRC32 checksum</p>
@@ -361,12 +361,12 @@ using protocols and send commands.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="jii_multispeq.device.command.send_command">
-<span class="sig-name descname"><span class="pre">send_command</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">command</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jii_multispeq/device/command.html#send_command"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jii_multispeq.device.command.send_command" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">send_command</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">command</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jii_multispeq/device/command.html#send_command"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jii_multispeq.device.command.send_command" title="Link to this definition">¶</a></dt>
 <dd><p>Send a command to a MultispeQ device.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>port</strong> (<em>str</em>) – Port the MultisepQ is connected to.</p></li>
+<li><p><strong>connection</strong> (<em>serial</em>) – Connection to the MultispeQ.</p></li>
 <li><p><strong>command</strong> (<em>str</em>) – Command</p></li>
 </ul>
 </dd>
@@ -378,9 +378,9 @@ using protocols and send commands.</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>ValueError</strong> – if no port is defined</p></li>
+<li><p><strong>ValueError</strong> – if no connection is defined</p></li>
 <li><p><strong>ValueError</strong> – if command is not provided as a string</p></li>
-<li><p><strong>Exception</strong> – if port is not open or device connected</p></li>
+<li><p><strong>Exception</strong> – if connection is not open or device connected</p></li>
 </ul>
 </dd>
 </dl>
@@ -468,7 +468,7 @@ using protocols and send commands.</p>
       
     </aside>
   </div>
-</div><script src="_static/documentation_options.js?v=e3a6060d"></script>
+</div><script src="_static/documentation_options.js?v=01f34227"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/furo.js?v=5fa4622c"></script>

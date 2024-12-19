@@ -261,175 +261,182 @@
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">from</span> <span class="nn">tabulate</span> <span class="kn">import</span> <span class="n">tabulate</span>
-<span class="kn">from</span> <span class="nn">jii_multispeq.measurement.checksum</span> <span class="kn">import</span> <span class="n">strip_crc32</span> 
+<span class="kn">from</span> <span class="nn">jii_multispeq.measurement.checksum</span> <span class="kn">import</span> <span class="n">strip_crc32</span>
+<span class="kn">from</span> <span class="nn">jii_multispeq.measurement.sanitize</span> <span class="kn">import</span> <span class="n">sanitize</span>
+<span class="kn">from</span> <span class="nn">jii_multispeq.constants</span> <span class="kn">import</span> <span class="n">REGEX_RETURN_END</span>
 
 <div class="viewcode-block" id="is_connected">
 <a class="viewcode-back" href="../../../device.html#jii_multispeq.device.command.is_connected">[docs]</a>
-<span class="k">def</span> <span class="nf">is_connected</span> <span class="p">(</span> <span class="n">port</span><span class="o">=</span><span class="kc">None</span> <span class="p">):</span>
+<span class="k">def</span> <span class="nf">is_connected</span> <span class="p">(</span> <span class="n">connection</span><span class="o">=</span><span class="kc">None</span> <span class="p">):</span>
 <span class="w">  </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">  Test the connection to a MultispeQ.</span>
 
-<span class="sd">  :param port: Port the MultisepQ is connected to.</span>
-<span class="sd">  :type port: str</span>
+<span class="sd">  :param connection: Connection to the MultispeQ.</span>
+<span class="sd">  :type connection: serial</span>
 
-<span class="sd">  :return: Instrument data and CRC32 checksum</span>
-<span class="sd">  :rtype: dict, str</span>
+<span class="sd">  :return: True if a MultispeQ is connected, otherwise False</span>
+<span class="sd">  :rtype: bool</span>
 
 <span class="sd">  &quot;&quot;&quot;</span>
 
   <span class="c1"># Set timeout to 0.01 </span>
-  <span class="n">port</span><span class="o">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="mf">.01</span>
+  <span class="n">connection</span><span class="o">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="mf">.01</span>
 
   <span class="c1"># Send handshake phrase</span>
-  <span class="n">port</span><span class="o">.</span><span class="n">write</span><span class="p">(</span> <span class="s2">&quot;hello</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span> <span class="p">)</span>
+  <span class="n">connection</span><span class="o">.</span><span class="n">write</span><span class="p">(</span> <span class="s2">&quot;hello&quot;</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span> <span class="p">)</span>
+
+  <span class="c1"># Send linebreak to start command</span>
+  <span class="n">connection</span><span class="o">.</span><span class="n">write</span><span class="p">(</span> <span class="s2">&quot;</span><span class="se">\r\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span> <span class="p">)</span>
 
   <span class="c1"># Data string</span>
   <span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
   <span class="c1"># Read port</span>
   <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-    <span class="n">read</span> <span class="o">=</span> <span class="n">port</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
-    <span class="n">data</span> <span class="o">+=</span> <span class="n">read</span>
-
-    <span class="c1"># Stop reading when linebreak received</span>
-    <span class="k">if</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="ow">in</span> <span class="n">read</span><span class="o">.</span><span class="n">decode</span><span class="p">():</span>
-      <span class="k">break</span>
-
-  <span class="c1"># Decode received data</span>
-  <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
-
-  <span class="c1"># Regular expression to test for CRC32 checksum</span>
-  <span class="n">prog</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span> <span class="sa">r</span><span class="s1">&#39;[}ABCDEF0-9]</span><span class="si">{9}</span><span class="s1">&#39;</span> <span class="p">)</span>
-  <span class="n">result</span> <span class="o">=</span> <span class="n">prog</span><span class="o">.</span><span class="n">search</span><span class="p">(</span> <span class="n">data</span> <span class="p">)</span>
-
-  <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;String has no checksum&quot;</span><span class="p">)</span>
-  
-  <span class="n">data</span><span class="p">,</span> <span class="n">crc32</span> <span class="o">=</span> <span class="n">strip_crc32</span><span class="p">(</span> <span class="n">data</span> <span class="p">)</span>
-
-  <span class="n">json_str</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">)</span>
-  <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">json_str</span><span class="p">)</span>
-
-  <span class="n">info</span> <span class="o">=</span><span class="p">[</span>
-      <span class="n">data</span><span class="p">[</span><span class="s2">&quot;device_name&quot;</span><span class="p">],</span>
-      <span class="n">data</span><span class="p">[</span><span class="s2">&quot;device_version&quot;</span><span class="p">],</span>
-      <span class="n">data</span><span class="p">[</span><span class="s2">&quot;device_id&quot;</span><span class="p">],</span>
-      <span class="n">data</span><span class="p">[</span><span class="s2">&quot;device_battery&quot;</span><span class="p">],</span>
-      <span class="n">data</span><span class="p">[</span><span class="s2">&quot;device_firmware&quot;</span><span class="p">]</span>
-    <span class="p">]</span>
-
-  <span class="c1"># Display Information</span>
-  <span class="n">output</span> <span class="o">=</span> <span class="n">tabulate</span><span class="p">(</span> <span class="p">[</span><span class="n">info</span><span class="p">],</span> <span class="n">headers</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Name&#39;</span><span class="p">,</span> <span class="s1">&#39;Version&#39;</span><span class="p">,</span> <span class="s1">&#39;ID&#39;</span><span class="p">,</span> <span class="s1">&#39;Battery&#39;</span><span class="p">,</span> <span class="s1">&#39;Firmware&#39;</span><span class="p">])</span>
-  <span class="nb">print</span><span class="p">(</span> <span class="n">output</span> <span class="p">)</span>
-
-  <span class="c1"># Reset timeout</span>
-  <span class="n">port</span><span class="o">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="kc">None</span>
-
-  <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="n">crc32</span></div>
-
-
-<div class="viewcode-block" id="get_memory">
-<a class="viewcode-back" href="../../../device.html#jii_multispeq.device.command.get_memory">[docs]</a>
-<span class="k">def</span> <span class="nf">get_memory</span> <span class="p">(</span> <span class="n">port</span><span class="o">=</span><span class="kc">None</span> <span class="p">):</span>
-<span class="w">  </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">  Get the MultispeQ setting saved in its memory (EEPROM).</span>
-
-<span class="sd">  :param port: Port the MultisepQ is connected to.</span>
-<span class="sd">  :type port: str</span>
-
-<span class="sd">  :return: Instrument data and CRC32 checksum</span>
-<span class="sd">  :rtype: dict, str</span>
-
-<span class="sd">  &quot;&quot;&quot;</span>
-
-  <span class="c1"># Set timeout to 0.01 </span>
-  <span class="n">port</span><span class="o">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="mf">.01</span>
-
-  <span class="c1"># Send handshake phrase</span>
-  <span class="n">port</span><span class="o">.</span><span class="n">write</span><span class="p">(</span> <span class="s2">&quot;print_memory</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span> <span class="p">)</span>
-
-  <span class="c1"># Data string</span>
-  <span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-
-  <span class="c1"># Regular expression to test for CRC32 checksum</span>
-  <span class="n">prog</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span> <span class="sa">r</span><span class="s1">&#39;[}ABCDEF0-9]</span><span class="si">{9}</span><span class="s1">&#39;</span> <span class="p">)</span>
-
-  <span class="c1"># Read port</span>
-  <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-    <span class="n">data</span> <span class="o">+=</span> <span class="n">port</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
-
-    <span class="c1"># Stop reading when linebreak received</span>
-    <span class="k">if</span> <span class="n">prog</span><span class="o">.</span><span class="n">search</span><span class="p">(</span> <span class="n">data</span> <span class="p">):</span>
-      <span class="k">break</span>
-
-  <span class="n">data</span><span class="p">,</span> <span class="n">crc32</span> <span class="o">=</span> <span class="n">strip_crc32</span><span class="p">(</span> <span class="n">data</span> <span class="p">)</span>
-
-  <span class="n">json_acceptable_string</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">)</span>
-  <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">json_acceptable_string</span><span class="p">)</span>
-
-  <span class="c1"># Display Information</span>
-  <span class="n">output</span> <span class="o">=</span> <span class="n">tabulate</span><span class="p">(</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Parameter&#39;</span><span class="p">,</span> <span class="s1">&#39;Value&#39;</span><span class="p">])</span>
-  <span class="nb">print</span><span class="p">(</span> <span class="n">output</span> <span class="p">)</span>
-
-  <span class="c1"># Reset timeout</span>
-  <span class="n">port</span><span class="o">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="kc">None</span>
-
-  <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="n">crc32</span></div>
-
-
-<div class="viewcode-block" id="send_command">
-<a class="viewcode-back" href="../../../device.html#jii_multispeq.device.command.send_command">[docs]</a>
-<span class="k">def</span> <span class="nf">send_command</span> <span class="p">(</span> <span class="n">port</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="s2">&quot;&quot;</span> <span class="p">):</span>
-<span class="w">  </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">  Send a command to a MultispeQ device.</span>
-
-<span class="sd">  :param port: Port the MultisepQ is connected to.</span>
-<span class="sd">  :type port: str</span>
-<span class="sd">  :param command: Command</span>
-<span class="sd">  :type command: str</span>
-<span class="sd">  </span>
-<span class="sd">  :return: Instrument output</span>
-<span class="sd">  :rtype: str</span>
-
-<span class="sd">  :raises ValueError: if no port is defined</span>
-<span class="sd">  :raises ValueError: if command is not provided as a string</span>
-<span class="sd">  :raises Exception: if port is not open or device connected</span>
-<span class="sd">  &quot;&quot;&quot;</span>
-
-  <span class="k">if</span> <span class="n">port</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;A port for the MultispeQ needs to be defined&quot;</span><span class="p">)</span>
-
-  <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Provided command needs to be a string&quot;</span><span class="p">)</span>
-  
-  <span class="c1"># Check if the port is open</span>
-  <span class="k">if</span> <span class="ow">not</span> <span class="n">port</span><span class="o">.</span><span class="n">is_open</span><span class="p">:</span>
-    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Port not open, connect device to port first&quot;</span><span class="p">)</span>
-
-  <span class="c1"># Set timeout to 0.01 </span>
-  <span class="n">port</span><span class="o">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="mf">.01</span>
-
-  <span class="c1"># Check if it is a known command</span>
-  <span class="n">prog</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span> <span class="sa">r</span><span class="s2">&quot;|&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">CMDS</span><span class="p">)</span> <span class="p">)</span>
-  <span class="k">if</span> <span class="ow">not</span> <span class="n">prog</span><span class="o">.</span><span class="n">match</span><span class="p">(</span> <span class="n">command</span> <span class="p">):</span>
-    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unknown command, it might not work.&quot;</span><span class="p">)</span>
-
-  <span class="c1"># Send command</span>
-  <span class="n">port</span><span class="o">.</span><span class="n">write</span><span class="p">(</span> <span class="n">command</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span> <span class="p">)</span>
-
-  <span class="c1"># Read port</span>
-  <span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-  <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-    <span class="n">read</span> <span class="o">=</span> <span class="n">port</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">read</span><span class="p">)</span>
+    <span class="n">read</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+    
+    <span class="c1"># Decode and append received data</span>
     <span class="n">data</span> <span class="o">+=</span> <span class="n">read</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
 
     <span class="c1"># Stop reading when linebreak received</span>
     <span class="k">if</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="ow">in</span> <span class="n">read</span><span class="o">.</span><span class="n">decode</span><span class="p">():</span>
       <span class="k">break</span>
 
+  <span class="c1"># Remove checksum if available</span>
+  <span class="n">data</span><span class="p">,</span> <span class="n">crc32</span> <span class="o">=</span> <span class="n">strip_crc32</span><span class="p">(</span> <span class="n">data</span> <span class="p">)</span>
+
+  <span class="n">connection</span><span class="o">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="kc">None</span>
+
+  <span class="k">if</span> <span class="n">data</span> <span class="o">==</span> <span class="s1">&#39;MultispeQ Ready&#39;</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;MultispeQ found&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">True</span>
+  
+  <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="get_memory">
+<a class="viewcode-back" href="../../../device.html#jii_multispeq.device.command.get_memory">[docs]</a>
+<span class="k">def</span> <span class="nf">get_memory</span> <span class="p">(</span> <span class="n">connection</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span> <span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  Get the MultispeQ setting saved in its memory (EEPROM).</span>
+
+<span class="sd">  :param connection: Connection to the MultispeQ.</span>
+<span class="sd">  :type connection: serial</span>
+
+<span class="sd">  :return: Instrument data and CRC32 checksum</span>
+<span class="sd">  :rtype: dict, str</span>
+
+<span class="sd">  &quot;&quot;&quot;</span>
+
+  <span class="c1"># Set timeout to 0.01 </span>
+  <span class="n">connection</span><span class="o">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="mf">.01</span>
+
+  <span class="c1"># Send handshake phrase</span>
+  <span class="n">connection</span><span class="o">.</span><span class="n">write</span><span class="p">(</span> <span class="s2">&quot;print_memory&quot;</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span> <span class="p">)</span>
+
+  <span class="c1"># Send linebreak to start command</span>
+  <span class="n">connection</span><span class="o">.</span><span class="n">write</span><span class="p">(</span> <span class="s2">&quot;</span><span class="se">\r\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span> <span class="p">)</span>
+
+  <span class="c1"># Data string</span>
+  <span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+  <span class="c1"># Regular expression to test for CRC32 checksum</span>
+  <span class="n">prog</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span> <span class="n">REGEX_RETURN_END</span> <span class="p">)</span>
+
+  <span class="c1"># Read port</span>
+  <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="n">read</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+    
+    <span class="c1"># Decode and append received data</span>
+    <span class="n">data</span> <span class="o">+=</span> <span class="n">read</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+
+    <span class="c1"># Stop reading when linebreak received</span>
+    <span class="k">if</span> <span class="n">prog</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+      <span class="k">break</span>
+
+  <span class="n">data</span><span class="p">,</span> <span class="n">crc32</span> <span class="o">=</span> <span class="n">strip_crc32</span><span class="p">(</span> <span class="n">data</span> <span class="p">)</span>
+
+  <span class="c1"># Sanitize quotes</span>
+  <span class="n">data</span> <span class="o">=</span> <span class="n">sanitize</span><span class="p">(</span> <span class="n">data</span> <span class="p">)</span>
+
+  <span class="k">try</span><span class="p">:</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">pass</span>
+  <span class="k">except</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+    <span class="k">pass</span>
+
+  <span class="c1"># Display Information</span>
+  <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">tabulate</span><span class="p">(</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Parameter&#39;</span><span class="p">,</span> <span class="s1">&#39;Value&#39;</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span> <span class="n">output</span> <span class="p">)</span>
+
   <span class="c1"># Reset timeout</span>
-  <span class="n">port</span><span class="o">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="kc">None</span>
+  <span class="n">connection</span><span class="o">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="kc">None</span>
+
+  <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="n">crc32</span></div>
+
+
+<div class="viewcode-block" id="send_command">
+<a class="viewcode-back" href="../../../device.html#jii_multispeq.device.command.send_command">[docs]</a>
+<span class="k">def</span> <span class="nf">send_command</span> <span class="p">(</span> <span class="n">connection</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span> <span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  Send a command to a MultispeQ device.</span>
+
+<span class="sd">  :param connection: Connection to the MultispeQ.</span>
+<span class="sd">  :type connection: serial</span>
+<span class="sd">  :param command: Command</span>
+<span class="sd">  :type command: str</span>
+<span class="sd">  </span>
+<span class="sd">  :return: Instrument output</span>
+<span class="sd">  :rtype: str</span>
+
+<span class="sd">  :raises ValueError: if no connection is defined</span>
+<span class="sd">  :raises ValueError: if command is not provided as a string</span>
+<span class="sd">  :raises Exception: if connection is not open or device connected</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+
+  <span class="k">if</span> <span class="n">connection</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;A connection for the MultispeQ needs to be defined&quot;</span><span class="p">)</span>
+
+  <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Provided command needs to be a string&quot;</span><span class="p">)</span>
+  
+  <span class="c1"># Check if the connection is open</span>
+  <span class="k">if</span> <span class="ow">not</span> <span class="n">connection</span><span class="o">.</span><span class="n">is_open</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Connection not open, connect device to port first&quot;</span><span class="p">)</span>
+
+  <span class="c1"># Set timeout to 0.01 </span>
+  <span class="n">connection</span><span class="o">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="mf">.01</span>
+
+  <span class="c1"># Check if it is a known command</span>
+  <span class="n">prog</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span> <span class="sa">r</span><span class="s2">&quot;|&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">CMDS</span><span class="p">)</span> <span class="p">)</span>
+  <span class="k">if</span> <span class="ow">not</span> <span class="n">prog</span><span class="o">.</span><span class="n">search</span><span class="p">(</span> <span class="n">command</span> <span class="p">):</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unknown command, it might not work.&quot;</span><span class="p">)</span>
+
+  <span class="n">prog</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span> <span class="n">REGEX_RETURN_END</span> <span class="p">)</span>
+
+  <span class="c1"># Send command</span>
+  <span class="n">connection</span><span class="o">.</span><span class="n">write</span><span class="p">(</span> <span class="n">command</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span> <span class="p">)</span>
+
+  <span class="c1"># Send linebreak to start command</span>
+  <span class="n">connection</span><span class="o">.</span><span class="n">write</span><span class="p">(</span> <span class="s2">&quot;</span><span class="se">\r\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span> <span class="p">)</span>
+
+  <span class="c1"># Read port</span>
+  <span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+  <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="n">read</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+    <span class="n">data</span> <span class="o">+=</span> <span class="n">read</span>
+
+    <span class="k">if</span> <span class="n">verbose</span> <span class="ow">is</span> <span class="kc">True</span> <span class="ow">and</span> <span class="p">(</span><span class="n">read</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
+      <span class="nb">print</span><span class="p">(</span><span class="n">read</span><span class="p">)</span>
+
+    <span class="c1"># Stop reading when linebreak received</span>
+    <span class="k">if</span> <span class="n">prog</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+      <span class="k">break</span>
+
+  <span class="c1"># Reset timeout</span>
+  <span class="n">connection</span><span class="o">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="kc">None</span>
 
   <span class="k">return</span> <span class="n">data</span></div>
 
@@ -483,7 +490,7 @@
       
     </aside>
   </div>
-</div><script src="../../../_static/documentation_options.js?v=e3a6060d"></script>
+</div><script src="../../../_static/documentation_options.js?v=01f34227"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=5fa4622c"></script>

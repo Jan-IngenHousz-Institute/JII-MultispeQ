@@ -264,23 +264,27 @@
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">import</span> <span class="nn">hashlib</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">jii_multispeq.constants</span> <span class="kn">import</span> <span class="n">REGEX_RETURN_END</span>
+<span class="kn">from</span> <span class="nn">jii_multispeq.measurement.sanitize</span> <span class="kn">import</span> <span class="n">sanitize</span>
 
 <span class="kn">from</span> <span class="nn">tabulate</span> <span class="kn">import</span> <span class="n">tabulate</span>
 
-<span class="kn">from</span> <span class="nn">jii_multispeq.measurement.checksum</span> <span class="kn">import</span> <span class="n">get_crc32</span><span class="p">,</span> <span class="n">strip_crc32</span>
+<span class="kn">from</span> <span class="nn">jii_multispeq.measurement.checksum</span> <span class="kn">import</span> <span class="n">strip_crc32</span>
 
 <div class="viewcode-block" id="measure">
 <a class="viewcode-back" href="../../../measurement.html#jii_multispeq.measurement.measure.measure">[docs]</a>
-<span class="k">def</span> <span class="nf">measure</span> <span class="p">(</span> <span class="n">port</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="p">[{}],</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">notes</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">directory</span><span class="o">=</span><span class="s2">&quot;./local/&quot;</span> <span class="p">):</span>
+<span class="k">def</span> <span class="nf">measure</span> <span class="p">(</span> <span class="n">connection</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="p">[{}],</span> <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="n">notes</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">directory</span><span class="o">=</span><span class="s2">&quot;./local/&quot;</span> <span class="p">):</span>
 <span class="w">  </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">  Take a measurement using a MultispeQ connected via a serial connection (USB or Bluetooth).</span>
 
-<span class="sd">  :param port: Port the MultisepQ is connected to.</span>
-<span class="sd">  :type port: str</span>
+<span class="sd">  :param connection: Connection to the MultispeQ.</span>
+<span class="sd">  :type connection: serial</span>
 <span class="sd">  :param protocol: Measurement Protocol</span>
-<span class="sd">  :type protocol: str or dict</span>
-<span class="sd">  :param name: Name for meaurement file. Default name is current date and time.</span>
-<span class="sd">  :type name: str</span>
+<span class="sd">  :type protocol: str, dict or list</span>
+<span class="sd">  :param filename: Name for saved measurement file. If set to None, no file is saved, Default name is current date and time.</span>
+<span class="sd">  :type filename: str</span>
 <span class="sd">  :param notes: Notes for the measurement</span>
 <span class="sd">  :type notes: str</span>
 <span class="sd">  :param directory: Directory the measurement is saved in. Default directory is &quot;local&quot;.</span>
@@ -289,20 +293,20 @@
 <span class="sd">  :return: The MultispeQ data is returned on success, otherwise None.</span>
 <span class="sd">  :rtype: str</span>
 <span class="sd">  </span>
-<span class="sd">  :raises ValueError: if no port is defined</span>
+<span class="sd">  :raises ValueError: if no connection is defined</span>
 <span class="sd">  :raises ValueError: if no protocol for the MultispeQ is provided</span>
 <span class="sd">  :raises ValueError: if protocol is not encoded as a string or dictionary</span>
 <span class="sd">  :raises ValueError: if notes are not provided as a string</span>
 <span class="sd">  :raises ValueError: if directory is not provided as a string</span>
-<span class="sd">  :raises Exception: if port is not open or device connected</span>
+<span class="sd">  :raises Exception: if connection is not open or device connected</span>
 <span class="sd">  &quot;&quot;&quot;</span>
 
   <span class="n">start</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
 
-  <span class="k">if</span> <span class="n">port</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;A port for the MultispeQ needs to be defined&quot;</span><span class="p">)</span>
+  <span class="k">if</span> <span class="n">connection</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;A connection for the MultispeQ needs to be defined&quot;</span><span class="p">)</span>
   
-  <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">protocol</span><span class="p">,</span> <span class="p">(</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">str</span><span class="p">)):</span>
+  <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">protocol</span><span class="p">,</span> <span class="p">(</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">)):</span>
     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Provided protocol needs to be a string or dictionary&quot;</span><span class="p">)</span>
   
   <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">notes</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
@@ -311,69 +315,56 @@
   <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Provided directory has to be a string&quot;</span><span class="p">)</span>
   
-  <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="n">filename</span> <span class="o">=</span> <span class="n">start</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;YYYY-MM-DD HHmmss&quot;</span><span class="p">)</span>
+  <span class="k">if</span> <span class="n">filename</span> <span class="o">==</span> <span class="s1">&#39;auto&#39;</span><span class="p">:</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="n">start</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H</span><span class="si">%%</span><span class="s2">%M&quot;</span><span class="p">)</span>
 
-  <span class="c1"># Check if the port is open</span>
-  <span class="k">if</span> <span class="ow">not</span> <span class="n">port</span><span class="o">.</span><span class="n">is_open</span><span class="p">:</span>
-    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Port not open, connect device to port first&quot;</span><span class="p">)</span>
+  <span class="c1"># Check if the connection is open</span>
+  <span class="k">if</span> <span class="ow">not</span> <span class="n">connection</span><span class="o">.</span><span class="n">is_open</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Connection not open, connect device to port first&quot;</span><span class="p">)</span>
 
   <span class="c1"># Check if the protocol is a dictionary and stringify</span>
-  <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span> <span class="n">protocol</span><span class="p">,</span> <span class="nb">dict</span> <span class="p">):</span>
+  <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span> <span class="n">protocol</span><span class="p">,</span> <span class="p">(</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="p">):</span>
     <span class="n">protocol</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span> <span class="n">protocol</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 
   <span class="c1"># Write the protocol to the Instrument</span>
-  <span class="n">port</span><span class="o">.</span><span class="n">write</span><span class="p">(</span> <span class="n">protocol</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span> <span class="p">)</span>
+  <span class="n">connection</span><span class="o">.</span><span class="n">write</span><span class="p">(</span> <span class="n">protocol</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span> <span class="p">)</span>
+
+  <span class="c1"># Send linebreak to start protocol</span>
+  <span class="n">connection</span><span class="o">.</span><span class="n">write</span><span class="p">(</span> <span class="s2">&quot;</span><span class="se">\r\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span> <span class="p">)</span>
 
   <span class="c1"># Data string</span>
   <span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
   <span class="c1"># Regular expression to test for CRC32 checksum</span>
-  <span class="n">prog</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span> <span class="sa">r</span><span class="s1">&#39;[}ABCDEF0-9]</span><span class="si">{9}</span><span class="s1">&#39;</span> <span class="p">)</span>
+  <span class="n">prog</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span> <span class="n">REGEX_RETURN_END</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">M</span> <span class="o">|</span> <span class="n">re</span><span class="o">.</span><span class="n">I</span> <span class="p">)</span>
 
   <span class="c1"># Read port</span>
   <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-    <span class="n">data</span> <span class="o">+=</span> <span class="n">port</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
-
+    <span class="n">data</span> <span class="o">+=</span> <span class="n">connection</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+    
     <span class="c1"># Stop reading when linebreak received</span>
-    <span class="k">if</span> <span class="n">prog</span><span class="o">.</span><span class="n">search</span><span class="p">(</span> <span class="n">data</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span> <span class="p">):</span>
+    <span class="k">if</span> <span class="n">prog</span><span class="o">.</span><span class="n">search</span><span class="p">(</span> <span class="n">data</span> <span class="p">):</span>
       <span class="k">break</span>
-  
+
   <span class="c1"># Remove linebreaks and split crc and data</span>
   <span class="n">data</span><span class="p">,</span> <span class="n">crc32</span> <span class="o">=</span> <span class="n">strip_crc32</span><span class="p">(</span> <span class="n">data</span> <span class="p">)</span>
 
-  <span class="n">json_str</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">)</span>
-
-<span class="w">  </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">  {</span>
-<span class="sd">    &quot;device_name&quot;:&quot;My Instrument&quot;,</span>
-<span class="sd">    &quot;device_version&quot;:&quot;1&quot;,</span>
-<span class="sd">    &quot;device_id&quot;:&quot;ff:ff:ff:ff&quot;,</span>
-<span class="sd">    &quot;device_battery&quot;:15,</span>
-<span class="sd">    &quot;device_firmware&quot;:2.21,</span>
-<span class="sd">    &quot;sample&quot;:[</span>
-<span class="sd">        {</span>
-<span class="sd">            &quot;protocol_id&quot;:&quot;123&quot;,</span>
-<span class="sd">            &quot;light_intensity&quot;:100,</span>
-<span class="sd">            &quot;data_raw&quot;:[]</span>
-<span class="sd">        }</span>
-<span class="sd">    ]</span>
-<span class="sd">  }</span>
-<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="c1">## Sanitize Strings</span>
+  <span class="n">json_str</span> <span class="o">=</span> <span class="n">sanitize</span><span class="p">(</span> <span class="n">data</span> <span class="p">)</span>
 
   <span class="k">try</span><span class="p">:</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">json_str</span><span class="p">)</span>
   <span class="k">except</span> <span class="n">json</span><span class="o">.</span><span class="n">decoder</span><span class="o">.</span><span class="n">JSONDecodeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
     <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;Error&#39;</span><span class="p">:</span> <span class="n">e</span> <span class="p">}</span>
-    <span class="k">pass</span>
+    <span class="k">return</span> <span class="p">{</span> <span class="s1">&#39;Error&#39;</span><span class="p">:</span> <span class="n">e</span> <span class="p">},</span> <span class="n">crc32</span> <span class="c1">#TODO: pass</span>
 
   <span class="c1"># Show a warning for battery below 25%</span>
   <span class="k">if</span> <span class="s1">&#39;device_battery&#39;</span> <span class="ow">in</span> <span class="n">data</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;device_battery&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">25</span><span class="p">:</span>
-    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Device battery low! Currently at </span><span class="si">%s</span><span class="s2">%, recharge soon.&quot;</span> <span class="o">%</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;device_battery&#39;</span><span class="p">])</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Device battery low! Currently at </span><span class="si">%s%%</span><span class="s1">, recharge soon.&#39;</span> <span class="o">%</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;device_battery&#39;</span><span class="p">])</span>
 
   <span class="c1"># Add filename</span>
-  <span class="n">data</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">filename</span>
+  <span class="k">if</span> <span class="ow">not</span> <span class="n">filename</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">data</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">filename</span>
 
   <span class="c1"># Add Notes</span>
   <span class="n">data</span><span class="p">[</span><span class="s1">&#39;notes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">notes</span>
@@ -389,19 +380,21 @@
   <span class="n">data</span><span class="p">[</span><span class="s1">&#39;md5_measurement&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">(</span> <span class="n">json_str</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span> <span class="p">)</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
 
   <span class="c1">## Save file with measurements in notebook format</span>
-  <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span> <span class="n">directory</span> <span class="p">):</span>
-    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span> <span class="n">directory</span> <span class="p">)</span>
+  <span class="k">if</span> <span class="ow">not</span> <span class="n">filename</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span> <span class="n">directory</span> <span class="p">):</span>
+      <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span> <span class="n">directory</span> <span class="p">)</span>
 
-  <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span> <span class="n">directory</span><span class="p">,</span> <span class="p">(</span><span class="n">filename</span> <span class="o">+</span> <span class="s1">&#39;.json&#39;</span><span class="p">)</span> <span class="p">)</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span> <span class="n">directory</span><span class="p">,</span> <span class="p">(</span><span class="n">filename</span> <span class="o">+</span> <span class="s1">&#39;.json&#39;</span><span class="p">)</span> <span class="p">)</span>
 
-  <span class="c1">## Check if filename already exists, if not attach crc32</span>
-  <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
-    <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span> <span class="n">directory</span><span class="p">,</span> <span class="p">(</span><span class="n">filename</span> <span class="o">+</span> <span class="s1">&#39; - &#39;</span> <span class="o">+</span> <span class="n">get_crc32</span><span class="p">(</span><span class="n">json_str</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;.json&#39;</span><span class="p">)</span> <span class="p">)</span>
-    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;File already existed, and file saved as </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">path</span> <span class="p">)</span>
+    <span class="c1">## Check if filename already exists. If true, &quot; - #&quot;&quot; is attached</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">while</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+      <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span> <span class="n">directory</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> - </span><span class="si">%s</span><span class="s1">.json&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="n">i</span><span class="p">)</span> <span class="p">)</span>
+      <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
 
-  <span class="c1">## Write to disk</span>
-  <span class="k">with</span> <span class="nb">open</span><span class="p">(</span> <span class="n">path</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
-    <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">fp</span><span class="p">,</span>  <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="c1">## Write to disk</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span> <span class="n">path</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+      <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">fp</span><span class="p">,</span>  <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
   <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="n">crc32</span></div>
 
@@ -430,6 +423,9 @@
   <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No data is provided&quot;</span><span class="p">)</span>
   
+  <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The provided data is not a dictionary&quot;</span><span class="p">)</span>
+
   <span class="k">if</span> <span class="n">fn</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">data</span>
 
@@ -447,19 +443,17 @@
       <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;sample&#39;</span><span class="p">],</span> <span class="nb">list</span> <span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;sample&#39;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
 
         <span class="c1">## Now check if the first element in the sample list is a list as well that has an element</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;sample&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="nb">list</span> <span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;sample&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c1"># if isinstance( data[&#39;sample&#39;][0], list ) and len(data[&#39;sample&#39;][0]) &gt; 0:</span>
           
           <span class="c1">## Seems like it is the standard format</span>
-          <span class="n">output</span> <span class="o">=</span> <span class="n">fn</span><span class="p">(</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;sample&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="p">)</span>
+          <span class="c1"># output = fn( data[&#39;sample&#39;][0][0] )</span>
           
           <span class="c1">## TODO: Not sure if we should add data back or how we address it...</span>
           <span class="c1"># And the raw data</span>
           <span class="c1"># for key in data[&#39;sample&#39;][0][0].keys():</span>
           <span class="c1">#   output[key] = data[&#39;sample&#39;][0][0].get(key, None)</span>
-
-        <span class="c1">## Perhaps some scrambled format, so sample is sent to the function  </span>
-        <span class="k">else</span><span class="p">:</span>
-          <span class="n">output</span> <span class="o">=</span> <span class="n">fn</span><span class="p">(</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;sample&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="p">)</span>
+        
+        <span class="n">output</span> <span class="o">=</span> <span class="n">fn</span><span class="p">(</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;sample&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="p">)</span>
 
       <span class="c1">## Perhaps some scrambled format, so sample is sent to the function</span>
       <span class="k">else</span><span class="p">:</span>
@@ -480,7 +474,8 @@
   <span class="n">keys</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">&#39;device_name&#39;</span><span class="p">,</span> <span class="s1">&#39;device_version&#39;</span><span class="p">,</span> <span class="s1">&#39;device_id&#39;</span><span class="p">,</span> <span class="s1">&#39;device_battery&#39;</span><span class="p">,</span> <span class="s1">&#39;device_firmware&#39;</span><span class="p">]</span>
 
   <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
-    <span class="n">output</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+      <span class="n">output</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
   <span class="k">return</span> <span class="n">output</span></div>
 
@@ -534,11 +529,11 @@
 
 <div class="viewcode-block" id="to_df">
 <a class="viewcode-back" href="../../../measurement.html#jii_multispeq.measurement.measure.to_df">[docs]</a>
-<span class="k">def</span> <span class="nf">to_df</span> <span class="p">(</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span> <span class="p">):</span>
+<span class="k">def</span> <span class="nf">to_df</span> <span class="p">(</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">append</span><span class="o">=</span><span class="kc">None</span> <span class="p">):</span>
 <span class="w">  </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">  Tabular display of data for a single measurent. If a parameter is a </span>
-<span class="sd">  list or dictionary or other type &#39;n/a&#39; will be displayed as such</span>
-<span class="sd">  content will not be plotted.</span>
+<span class="sd">  Adding data to dataframe. A new dataframe can be created</span>
+<span class="sd">  or the data can be appended to an existing one, if the</span>
+<span class="sd">  column format is the same.</span>
 
 <span class="sd">  :param data: MultispeQ data output</span>
 <span class="sd">  :type data: dict or list[dict]</span>
@@ -556,25 +551,9 @@
   <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="p">(</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">list</span><span class="p">)):</span>
     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Provided data needs to be a dictionary or list of dictionarys&quot;</span><span class="p">)</span>
   
-  <span class="n">keys</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="nb">str</span><span class="o">.</span><span class="n">lower</span><span class="p">)</span>
-  <span class="n">table_content</span> <span class="o">=</span> <span class="p">[]</span>
+  <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span> <span class="n">data</span> <span class="p">)</span>
 
-  <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
-    <span class="n">value</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
-    <span class="n">vtype</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">int</span> <span class="p">))</span> <span class="ow">or</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-      <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-      <span class="n">value</span> <span class="o">=</span> <span class="s1">&#39;n/a&#39;</span>
-
-    <span class="n">table_content</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">vtype</span><span class="p">])</span>
-
-  <span class="n">table</span> <span class="o">=</span> <span class="n">tabulate</span><span class="p">(</span><span class="n">table_content</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Parameter&#39;</span><span class="p">,</span> <span class="s1">&#39;Value&#39;</span><span class="p">,</span> <span class="s1">&#39;Type&#39;</span><span class="p">])</span>
-  
-  <span class="nb">print</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
-
-  <span class="k">return</span> <span class="kc">None</span></div>
+  <span class="k">return</span> <span class="n">df</span></div>
 
 </pre></div>
         </article>
@@ -608,7 +587,7 @@
       
     </aside>
   </div>
-</div><script src="../../../_static/documentation_options.js?v=e3a6060d"></script>
+</div><script src="../../../_static/documentation_options.js?v=01f34227"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=5fa4622c"></script>

@@ -272,14 +272,14 @@ as well as from notebooks saved by the PhotosynQ Desktop Application
 a serial port. The returned data can be analyzed and viewed.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="jii_multispeq.measurement.measure.measure">
-<span class="sig-name descname"><span class="pre">measure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">protocol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[{}]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./local/'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jii_multispeq/measurement/measure.html#measure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jii_multispeq.measurement.measure.measure" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">measure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">protocol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[{}]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./local/'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jii_multispeq/measurement/measure.html#measure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jii_multispeq.measurement.measure.measure" title="Link to this definition">¶</a></dt>
 <dd><p>Take a measurement using a MultispeQ connected via a serial connection (USB or Bluetooth).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>port</strong> (<em>str</em>) – Port the MultisepQ is connected to.</p></li>
-<li><p><strong>protocol</strong> (<em>str</em><em> or </em><em>dict</em>) – Measurement Protocol</p></li>
-<li><p><strong>name</strong> (<em>str</em>) – Name for meaurement file. Default name is current date and time.</p></li>
+<li><p><strong>connection</strong> (<em>serial</em>) – Connection to the MultispeQ.</p></li>
+<li><p><strong>protocol</strong> (<em>str</em><em>, </em><em>dict</em><em> or </em><em>list</em>) – Measurement Protocol</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – Name for saved measurement file. If set to None, no file is saved, Default name is current date and time.</p></li>
 <li><p><strong>notes</strong> (<em>str</em>) – Notes for the measurement</p></li>
 <li><p><strong>directory</strong> (<em>str</em>) – Directory the measurement is saved in. Default directory is “local”.</p></li>
 </ul>
@@ -292,12 +292,12 @@ a serial port. The returned data can be analyzed and viewed.</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>ValueError</strong> – if no port is defined</p></li>
+<li><p><strong>ValueError</strong> – if no connection is defined</p></li>
 <li><p><strong>ValueError</strong> – if no protocol for the MultispeQ is provided</p></li>
 <li><p><strong>ValueError</strong> – if protocol is not encoded as a string or dictionary</p></li>
 <li><p><strong>ValueError</strong> – if notes are not provided as a string</p></li>
 <li><p><strong>ValueError</strong> – if directory is not provided as a string</p></li>
-<li><p><strong>Exception</strong> – if port is not open or device connected</p></li>
+<li><p><strong>Exception</strong> – if connection is not open or device connected</p></li>
 </ul>
 </dd>
 </dl>
@@ -358,10 +358,10 @@ content will not be plotted.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="jii_multispeq.measurement.measure.to_df">
-<span class="sig-name descname"><span class="pre">to_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jii_multispeq/measurement/measure.html#to_df"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jii_multispeq.measurement.measure.to_df" title="Link to this definition">¶</a></dt>
-<dd><p>Tabular display of data for a single measurent. If a parameter is a
-list or dictionary or other type ‘n/a’ will be displayed as such
-content will not be plotted.</p>
+<span class="sig-name descname"><span class="pre">to_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">append</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jii_multispeq/measurement/measure.html#to_df"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jii_multispeq.measurement.measure.to_df" title="Link to this definition">¶</a></dt>
+<dd><p>Adding data to dataframe. A new dataframe can be created
+or the data can be appended to an existing one, if the
+column format is the same.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>data</strong> (<em>dict</em><em> or </em><em>list</em><em>[</em><em>dict</em><em>]</em>) – MultispeQ data output</p>
@@ -617,7 +617,7 @@ This package only provides limited support of the Notebook format.</p>
       
     </aside>
   </div>
-</div><script src="_static/documentation_options.js?v=e3a6060d"></script>
+</div><script src="_static/documentation_options.js?v=01f34227"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/furo.js?v=5fa4622c"></script>

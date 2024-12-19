@@ -23,7 +23,7 @@ def measure ( connection=None, protocol=[{}], filename='auto', notes="", directo
   Take a measurement using a MultispeQ connected via a serial connection (USB or Bluetooth).
 
   :param connection: Connection to the MultispeQ.
-  :type port: serial
+  :type connection: serial
   :param protocol: Measurement Protocol
   :type protocol: str, dict or list
   :param filename: Name for saved measurement file. If set to None, no file is saved, Default name is current date and time.
@@ -36,18 +36,18 @@ def measure ( connection=None, protocol=[{}], filename='auto', notes="", directo
   :return: The MultispeQ data is returned on success, otherwise None.
   :rtype: str
   
-  :raises ValueError: if no port is defined
+  :raises ValueError: if no connection is defined
   :raises ValueError: if no protocol for the MultispeQ is provided
   :raises ValueError: if protocol is not encoded as a string or dictionary
   :raises ValueError: if notes are not provided as a string
   :raises ValueError: if directory is not provided as a string
-  :raises Exception: if port is not open or device connected
+  :raises Exception: if connection is not open or device connected
   """
 
   start = datetime.datetime.now()
 
   if connection is None:
-    raise ValueError("A port for the MultispeQ needs to be defined")
+    raise ValueError("A connection for the MultispeQ needs to be defined")
   
   if not isinstance(protocol, (dict, str, list)):
     raise ValueError("Provided protocol needs to be a string or dictionary")
@@ -61,9 +61,9 @@ def measure ( connection=None, protocol=[{}], filename='auto', notes="", directo
   if filename == 'auto':
     filename = start.strftime("%Y-%m-%d %H%%%M")
 
-  # Check if the port is open
+  # Check if the connection is open
   if not connection.is_open:
-    raise Exception("Port not open, connect device to port first")
+    raise Exception("Connection not open, connect device to port first")
 
   # Check if the protocol is a dictionary and stringify
   if isinstance( protocol, (dict, list) ):

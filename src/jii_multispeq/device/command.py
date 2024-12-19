@@ -128,20 +128,20 @@ def send_command ( connection=None, command="", verbose=False ):
   :return: Instrument output
   :rtype: str
 
-  :raises ValueError: if no port is defined
+  :raises ValueError: if no connection is defined
   :raises ValueError: if command is not provided as a string
-  :raises Exception: if port is not open or device connected
+  :raises Exception: if connection is not open or device connected
   """
 
   if connection is None:
-    raise ValueError("A port for the MultispeQ needs to be defined")
+    raise ValueError("A connection for the MultispeQ needs to be defined")
 
   if not isinstance(command, str):
     raise ValueError("Provided command needs to be a string")
   
-  # Check if the port is open
+  # Check if the connection is open
   if not connection.is_open:
-    raise Exception("Port not open, connect device to port first")
+    raise Exception("Connection not open, connect device to port first")
 
   # Set timeout to 0.01 
   connection.timeout = .01

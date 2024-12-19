@@ -162,6 +162,9 @@ def analyze ( data=None, fn=None ):
   if data is None:
     raise ValueError("No data is provided")
   
+  if not isinstance(data, dict):
+    raise ValueError("The provided data is not a dictionary")
+
   if fn is None:
     return data
 
@@ -179,19 +182,17 @@ def analyze ( data=None, fn=None ):
       if isinstance( data['sample'], list ) and len(data['sample']) > 0:
 
         ## Now check if the first element in the sample list is a list as well that has an element
-        if isinstance( data['sample'][0], list ) and len(data['sample'][0]) > 0:
+        # if isinstance( data['sample'][0], list ) and len(data['sample'][0]) > 0:
           
           ## Seems like it is the standard format
-          output = fn( data['sample'][0][0] )
+          # output = fn( data['sample'][0][0] )
           
           ## TODO: Not sure if we should add data back or how we address it...
           # And the raw data
           # for key in data['sample'][0][0].keys():
           #   output[key] = data['sample'][0][0].get(key, None)
-
-        ## Perhaps some scrambled format, so sample is sent to the function  
-        else:
-          output = fn( data['sample'][0] )
+        
+        output = fn( data['sample'][0] )
 
       ## Perhaps some scrambled format, so sample is sent to the function
       else:
@@ -212,7 +213,8 @@ def analyze ( data=None, fn=None ):
   keys += ['device_name', 'device_version', 'device_id', 'device_battery', 'device_firmware']
 
   for key in keys:
-    output[key] = data.get(key, None)
+    if key in data:
+      output[key] = data.get(key, None)
 
   return output
 

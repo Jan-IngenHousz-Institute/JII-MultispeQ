@@ -8,31 +8,36 @@ import warnings
 from tabulate import tabulate
 from jii_multispeq.measurement.checksum import strip_crc32 
 
-def is_connected ( port=None ):
+def is_connected ( connection=None ):
   """
   Test the connection to a MultispeQ.
 
-  :param port: Port the MultisepQ is connected to.
-  :type port: str
+  :param connection: Connection to the MultispeQ.
+  :type connection: serial
 
-  :return: Instrument data and CRC32 checksum
-  :rtype: dict, str
+  :return: True if a MultispeQ is connected, otherwise False
+  :rtype: bool
 
   """
 
   # Set timeout to 0.01 
-  port.timeout = .01
+  connection.timeout = .01
 
   # Send handshake phrase
-  port.write( "hello\n".encode() )
+  connection.write( "hello".encode() )
+
+  # Send linebreak to start command
+  connection.write( "\r\n".encode() )
 
   # Data string
   data = ""
 
   # Read port
   while True:
-    read = port.readline()
-    data += read
+    read = connection.readline()
+    
+    # Decode and append received data
+    data += read.decode()
 
     # Stop reading when linebreak received
     if "\n" in read.decode():
@@ -65,17 +70,16 @@ def is_connected ( port=None ):
   output = tabulate( [info], headers=['Name', 'Version', 'ID', 'Battery', 'Firmware'])
   print( output )
 
-  # Reset timeout
-  port.timeout = None
+  connection.timeout = None
 
   return data, crc32
 
-def get_memory ( port=None ):
+def get_memory ( connection=None, verbose=False ):
   """
   Get the MultispeQ setting saved in its memory (EEPROM).
 
-  :param port: Port the MultisepQ is connected to.
-  :type port: str
+  :param connection: Connection to the MultispeQ.
+  :type connection: serial
 
   :return: Instrument data and CRC32 checksum
   :rtype: dict, str
@@ -83,10 +87,13 @@ def get_memory ( port=None ):
   """
 
   # Set timeout to 0.01 
-  port.timeout = .01
+  connection.timeout = .01
 
   # Send handshake phrase
-  port.write( "print_memory\n".encode() )
+  connection.write( "print_memory".encode() )
+
+  # Send linebreak to start command
+  connection.write( "\r\n".encode() )
 
   # Data string
   data = ""
@@ -96,10 +103,13 @@ def get_memory ( port=None ):
 
   # Read port
   while True:
-    data += port.readline().decode()
+    read = connection.readline()
+    
+    # Decode and append received data
+    data += read.decode()
 
     # Stop reading when linebreak received
-    if prog.search( data ):
+    if prog.search(data):
       break
 
   data, crc32 = strip_crc32( data )
@@ -112,16 +122,16 @@ def get_memory ( port=None ):
   print( output )
 
   # Reset timeout
-  port.timeout = None
+  connection.timeout = None
 
   return data, crc32
 
-def send_command ( port=None, command="" ):
+def send_command ( connection=None, command="", verbose=False ):
   """
   Send a command to a MultispeQ device.
 
-  :param port: Port the MultisepQ is connected to.
-  :type port: str
+  :param connection: Connection to the MultispeQ.
+  :type connection: serial
   :param command: Command
   :type command: str
   
@@ -133,40 +143,47 @@ def send_command ( port=None, command="" ):
   :raises Exception: if port is not open or device connected
   """
 
-  if port is None:
+  if connection is None:
     raise ValueError("A port for the MultispeQ needs to be defined")
 
   if not isinstance(command, str):
     raise ValueError("Provided command needs to be a string")
   
   # Check if the port is open
-  if not port.is_open:
+  if not connection.is_open:
     raise Exception("Port not open, connect device to port first")
 
   # Set timeout to 0.01 
-  port.timeout = .01
+  connection.timeout = .01
 
   # Check if it is a known command
   prog = re.compile( r"|".join(CMDS) )
-  if not prog.match( command ):
+  if not prog.search( command ):
     warnings.warn("Unknown command, it might not work.")
 
+  prog = re.compile( REGEX_RETURN_END )
+
   # Send command
-  port.write( command.encode() )
+  connection.write( command.encode() )
+
+  # Send linebreak to start command
+  connection.write( "\r\n".encode() )
 
   # Read port
   data = ""
   while True:
-    read = port.readline()
-    print(read)
-    data += read.decode()
+    read = connection.readline().decode()
+    data += read
+
+    if verbose is True and (read != ""):
+      print(read)
 
     # Stop reading when linebreak received
-    if "\n" in read.decode():
+    if prog.search(data):
       break
 
   # Reset timeout
-  port.timeout = None
+  connection.timeout = None
 
   return data
 

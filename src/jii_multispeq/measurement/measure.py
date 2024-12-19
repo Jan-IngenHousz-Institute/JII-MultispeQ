@@ -9,6 +9,7 @@ import re
 import warnings
 import hashlib
 import os
+import pandas as pd
 
 from jii_multispeq.constants import REGEX_RETURN_END
 from jii_multispeq.measurement.sanitize import sanitize
@@ -262,11 +263,11 @@ def view ( data=None ):
   return None
 
 
-def to_df ( data=None ):
+def to_df ( data=None, append=None ):
   """
-  Tabular display of data for a single measurent. If a parameter is a 
-  list or dictionary or other type 'n/a' will be displayed as such
-  content will not be plotted.
+  Adding data to dataframe. A new dataframe can be created
+  or the data can be appended to an existing one, if the
+  column format is the same.
 
   :param data: MultispeQ data output
   :type data: dict or list[dict]
@@ -284,22 +285,6 @@ def to_df ( data=None ):
   if not isinstance(data, (dict, list)):
     raise ValueError("Provided data needs to be a dictionary or list of dictionarys")
   
-  keys = sorted(data.keys(), key=str.lower)
-  table_content = []
+  df = pd.DataFrame( data )
 
-  for key in keys:
-    value = data[key]
-    vtype = type(value)
-
-    if isinstance(value, (str, float, int )) or value is None:
-      value = str(value)
-    else:
-      value = 'n/a'
-
-    table_content.append([key, value, vtype])
-
-  table = tabulate(table_content, headers=['Parameter', 'Value', 'Type'])
-  
-  print(table)
-
-  return None
+  return df

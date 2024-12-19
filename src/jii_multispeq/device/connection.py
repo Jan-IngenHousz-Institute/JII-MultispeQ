@@ -53,8 +53,8 @@ def disconnect ( connection=None ):
   """
   Disconnect device from serial port.
 
-  :param connection: Port the MultisepQ is connected to.
-  :type connection: str
+  :param connection: Connection to the MultispeQ.
+  :type connection: serial
 
   :return: None
   """

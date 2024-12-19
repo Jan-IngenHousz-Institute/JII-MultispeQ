@@ -39,15 +39,17 @@ def connect ( port=None, baudrate=115200, timeout=None ):
   if not timeout is None and not isinstance(timeout, float):
     raise ValueError("Timeout needs to be defined as a float")
 
-  ser = serial.Serial( port=port, baudrate=baudrate, timeout=timeout )
+  connection = serial.Serial( port=port, baudrate=baudrate, timeout=timeout )
 
-  if not ser.is_open:
+  if not connection.is_open:
     raise serial.SerialException("Device not connected")
+  
+  print("Connected Opened")
 
-  return ser
+  return connection
 
 
-def disconnect ( port=None ):
+def disconnect ( connection=None ):
   """
   Disconnect device from serial port.
 
@@ -57,8 +59,8 @@ def disconnect ( port=None ):
   :return: None
   """
 
-  if port.is_open:
-    port.close()
+  if connection.is_open:
+    connection.close()
     print("Connection closed")
   else:
     print("Connection already closed")

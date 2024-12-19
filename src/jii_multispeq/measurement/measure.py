@@ -10,9 +10,12 @@ import warnings
 import hashlib
 import os
 
+from jii_multispeq.constants import REGEX_RETURN_END
+from jii_multispeq.measurement.sanitize import sanitize
+
 from tabulate import tabulate
 
-from jii_multispeq.measurement.checksum import get_crc32, strip_crc32
+from jii_multispeq.measurement.checksum import strip_crc32
 
 def measure ( connection=None, protocol=[{}], filename='auto', notes="", directory="./local/" ):
   """
@@ -45,7 +48,7 @@ def measure ( connection=None, protocol=[{}], filename='auto', notes="", directo
   if connection is None:
     raise ValueError("A port for the MultispeQ needs to be defined")
   
-  if not isinstance(protocol, (dict, str)):
+  if not isinstance(protocol, (dict, str, list)):
     raise ValueError("Provided protocol needs to be a string or dictionary")
   
   if not isinstance(notes, str):
@@ -62,17 +65,20 @@ def measure ( connection=None, protocol=[{}], filename='auto', notes="", directo
     raise Exception("Port not open, connect device to port first")
 
   # Check if the protocol is a dictionary and stringify
-  if isinstance( protocol, dict ):
+  if isinstance( protocol, (dict, list) ):
     protocol = json.dumps( protocol, indent=None)
 
   # Write the protocol to the Instrument
   connection.write( protocol.encode() )
 
+  # Send linebreak to start protocol
+  connection.write( "\r\n".encode() )
+
   # Data string
   data = ""
 
   # Regular expression to test for CRC32 checksum
-  prog = re.compile( r'[}ABCDEF0-9]{9}' )
+  prog = re.compile( REGEX_RETURN_END, re.M | re.I )
 
   # Read port
   while True:
@@ -81,38 +87,22 @@ def measure ( connection=None, protocol=[{}], filename='auto', notes="", directo
     # Stop reading when linebreak received
     if prog.search( data ):
       break
+
   # Remove linebreaks and split crc and data
   data, crc32 = strip_crc32( data )
 
-  json_str = data.replace("'", "\"")
-
-  """
-  {
-    "device_name":"My Instrument",
-    "device_version":"1",
-    "device_id":"ff:ff:ff:ff",
-    "device_battery":15,
-    "device_firmware":2.21,
-    "sample":[
-        {
-            "protocol_id":"123",
-            "light_intensity":100,
-            "data_raw":[]
-        }
-    ]
-  }
-  """
+  ## Sanitize Strings
+  json_str = sanitize( data )
 
   try:
     data = json.loads(json_str)
   except json.decoder.JSONDecodeError as e:
     warnings.warn(e)
-    data = { 'Error': e }
-    pass
+    return { 'Error': e }, crc32 #TODO: pass
 
   # Show a warning for battery below 25%
   if 'device_battery' in data and data['device_battery'] < 25:
-    warnings.warn("Device battery low! Currently at %s%, recharge soon." % data['device_battery'])
+    warnings.warn('Device battery low! Currently at %s%%, recharge soon.' % data['device_battery'])
 
   # Add filename
   data['name'] = filename

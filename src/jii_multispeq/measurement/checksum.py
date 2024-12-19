@@ -2,8 +2,10 @@
 Checksum handeling and calculation for MultispeQ Measurements.
 """
 
+import re
 import zlib
 import warnings
+from jii_multispeq.constants import REGEX_CHECKSUM
 
 def get_crc32( data=None ):
   """
@@ -48,9 +50,16 @@ def strip_crc32 ( data=None ):
   
   if not isinstance(data, str):
     raise ValueError("Provided data needs to be a string")
-  
-  # Decode received data
+
+  # Remove trailing spaces or line breaks
   data = data.strip()
+
+  # Check if there is an attached checksum 
+  prog = re.compile( REGEX_CHECKSUM, re.I )
+  result = prog.search( data )
+
+  if result is None:
+    return data, None  
   
   crc32 = data[-8:]
   data = data[:-8]

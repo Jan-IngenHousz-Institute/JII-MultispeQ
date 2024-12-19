@@ -6,7 +6,9 @@ import json
 import re
 import warnings
 from tabulate import tabulate
-from jii_multispeq.measurement.checksum import strip_crc32 
+from jii_multispeq.measurement.checksum import strip_crc32
+from jii_multispeq.measurement.sanitize import sanitize
+from jii_multispeq.constants import REGEX_RETURN_END
 
 def is_connected ( connection=None ):
   """
@@ -43,36 +45,16 @@ def is_connected ( connection=None ):
     if "\n" in read.decode():
       break
 
-  # Decode received data
-  data = data.decode()
-
-  # Regular expression to test for CRC32 checksum
-  prog = re.compile( r'[}ABCDEF0-9]{9}' )
-  result = prog.search( data )
-
-  if result is None:
-    raise ValueError("String has no checksum")
-  
+  # Remove checksum if available
   data, crc32 = strip_crc32( data )
-
-  json_str = data.replace("'", "\"")
-  data = json.loads(json_str)
-
-  info =[
-      data["device_name"],
-      data["device_version"],
-      data["device_id"],
-      data["device_battery"],
-      data["device_firmware"]
-    ]
-
-  # Display Information
-  output = tabulate( [info], headers=['Name', 'Version', 'ID', 'Battery', 'Firmware'])
-  print( output )
 
   connection.timeout = None
 
-  return data, crc32
+  if data == 'MultispeQ Ready':
+    print("MultispeQ found")
+    return True
+  
+  return False
 
 def get_memory ( connection=None, verbose=False ):
   """
@@ -99,7 +81,7 @@ def get_memory ( connection=None, verbose=False ):
   data = ""
 
   # Regular expression to test for CRC32 checksum
-  prog = re.compile( r'[}ABCDEF0-9]{9}' )
+  prog = re.compile( REGEX_RETURN_END )
 
   # Read port
   while True:
@@ -114,12 +96,20 @@ def get_memory ( connection=None, verbose=False ):
 
   data, crc32 = strip_crc32( data )
 
-  json_acceptable_string = data.replace("'", "\"")
-  data = json.loads(json_acceptable_string)
+  # Sanitize quotes
+  data = sanitize( data )
+
+  try:
+    data = json.loads(data)
+    pass
+  except json.JSONDecodeError as e:
+    print(e)
+    pass
 
   # Display Information
-  output = tabulate( data.items() , headers=['Parameter', 'Value'])
-  print( output )
+  if verbose:
+    output = tabulate( data.items() , headers=['Parameter', 'Value'])
+    print( output )
 
   # Reset timeout
   connection.timeout = None

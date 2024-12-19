@@ -57,8 +57,8 @@ def measure ( connection=None, protocol=[{}], filename='auto', notes="", directo
   if not isinstance(directory, str):
     raise ValueError("Provided directory has to be a string")
   
-  if filename is None:
-    filename = start.strftime("YYYY-MM-DD HHmmss")
+  if filename == 'auto':
+    filename = start.strftime("%Y-%m-%d %H%%%M")
 
   # Check if the port is open
   if not connection.is_open:
@@ -105,7 +105,8 @@ def measure ( connection=None, protocol=[{}], filename='auto', notes="", directo
     warnings.warn('Device battery low! Currently at %s%%, recharge soon.' % data['device_battery'])
 
   # Add filename
-  data['name'] = filename
+  if not filename is None:
+    data['name'] = filename
 
   # Add Notes
   data['notes'] = notes
@@ -121,19 +122,21 @@ def measure ( connection=None, protocol=[{}], filename='auto', notes="", directo
   data['md5_measurement'] = hashlib.md5( json_str.encode() ).hexdigest()
 
   ## Save file with measurements in notebook format
-  if not os.path.exists( directory ):
-    os.makedirs( directory )
+  if not filename is None:
+    if not os.path.exists( directory ):
+      os.makedirs( directory )
 
-  path = os.path.join( directory, (filename + '.json') )
+    path = os.path.join( directory, (filename + '.json') )
 
-  ## Check if filename already exists, if not attach crc32
-  if os.path.exists(path):
-    path = os.path.join( directory, (filename + ' - ' + get_crc32(json_str) + '.json') )
-    warnings.warn("File already existed, and file saved as %s" % path )
+    ## Check if filename already exists. If true, " - #"" is attached
+    i = 1
+    while os.path.exists(path):
+      path = os.path.join( directory, '%s - %s.json' % (filename,i) )
+      i += 1
 
-  ## Write to disk
-  with open( path, 'w') as fp:
-    json.dump(data, fp,  indent=2)
+    ## Write to disk
+    with open( path, 'w') as fp:
+      json.dump(data, fp,  indent=2)
 
   return data, crc32
 

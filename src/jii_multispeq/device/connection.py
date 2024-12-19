@@ -36,7 +36,7 @@ def connect ( port=None, baudrate=115200, timeout=None ):
   if baudrate is None or not isinstance(baudrate, int):
     raise ValueError("The baudrate needs to be defined and provided as an integer")
 
-  if not isinstance(timeout, float):
+  if not timeout is None and not isinstance(timeout, float):
     raise ValueError("Timeout needs to be defined as a float")
 
   ser = serial.Serial( port=port, baudrate=baudrate, timeout=timeout )

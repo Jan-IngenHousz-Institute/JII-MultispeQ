@@ -14,16 +14,16 @@ from tabulate import tabulate
 
 from jii_multispeq.measurement.checksum import get_crc32, strip_crc32
 
-def measure ( port=None, protocol=[{}], filename=None, notes="", directory="./local/" ):
+def measure ( connection=None, protocol=[{}], filename='auto', notes="", directory="./local/" ):
   """
   Take a measurement using a MultispeQ connected via a serial connection (USB or Bluetooth).
 
-  :param port: Port the MultisepQ is connected to.
-  :type port: str
+  :param connection: Connection to the MultispeQ.
+  :type port: serial
   :param protocol: Measurement Protocol
-  :type protocol: str or dict
-  :param name: Name for meaurement file. Default name is current date and time.
-  :type name: str
+  :type protocol: str, dict or list
+  :param filename: Name for saved measurement file. If set to None, no file is saved, Default name is current date and time.
+  :type filename: str
   :param notes: Notes for the measurement
   :type notes: str
   :param directory: Directory the measurement is saved in. Default directory is "local".
@@ -42,7 +42,7 @@ def measure ( port=None, protocol=[{}], filename=None, notes="", directory="./lo
 
   start = datetime.datetime.now()
 
-  if port is None:
+  if connection is None:
     raise ValueError("A port for the MultispeQ needs to be defined")
   
   if not isinstance(protocol, (dict, str)):
@@ -58,7 +58,7 @@ def measure ( port=None, protocol=[{}], filename=None, notes="", directory="./lo
     filename = start.strftime("YYYY-MM-DD HHmmss")
 
   # Check if the port is open
-  if not port.is_open:
+  if not connection.is_open:
     raise Exception("Port not open, connect device to port first")
 
   # Check if the protocol is a dictionary and stringify
@@ -66,7 +66,7 @@ def measure ( port=None, protocol=[{}], filename=None, notes="", directory="./lo
     protocol = json.dumps( protocol, indent=None)
 
   # Write the protocol to the Instrument
-  port.write( protocol.encode() )
+  connection.write( protocol.encode() )
 
   # Data string
   data = ""
@@ -76,12 +76,11 @@ def measure ( port=None, protocol=[{}], filename=None, notes="", directory="./lo
 
   # Read port
   while True:
-    data += port.readline()
-
+    data += connection.readline().decode()
+    
     # Stop reading when linebreak received
-    if prog.search( data.decode() ):
+    if prog.search( data ):
       break
-  
   # Remove linebreaks and split crc and data
   data, crc32 = strip_crc32( data )
 

@@ -146,22 +146,25 @@ def load_files ( directory=None, recursive=False, fn=None ):
   return data
 
 
-def load_files_df ( directory=None, recursive=False ):
+def load_files_df ( directory=None, recursive=False, fn=None ):
   """
   Load files from selected directories into a dataframe.
 
   :param directory: Measurements in one or multiple directories
   :type directory: str or list[str]
+  :param recursive: Recursive listing of files and subdirectories
+  :type recursive: bool
+  :param fn: Function to analyze the provided data
+  :type fn: function
 
   :return: Dataframe with Measurements
   :rtype: pandas.DataFrame
   """
 
-  data = load_files ( directory, recursive )
+  ## Load all files and apply function if selected
+  data = load_files ( directory, recursive, fn )
   
-  ## Now the data needs to be transformed to be added to the dataframe
-  print(data)
-
-  df = pd.DataFrame()
+  ## Now the data can be added to the dataframe
+  df = pd.DataFrame(data)
 
   return df

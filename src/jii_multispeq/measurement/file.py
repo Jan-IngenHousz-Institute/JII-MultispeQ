@@ -44,18 +44,23 @@ def list_files ( directory='./local/' ):
         date_str = datetime.datetime.fromtimestamp(ctime).strftime('%Y-%m-%d %H:%M')
         name_str = 'n/a'
         notes_str = 'n/a'
+        type_str = 'single'
 
         if isinstance(data, list) and len(data) > 1:
-          if 'created_at' in data[0]:
-            date_str = datetime.datetime.fromisoformat(data[0]['created_at']).strftime('%Y-%m-%d %H:%M')
-          if 'name' in data[0]:
-            name_str = data[0]['name']
-          if 'notes' in data[0]:
-            notes_str = data[0]['notes']
+          type_str = "multi (%s)" % len(data)
+
+        if isinstance(data, dict):
+          if 'created_at' in data:
+            date_str = datetime.datetime.fromisoformat(data['created_at']).strftime('%Y-%m-%d %H:%M')
+          if 'name' in data:
+            name_str = data['name']
+          if 'notes' in data:
+            notes_str = "n/a" if data['notes'] == "" else data['notes']
 
         tbl_content.append([
           file,
           date_str,
+          type_str,
           name_str,
           notes_str
         ])
@@ -63,7 +68,7 @@ def list_files ( directory='./local/' ):
     if len(tbl_content) > 0:
 
       print( "\n├─ %s (%s)\n" % (root, len(tbl_content) ) )
-      table = tabulate( tbl_content, headers=['File', 'Date', 'Name', 'Notes'] )
+      table = tabulate( tbl_content, headers=['File', 'Date', 'Type', 'Name', 'Notes'] )
       print( table )
 
 

@@ -112,9 +112,10 @@ def load_files ( directory=None, recursive=False ):
             files_all.append( os.path.join(root, file) )
     else:
       for file in os.listdir( dir ):
-        if os.path.isfile(file) and file.lower().endswith('.json'):
-          files_all.append( file )
-
+        filepath = os.path.join(dir, file)
+        if os.path.isfile(filepath) and filepath.lower().endswith('.json'):
+          files_all.append( filepath )
+  
   # Remove duplicates that may occure when recursive is used with multiple directories
   files_all = list(set(files_all)) 
 

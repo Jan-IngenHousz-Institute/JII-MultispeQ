@@ -10,6 +10,8 @@ import warnings
 from tabulate import tabulate
 import pandas as pd
 
+from jii_multispeq.measurement import analyze as _analyze 
+
 def list_files ( directory='./local/' ):
   """
   List all local files in the provided directory
@@ -72,18 +74,23 @@ def list_files ( directory='./local/' ):
       print( table )
 
 
-def load_files ( directory=None, recursive=False ):
+def load_files ( directory=None, recursive=False, fn=None ):
   """
   Load files from selected directories into a dictionary.
 
   :param directory: Measurements in one or multiple directories
   :type directory: str or list[str]
+  :param recursive: Recursive listing of files and subdirectories
+  :type recursive: bool
+  :param fn: Function to analyze the provided data
+  :type fn: function
 
   :return: Dictionary with Measurements
   :rtype: list[dict]
 
   :raise ValueError: if directory is not provided with a sting or list
   :raise ValueError: if recursive is not True or False
+  :raise ValueError: if no valid function is provided
   """
 
   if directory is None:
@@ -92,6 +99,9 @@ def load_files ( directory=None, recursive=False ):
 
   if not isinstance(directory, (str, list)):
     raise ValueError("Directory needs to be provided as a string or list")
+
+  if (not fn is None) & (not hasattr( fn, '__call__')):
+    raise Exception("No function is provided")
 
   if isinstance(directory, str):
     directory = [directory]
@@ -124,11 +134,15 @@ def load_files ( directory=None, recursive=False ):
   for file_path in files_all:
     try:
       with open( file_path, 'r', encoding='utf-8') as fp:
-        data += json.load( fp )
+        data.append( json.load( fp ) )
     except json.JSONDecodeError:
       warnings.warn('Error: Invalid JSON (%s)' % file_path )
       continue
   
+  ## Run function on every element
+  if (not fn is None) & (hasattr( fn, '__call__')):
+    data[:] = [_analyze(itm, fn) for itm in data]
+
   return data
 
 

@@ -25,6 +25,9 @@ def is_connected ( connection=None ):
   # Set timeout to 0.01 
   connection.timeout = .01
 
+  if not connection.is_open:
+    return False
+
   # Send handshake phrase
   connection.write( "hello".encode() )
 

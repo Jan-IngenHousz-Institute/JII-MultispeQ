@@ -59,7 +59,7 @@ def measure ( connection=None, protocol=[{}], filename='auto', notes="", directo
     raise ValueError("Provided directory has to be a string")
   
   if filename == 'auto':
-    filename = start.strftime("%Y-%m-%d %H%%%M")
+    filename = start.strftime("%Y-%m-%d_%H%M")
 
   # Check if the connection is open
   if not connection.is_open:

@@ -113,7 +113,7 @@ The :func:`jii_multispeq.measurement.measure` allows to save the data from the M
 to the disk as well. The example below shows how to only return the data, setting the
 filename to ``None`` or returning the data and saving the output to a file by specifying
 the file name and a directory. If the filename is not set, or defined as ``auto``, a
-filename is generated based on date and time. In case the directory is not set, files will
+filename is generated based on date and time (``YYYY-MM-DD_HHmm``). In case the directory is not set, files will
 automatically saved to the ``./local`` directory.
 
 If a defined directory doesn't exists it will be created. Files will not be overwritten,

@@ -5,7 +5,7 @@ First we must make sure we have the ``JII MultispeQ`` library installed:
 
 .. code-block:: bash
   
-    pip install git+https://github.com/JII/JII-MultispeQ.git --upgrade --no-cache-dir
+    pip install git+https://github.com/Jan-Ingenhousz-Institute/JII-MultispeQ.git --upgrade --no-cache-dir
 
 Now you have all the tools available to download your ``Project`` data and information to get started.
 

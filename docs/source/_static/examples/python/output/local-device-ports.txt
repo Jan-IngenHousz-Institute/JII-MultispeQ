@@ -1,0 +1,6 @@
+Port                             Name                        Description    Manufacturer    Product
+-------------------------------  --------------------------  -------------  --------------  ----------
+/dev/cu.debug-console            cu.debug-console            n/a
+/dev/cu.Bluetooth-Incoming-Port  cu.Bluetooth-Incoming-Port  n/a
+/dev/cu.usbmodem42949672951      cu.usbmodem42949672951      USB Serial     Teensyduino     USB Serial
+/dev/cu.MultiSpeQ                cu.MultiSpeQ                n/a

@@ -64,7 +64,7 @@ Establish a Connection
 Once the serial port is identified, use the following code to open the connection to your MultispeQ device.
 The returned connection (:class:`serial.serialposix.Serial`) will be used with all other functions.
 
-.. literalinclude:: _static/examples/python/local-device-command.py
+.. literalinclude:: _static/examples/python/local-device-connect.py
    :language: python
    :caption: *Example:* Open a connection to a MultispeQ device.
    :linenos:
@@ -77,7 +77,7 @@ Test the Connection
 When the connection is established, it needs to be checked it the MultispeQ device is properly responding.
 The :func:`~jii_multispeq.device.is_connected` checks if the connection is open and identifies the MultispeQ.
 
-.. literalinclude:: _static/examples/python/local-device-command.py
+.. literalinclude:: _static/examples/python/local-device-connect.py
    :language: python
    :caption: *Example:* Check if the connection is open and the MultispeQ is responding
    :linenos:
@@ -224,7 +224,7 @@ The following functions are available in the applications and probably more conv
 Send a Command
 ^^^^^^^^^^^^^^
 
-.. literalinclude:: _static/examples/python/local-device-command.py
+.. literalinclude:: _static/examples/python/local-device-connect.py
    :language: python
    :caption: *Example:* Sending a command to a connected MultispeQ device.
    :linenos:

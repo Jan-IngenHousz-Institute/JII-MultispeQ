@@ -156,7 +156,7 @@ The suggested template contains a header for a detailed description, the protoco
 
 
 Protocol File -  Template
-"""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. literalinclude:: _static/protocols/template.py
    :language: python

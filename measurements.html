@@ -1,0 +1,806 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="./">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Analysis" href="modules/analysis.html" /><link rel="prev" title="Protocols" href="protocols.html" />
+
+    <link rel="shortcut icon" href="_static/favicon.png"/><!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
+        <title>Measurements - JII - MultispeQ</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=354aac6f" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=302659d7" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">JII - MultispeQ</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="_static/jan-ingenhousz-institute-logo.webp" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">JII - MultispeQ</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projects.html">Online - Projects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="protocols.html">Protocols</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Measurements</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules/analysis.html">Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/device.html">Device</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/measurement.html">Measurement</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/project.html">Project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/protocol.html">Protocol</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Resources</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://www.jan-ingenhousz-institute.org">Jan Ingenhousz Institute</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/Jan-IngenHousz-Institute">GitHub</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="_sources/measurements.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="measurements">
+<h1>Measurements<a class="headerlink" href="#measurements" title="Link to this heading">¶</a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">JII-MultispeQ</span></code> package allows the direct connection to a MultispeQ using a python script, instead of using a
+separate application. In the following examples, it’s shown how to connect to a MultispeQ, use protocols or commands
+with the device and save the measurements to your local computer, as well as analyze them with custom functions and
+load them for a later analysis.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">JII-MultispeQ</span></code> package is for local measurements. If the measurements are intended to be saved with a project
+online, use the PhotosynQ, Inc. Desktop or Mobile app.</p>
+</div>
+<section id="connect-a-multispeq">
+<h2>Connect a MultispeQ<a class="headerlink" href="#connect-a-multispeq" title="Link to this heading">¶</a></h2>
+<p>Make sure your MultispeQ is powered on and connect it to your computer either using USB or Bluetooth®. After that, you have
+to open the connection by selecting the Serial port the device is connected to. Depending on the operating system used, the
+port names have different names.</p>
+<div class="table-wrapper colwidths-given docutils container" id="id1">
+<table class="docutils align-default" id="id1">
+<caption><span class="caption-text">Basic Serial Port Names depending on the OS</span><a class="headerlink" href="#id1" title="Link to this table">¶</a></caption>
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 35.0%" />
+<col style="width: 35.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Operating system</p></th>
+<th class="head"><p>USB</p></th>
+<th class="head"><p>Bluetooth®</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Windows</p></td>
+<td><p>COM…</p></td>
+<td><p>COM…</p></td>
+</tr>
+<tr class="row-odd"><td><p>macOS</p></td>
+<td><p>usbmodem…</p></td>
+<td><p>Instrument-Name</p></td>
+</tr>
+<tr class="row-even"><td><p>Linux</p></td>
+<td><p>ACM…</p></td>
+<td><p>Not tested</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Connecting a Device</p>
+<ol class="arabic simple">
+<li><p>When connecting the device via USB, make sure the mirco-USB cable is designed for data transfer, not just charging.</p></li>
+<li><p>When using Bluetooth®, the required pairing code is <code class="docutils literal notranslate"><span class="pre">1234</span></code>.</p></li>
+</ol>
+</div>
+<section id="available-ports">
+<h3>Available Ports<a class="headerlink" href="#available-ports" title="Link to this heading">¶</a></h3>
+<p>Use the <code class="xref py py-func docutils literal notranslate"><span class="pre">get_ports()</span></code> to see the list of available ports on your
+computer. Make sure to use the port, not just the name when selecting your device’s port.</p>
+<div class="literal-block-wrapper docutils container" id="local-get-ports-1">
+<div class="code-block-caption"><span class="caption-text"><em>Example:</em> Get a list of available serial ports and connected devices.</span><a class="headerlink" href="#local-get-ports-1" title="Link to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="kn">import</span> <span class="nn">jii_multispeq.device</span> <span class="k">as</span> <span class="nn">_device</span>
+<span class="linenos">2</span>
+<span class="linenos">3</span><span class="c1">## View Ports</span>
+<span class="linenos">4</span><span class="n">_device</span><span class="o">.</span><span class="n">get_ports</span><span class="p">(</span> <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="local-get-ports-2">
+<div class="code-block-caption"><span class="caption-text"><em>Example:</em> Output of the <code class="xref py py-func docutils literal notranslate"><span class="pre">jii_multispeq.device.get_ports()</span></code> function (on macOS).</span><a class="headerlink" href="#local-get-ports-2" title="Link to this code">¶</a></div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Port<span class="w">                             </span>Name<span class="w">                        </span>Description<span class="w">    </span>Manufacturer<span class="w">    </span>Product
+-------------------------------<span class="w">  </span>--------------------------<span class="w">  </span>-------------<span class="w">  </span>--------------<span class="w">  </span>----------
+/dev/cu.debug-console<span class="w">            </span>cu.debug-console<span class="w">            </span>n/a
+/dev/cu.Bluetooth-Incoming-Port<span class="w">  </span>cu.Bluetooth-Incoming-Port<span class="w">  </span>n/a
+/dev/cu.usbmodem42949672951<span class="w">      </span>cu.usbmodem42949672951<span class="w">      </span>USB<span class="w"> </span>Serial<span class="w">     </span>Teensyduino<span class="w">     </span>USB<span class="w"> </span>Serial
+/dev/cu.MultiSpeQ<span class="w">                </span>cu.MultiSpeQ<span class="w">                </span>n/a
+</pre></div>
+</div>
+</div>
+</section>
+<section id="establish-a-connection">
+<h3>Establish a Connection<a class="headerlink" href="#establish-a-connection" title="Link to this heading">¶</a></h3>
+<p>Once the serial port is identified, use the following code to open the connection to your MultispeQ device.
+The returned connection (<code class="xref py py-class docutils literal notranslate"><span class="pre">serial.serialposix.Serial</span></code>) will be used with all other functions.</p>
+<div class="literal-block-wrapper docutils container" id="local-device-connect-1">
+<div class="code-block-caption"><span class="caption-text"><em>Example:</em> Open a connection to a MultispeQ device.</span><a class="headerlink" href="#local-device-connect-1" title="Link to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="kn">import</span> <span class="nn">jii_multispeq.device</span> <span class="k">as</span> <span class="nn">_device</span>
+<span class="linenos">2</span>
+<span class="linenos">3</span><span class="c1">## Establish connection</span>
+<span class="linenos">4</span><span class="n">_connection</span> <span class="o">=</span> <span class="n">_device</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span> <span class="s2">&quot;/com1&quot;</span> <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="test-the-connection">
+<h3>Test the Connection<a class="headerlink" href="#test-the-connection" title="Link to this heading">¶</a></h3>
+<p>When the connection is established, it needs to be checked it the MultispeQ device is properly responding.
+The <code class="xref py py-func docutils literal notranslate"><span class="pre">is_connected()</span></code> checks if the connection is open and identifies the MultispeQ.</p>
+<div class="literal-block-wrapper docutils container" id="local-device-connect-2">
+<div class="code-block-caption"><span class="caption-text"><em>Example:</em> Check if the connection is open and the MultispeQ is responding</span><a class="headerlink" href="#local-device-connect-2" title="Link to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="c1">## Test if connection is open and device is communicating</span>
+<span class="linenos">2</span><span class="k">if</span> <span class="n">_device</span><span class="o">.</span><span class="n">is_connected</span><span class="p">(</span> <span class="n">_connection</span> <span class="p">):</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="take-a-measurement">
+<h2>Take a Measurement<a class="headerlink" href="#take-a-measurement" title="Link to this heading">¶</a></h2>
+<p>If the MultispeQ device is connected and the connection is open, measurements can be run now.
+The example below shows how a single relative Chlorophyll (SPAD) measurement can be taken.</p>
+<div class="literal-block-wrapper docutils container" id="local-device-measurement-1">
+<div class="code-block-caption"><span class="caption-text"><em>Example:</em> Take a SPAD measurement with the MultispeQ</span><a class="headerlink" href="#local-device-measurement-1" title="Link to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">jii_multispeq.measurement</span> <span class="k">as</span> <span class="nn">_measurement</span>
+<span class="linenos"> 2</span><span class="kn">import</span> <span class="nn">jii_multispeq.device</span> <span class="k">as</span> <span class="nn">_device</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="c1">## MultispeQ Protocol</span>
+<span class="linenos"> 5</span><span class="n">spad_protocol</span> <span class="o">=</span> <span class="p">[{</span>
+<span class="linenos"> 6</span>  <span class="s2">&quot;spad&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="linenos"> 7</span><span class="p">}]</span>
+<span class="linenos"> 8</span>
+<span class="linenos"> 9</span><span class="c1">## MultispeQ Response Analysis</span>
+<span class="linenos">10</span><span class="k">def</span> <span class="nf">spad_fn</span><span class="p">(</span> <span class="n">_data</span> <span class="p">):</span>
+<span class="linenos">11</span>  <span class="n">output</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="linenos">12</span>  <span class="n">output</span><span class="p">[</span><span class="s2">&quot;SPAD&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_data</span><span class="p">[</span><span class="s2">&quot;spad&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="linenos">13</span>  <span class="k">return</span> <span class="n">output</span>
+<span class="linenos">14</span>
+<span class="linenos">15</span><span class="c1">## Establish connection</span>
+<span class="linenos">16</span><span class="n">_connection</span> <span class="o">=</span> <span class="n">_device</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span> <span class="s2">&quot;/com1&quot;</span> <span class="p">)</span>
+<span class="linenos">17</span>
+<span class="linenos">18</span><span class="c1">## Test if connection is open and device is communicating</span>
+<span class="linenos">19</span><span class="k">if</span> <span class="n">_device</span><span class="o">.</span><span class="n">is_connected</span><span class="p">(</span> <span class="n">_connection</span> <span class="p">):</span>
+<span class="linenos">20</span>
+<span class="linenos">21</span>  <span class="n">data</span><span class="p">,</span> <span class="n">crc32</span> <span class="o">=</span> <span class="n">_measurement</span><span class="o">.</span><span class="n">measure</span><span class="p">(</span> <span class="n">_connection</span><span class="p">,</span> <span class="n">spad_protocol</span><span class="p">,</span> 
+<span class="linenos">22</span>                                     <span class="kc">None</span><span class="p">,</span> 
+<span class="linenos">23</span>                                     <span class="s1">&#39;Single SPAD meaurement&#39;</span> <span class="p">)</span>
+<span class="linenos">24</span>
+<span class="linenos">25</span>  <span class="c1">## Run the analysis function</span>
+<span class="linenos">26</span>  <span class="n">data</span> <span class="o">=</span> <span class="n">_measurement</span><span class="o">.</span><span class="n">analyze</span><span class="p">(</span> <span class="n">data</span><span class="p">,</span> <span class="n">spad_fn</span> <span class="p">)</span>
+<span class="linenos">27</span>
+<span class="linenos">28</span>  <span class="c1">## View response as a table</span>
+<span class="linenos">29</span>  <span class="n">_measurement</span><span class="o">.</span><span class="n">view</span><span class="p">(</span> <span class="n">data</span> <span class="p">)</span>
+<span class="linenos">30</span>
+<span class="linenos">31</span><span class="c1">## Close the connection</span>
+<span class="linenos">32</span><span class="n">_device</span><span class="o">.</span><span class="n">disconnect</span><span class="p">(</span> <span class="n">_connection</span> <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="local-device-measurement-2">
+<div class="code-block-caption"><span class="caption-text"><em>Example:</em> Output from a SPAD measurement with the MultispeQ</span><a class="headerlink" href="#local-device-measurement-2" title="Link to this code">¶</a></div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Parameter<span class="w">        </span>Value<span class="w">                             </span>Type
+---------------<span class="w">  </span>--------------------------------<span class="w">  </span>---------------
+created_at<span class="w">       </span><span class="m">2024</span>-12-21T10:38:11.498360+01:00<span class="w">  </span>&lt;class<span class="w"> </span><span class="s1">&#39;str&#39;</span>&gt;
+device_battery<span class="w">   </span><span class="m">95</span><span class="w">                                </span>&lt;class<span class="w"> </span><span class="s1">&#39;int&#39;</span>&gt;
+device_firmware<span class="w">  </span><span class="m">2</span>.3465<span class="w">                            </span>&lt;class<span class="w"> </span><span class="s1">&#39;float&#39;</span>&gt;
+device_id<span class="w">        </span><span class="m">01</span>:12:53:##<span class="w">                       </span>&lt;class<span class="w"> </span><span class="s1">&#39;str&#39;</span>&gt;
+device_name<span class="w">      </span>MultispeQ<span class="w">                         </span>&lt;class<span class="w"> </span><span class="s1">&#39;str&#39;</span>&gt;
+device_version<span class="w">   </span><span class="m">2</span><span class="w">                                 </span>&lt;class<span class="w"> </span><span class="s1">&#39;str&#39;</span>&gt;
+md5_measurement<span class="w">  </span>3565bc573416002424c6072bdfb033f2<span class="w">  </span>&lt;class<span class="w"> </span><span class="s1">&#39;str&#39;</span>&gt;
+md5_protocol<span class="w">     </span>b133a7f804cd1d1608da0577b3d89f72<span class="w">  </span>&lt;class<span class="w"> </span><span class="s1">&#39;str&#39;</span>&gt;
+<span class="hll">notes<span class="w">            </span>Single<span class="w"> </span>SPAD<span class="w"> </span>meaurement<span class="w">            </span>&lt;class<span class="w"> </span><span class="s1">&#39;str&#39;</span>&gt;
+</span>protocol<span class="w">         </span>n/a<span class="w">                               </span>&lt;class<span class="w"> </span><span class="s1">&#39;list&#39;</span>&gt;
+<span class="hll">SPAD<span class="w">             </span><span class="m">24</span>.548<span class="w">                            </span>&lt;class<span class="w"> </span><span class="s1">&#39;float&#39;</span>&gt;
+</span></pre></div>
+</div>
+</div>
+<section id="save-measurement-to-disk">
+<h3>Save Measurement to Disk<a class="headerlink" href="#save-measurement-to-disk" title="Link to this heading">¶</a></h3>
+<p>The <a class="reference internal" href="modules/measurement.html#module-jii_multispeq.measurement.measure" title="jii_multispeq.measurement.measure"><code class="xref py py-func docutils literal notranslate"><span class="pre">jii_multispeq.measurement.measure()</span></code></a> allows to save the data from the MultispeQ
+to the disk as well. The example below shows how to only return the data, setting the
+filename to <code class="docutils literal notranslate"><span class="pre">None</span></code> or returning the data and saving the output to a file by specifying
+the file name and a directory. If the filename is not set, or defined as <code class="docutils literal notranslate"><span class="pre">auto</span></code>, a
+filename is generated based on date and time (<code class="docutils literal notranslate"><span class="pre">YYYY-MM-DD_HHmm</span></code>). In case the directory is not set, files will
+automatically saved to the <code class="docutils literal notranslate"><span class="pre">./local</span></code> directory.</p>
+<p>If a defined directory doesn’t exists it will be created. Files will not be overwritten,
+to prevent data loss. In case a filename already exists, a number will be appended to the
+filename.</p>
+<div class="literal-block-wrapper docutils container" id="local-device-measurement-3">
+<div class="code-block-caption"><span class="caption-text"><em>Example:</em> Take a SPAD measurement with the MultispeQ and save to disk</span><a class="headerlink" href="#local-device-measurement-3" title="Link to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1">## Only return data</span>
+<span class="linenos"> 2</span><span class="n">data</span><span class="p">,</span> <span class="n">crc32</span> <span class="o">=</span> <span class="n">_measurement</span><span class="o">.</span><span class="n">measure</span><span class="p">(</span> <span class="n">_connection</span><span class="p">,</span> <span class="n">spad_protocol</span><span class="p">,</span>
+<span class="hll"><span class="linenos"> 3</span>                                  <span class="kc">None</span><span class="p">,</span>
+</span><span class="linenos"> 4</span>                                  <span class="s1">&#39;Single SPAD meaurement&#39;</span> <span class="p">)</span>
+<span class="linenos"> 5</span>
+<span class="linenos"> 6</span><span class="c1">## Save data to defined file and define directory</span>
+<span class="linenos"> 7</span><span class="n">data</span><span class="p">,</span> <span class="n">crc32</span> <span class="o">=</span> <span class="n">_measurement</span><span class="o">.</span><span class="n">measure</span><span class="p">(</span> <span class="n">_connection</span><span class="p">,</span> <span class="n">spad_protocol</span><span class="p">,</span>
+<span class="hll"><span class="linenos"> 8</span>                                  <span class="s2">&quot;SPAD&quot;</span><span class="p">,</span>
+</span><span class="linenos"> 9</span>                                  <span class="s1">&#39;Single SPAD meaurement&#39;</span><span class="p">,</span>
+<span class="hll"><span class="linenos">10</span>                                  <span class="s1">&#39;./chlorophyll-measurements&#39;</span> <span class="p">)</span>
+</span><span class="linenos">11</span>
+<span class="linenos">12</span><span class="c1">## Save data automatically</span>
+<span class="linenos">13</span><span class="n">data</span><span class="p">,</span> <span class="n">crc32</span> <span class="o">=</span> <span class="n">_measurement</span><span class="o">.</span><span class="n">measure</span><span class="p">(</span> <span class="n">_connection</span><span class="p">,</span> <span class="n">spad_protocol</span><span class="p">,</span>
+<span class="linenos">14</span>                                  <span class="s1">&#39;Single SPAD meaurement&#39;</span> <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Available Protocols</p>
+<p>The <a class="reference external" href="https://github.com/Jan-IngenHousz-Institute/JII-MultispeQ-Protocols">JII-MultispeQ-Protocols</a>
+package provides preset protocols for the MultispeQ. In addition, it provides a validation function
+for custom MultispeQ protocols, helping to identify potential issues with a protocol before running it.</p>
+</div>
+</section>
+</section>
+<section id="load-saved-measurement-s">
+<h2>Load Saved Measurement(s)<a class="headerlink" href="#load-saved-measurement-s" title="Link to this heading">¶</a></h2>
+<p>Saved measurement files can be loaded into a list of dictionaries (<code class="docutils literal notranslate"><span class="pre">list[dict]</span></code>) or they can be loaded
+into a pandas dataframe.</p>
+<section id="file-summary">
+<h3>File Summary<a class="headerlink" href="#file-summary" title="Link to this heading">¶</a></h3>
+<p>It might be helpful to list files in the selected directory, to check what the content is without having to
+open individual files using the <code class="xref py py-func docutils literal notranslate"><span class="pre">list_files()</span></code> function of the
+<a class="reference internal" href="modules/measurement.html#module-jii_multispeq.measurement" title="jii_multispeq.measurement"><code class="xref py py-mod docutils literal notranslate"><span class="pre">measurement</span></code></a> module. The filenames, the date and time the measurement was saved and
+also the notes are listed by individual directories.</p>
+<div class="literal-block-wrapper docutils container" id="local-files-1">
+<div class="code-block-caption"><span class="caption-text"><em>Example:</em> View all the files in a directory including all sub-directories</span><a class="headerlink" href="#local-files-1" title="Link to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="kn">import</span> <span class="nn">jii_multispeq.measurement</span> <span class="k">as</span> <span class="nn">_measurement</span>
+<span class="linenos">2</span>
+<span class="linenos">3</span><span class="c1">## View Files in Directories</span>
+<span class="linenos">4</span><span class="n">_measurement</span><span class="o">.</span><span class="n">list_files</span><span class="p">(</span><span class="s1">&#39;./local&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="load-files">
+<h3>Load Files<a class="headerlink" href="#load-files" title="Link to this heading">¶</a></h3>
+<div class="literal-block-wrapper docutils container" id="local-files-2">
+<div class="code-block-caption"><span class="caption-text"><em>Example:</em> View all the files in a directory including all sub-directories</span><a class="headerlink" href="#local-files-2" title="Link to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="kn">import</span> <span class="nn">jii_multispeq.measurement</span> <span class="k">as</span> <span class="nn">_measurement</span>
+<span class="linenos">2</span>
+<span class="linenos">3</span><span class="c1">## Load Files Into a List</span>
+<span class="linenos">4</span><span class="n">data</span> <span class="o">=</span> <span class="n">_measurement</span><span class="o">.</span><span class="n">load_files</span><span class="p">(</span><span class="s1">&#39;./local&#39;</span><span class="p">)</span>
+<span class="linenos">5</span>
+<span class="linenos">6</span><span class="c1">## Load Files Into a Dataframe</span>
+<span class="linenos">7</span><span class="n">df</span> <span class="o">=</span> <span class="n">_measurement</span><span class="o">.</span><span class="n">load_files_df</span><span class="p">(</span><span class="s1">&#39;./local&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="recursive-loading">
+<h3>Recursive Loading<a class="headerlink" href="#recursive-loading" title="Link to this heading">¶</a></h3>
+<div class="literal-block-wrapper docutils container" id="local-files-3">
+<div class="code-block-caption"><span class="caption-text"><em>Example:</em> View all the files in a directory including all sub-directories</span><a class="headerlink" href="#local-files-3" title="Link to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="c1">## Load Files Into a List Using Recursive Search</span>
+<span class="linenos">2</span><span class="n">data</span> <span class="o">=</span> <span class="n">_measurement</span><span class="o">.</span><span class="n">load_files</span><span class="p">(</span><span class="s1">&#39;./local&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="local-files-recursive-1">
+<div class="code-block-caption"><span class="caption-text"><em>Example:</em> Take a SPAD measurement with the MultispeQ and save to disk</span><a class="headerlink" href="#local-files-recursive-1" title="Link to this code">¶</a></div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>MultispeQ/
+├──<span class="w"> </span>local/
+│<span class="w">   </span>├──<span class="w"> </span>Measurement.json
+│<span class="w">   </span>├──<span class="w"> </span>Measurement<span class="w"> </span>-<span class="w"> </span><span class="m">1</span>.json
+│<span class="w">   </span>├──<span class="w"> </span>Measurement<span class="w"> </span>-<span class="w"> </span><span class="m">2</span>.json
+│<span class="w">   </span>├──<span class="w"> </span>Measurement<span class="w"> </span>-<span class="w"> </span><span class="m">3</span>.json
+│<span class="w">   </span>├──<span class="w"> </span>Measurement<span class="w"> </span>-<span class="w"> </span><span class="m">4</span>.json
+│<span class="w">   </span>└──<span class="w"> </span>sub-directory/
+<span class="hll">│<span class="w">       </span>├──<span class="w"> </span>Measurement.json
+</span><span class="hll">│<span class="w">       </span>├──<span class="w"> </span>Measurement<span class="w"> </span>-<span class="w"> </span><span class="m">1</span>.json
+</span><span class="hll">│<span class="w">       </span>└──<span class="w"> </span>Measurement<span class="w"> </span>-<span class="w"> </span><span class="m">2</span>.json
+</span>└──<span class="w"> </span>script.py
+</pre></div>
+</div>
+</div>
+</section>
+<section id="process-data">
+<h3>Process Data<a class="headerlink" href="#process-data" title="Link to this heading">¶</a></h3>
+<div class="literal-block-wrapper docutils container" id="local-files-4">
+<div class="code-block-caption"><span class="caption-text"><em>Example:</em> View all the files in a directory including all sub-directories</span><a class="headerlink" href="#local-files-4" title="Link to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">def</span> <span class="nf">fn</span><span class="p">(</span> <span class="n">_data</span> <span class="p">):</span>
+<span class="linenos">2</span>  <span class="c1">## Data Processing here</span>
+<span class="linenos">3</span>  <span class="k">return</span> <span class="n">_data</span>
+<span class="linenos">4</span>
+<span class="linenos">5</span><span class="c1">## Load Files and Apply Function on File Content</span>
+<span class="linenos">6</span><span class="n">data</span> <span class="o">=</span> <span class="n">_measurement</span><span class="o">.</span><span class="n">load_files</span><span class="p">(</span><span class="s1">&#39;./local&#39;</span><span class="p">,</span> <span class="n">fn</span><span class="o">=</span><span class="n">fn</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="tl-dr">
+<h2>TL;DR<a class="headerlink" href="#tl-dr" title="Link to this heading">¶</a></h2>
+<p>The following functions are available in the applications and probably more convinient to use.</p>
+<section id="send-a-command">
+<h3>Send a Command<a class="headerlink" href="#send-a-command" title="Link to this heading">¶</a></h3>
+<div class="literal-block-wrapper docutils container" id="local-device-command-1">
+<div class="code-block-caption"><span class="caption-text"><em>Example:</em> Sending a command to a connected MultispeQ device.</span><a class="headerlink" href="#local-device-command-1" title="Link to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">jii_multispeq.device</span> <span class="k">as</span> <span class="nn">_device</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="c1">## Establish connection</span>
+<span class="linenos"> 4</span><span class="n">_connection</span> <span class="o">=</span> <span class="n">_device</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span> <span class="s2">&quot;/com1&quot;</span> <span class="p">)</span>
+<span class="linenos"> 5</span>
+<span class="linenos"> 6</span><span class="c1">## Test if connection is open and device is communicating</span>
+<span class="linenos"> 7</span><span class="k">if</span> <span class="n">_device</span><span class="o">.</span><span class="n">is_connected</span><span class="p">(</span> <span class="n">_connection</span> <span class="p">):</span>
+<span class="linenos"> 8</span>
+<span class="linenos"> 9</span>  <span class="c1">## Send the command for device settings (memory)</span>
+<span class="hll"><span class="linenos">10</span>  <span class="n">response</span> <span class="o">=</span> <span class="n">_device</span><span class="o">.</span><span class="n">send_command</span><span class="p">(</span> <span class="n">_connection</span><span class="p">,</span> <span class="s2">&quot;print_memory&quot;</span> <span class="p">)</span>
+</span><span class="linenos">11</span>
+<span class="linenos">12</span>  <span class="c1">## View response</span>
+<span class="hll"><span class="linenos">13</span>  <span class="nb">print</span><span class="p">(</span> <span class="n">response</span> <span class="p">)</span>
+</span><span class="linenos">14</span>
+<span class="linenos">15</span><span class="c1">## Close the connection</span>
+<span class="linenos">16</span><span class="n">_device</span><span class="o">.</span><span class="n">disconnect</span><span class="p">(</span> <span class="n">_connection</span> <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="local-device-command-2">
+<div class="code-block-caption"><span class="caption-text"><em>Example:</em> Response from connected MultispeQ device for command <code class="docutils literal notranslate"><span class="pre">print_memory</span></code>.</span><a class="headerlink" href="#local-device-command-2" title="Link to this code">¶</a></div>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="p">{</span>
+<span class="linenos"> 2</span><span class="w">  </span><span class="nt">&quot;device_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;MultispeQ&quot;</span><span class="p">,</span>
+<span class="linenos"> 3</span><span class="w">  </span><span class="nt">&quot;device_version&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+<span class="linenos"> 4</span><span class="w">  </span><span class="nt">&quot;device_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;01:12:53:##&quot;</span><span class="p">,</span>
+<span class="linenos"> 5</span><span class="w">  </span><span class="nt">&quot;firmware&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">2.3465</span><span class="p">,</span>
+<span class="linenos"> 6</span><span class="w">  </span><span class="nt">&quot;compiled&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">&quot;Aug  2 2021&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;16:00:28&quot;</span><span class="w"> </span><span class="p">],</span>
+<span class="linenos"> 7</span><span class="w">  </span><span class="nt">&quot;calTimes&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="mi">1627920106</span><span class="p">,</span><span class="w"> </span><span class="mi">1065353216</span><span class="p">,</span><span class="w"> </span><span class="mi">1627920743</span><span class="p">,</span><span class="w"> </span><span class="mi">1627920666</span><span class="p">,</span><span class="w"> </span><span class="mi">1627920788</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">-1050673152</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">],</span>
+<span class="linenos"> 8</span><span class="w">  </span><span class="nt">&quot;device_mod&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="linenos"> 9</span><span class="w">  </span><span class="nt">&quot;mag_address&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span>
+<span class="linenos">10</span><span class="w">  </span><span class="nt">&quot;mag_x_scale&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">800.0</span><span class="p">,</span>
+<span class="linenos">11</span><span class="w">  </span><span class="nt">&quot;mag_y_scale&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">837.0</span><span class="p">,</span>
+<span class="linenos">12</span><span class="w">  </span><span class="nt">&quot;mag_z_scale&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">694.0</span><span class="p">,</span>
+<span class="linenos">13</span><span class="w">  </span><span class="nt">&quot;max_PAR&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="mi">351</span><span class="p">,</span><span class="w"> </span><span class="mi">4095</span><span class="p">,</span><span class="w"> </span><span class="mi">3054</span><span class="p">,</span><span class="w"> </span><span class="mi">4095</span><span class="p">,</span><span class="w"> </span><span class="mi">4095</span><span class="p">,</span><span class="w"> </span><span class="mi">4095</span><span class="p">,</span><span class="w"> </span><span class="mi">1859</span><span class="p">,</span><span class="w"> </span><span class="mi">4095</span><span class="p">,</span><span class="w"> </span><span class="mi">4095</span><span class="p">,</span><span class="w"> </span><span class="mi">4095</span><span class="w"> </span><span class="p">],</span>
+<span class="linenos">14</span><span class="w">  </span><span class="nt">&quot;light_slope_all&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="mf">0.362</span><span class="w"> </span><span class="p">],</span>
+<span class="linenos">15</span><span class="w">  </span><span class="nt">&quot;light_slope_r&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="mf">-0.235</span><span class="w"> </span><span class="p">],</span>
+<span class="linenos">16</span><span class="w">  </span><span class="nt">&quot;light_slope_g&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="mf">-0.136</span><span class="w"> </span><span class="p">],</span>
+<span class="linenos">17</span><span class="w">  </span><span class="nt">&quot;light_slope_b&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="mf">-0.01</span><span class="w"> </span><span class="p">],</span>
+<span class="linenos">18</span><span class="w">  </span><span class="nt">&quot;light_yint&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="mf">0.0</span><span class="w"> </span><span class="p">],</span>
+<span class="linenos">19</span><span class="w">  </span><span class="nt">&quot;bleed3&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="linenos">20</span><span class="w">    </span><span class="p">[</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="w"> </span><span class="p">],</span>
+<span class="linenos">21</span><span class="w">    </span><span class="p">[</span><span class="w"> </span><span class="mf">31.0</span><span class="p">,</span><span class="w"> </span><span class="mf">173.0</span><span class="p">,</span><span class="w"> </span><span class="mf">360.0</span><span class="p">,</span><span class="w"> </span><span class="mf">401.0</span><span class="p">,</span><span class="w"> </span><span class="mf">476.0</span><span class="p">,</span><span class="w"> </span><span class="mf">726.0</span><span class="p">,</span><span class="w"> </span><span class="mf">860.0</span><span class="p">,</span><span class="w"> </span><span class="mf">986.0</span><span class="w"> </span><span class="p">],</span>
+<span class="linenos">22</span><span class="w">    </span><span class="p">[</span><span class="w"> </span><span class="mf">7.0</span><span class="p">,</span><span class="w"> </span><span class="mf">19.0</span><span class="p">,</span><span class="w"> </span><span class="mf">33.0</span><span class="p">,</span><span class="w"> </span><span class="mf">39.0</span><span class="p">,</span><span class="w"> </span><span class="mf">63.0</span><span class="p">,</span><span class="w"> </span><span class="mf">134.0</span><span class="p">,</span><span class="w"> </span><span class="mf">178.0</span><span class="p">,</span><span class="w"> </span><span class="mf">230.0</span><span class="w"> </span><span class="p">],</span>
+<span class="linenos">23</span><span class="w">    </span><span class="p">[</span><span class="w"> </span><span class="mf">9.0</span><span class="p">,</span><span class="w"> </span><span class="mf">-48.0</span><span class="p">,</span><span class="w"> </span><span class="mf">-48.0</span><span class="p">,</span><span class="w"> </span><span class="mf">-46.0</span><span class="p">,</span><span class="w"> </span><span class="mf">-48.0</span><span class="p">,</span><span class="w"> </span><span class="mf">-141.0</span><span class="p">,</span><span class="w"> </span><span class="mf">-118.0</span><span class="p">,</span><span class="w"> </span><span class="mf">-123.0</span><span class="w"> </span><span class="p">],</span>
+<span class="linenos">24</span><span class="w">    </span><span class="p">[</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="w"> </span><span class="p">],</span>
+<span class="linenos">25</span><span class="w">    </span><span class="p">[</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="w"> </span><span class="p">],</span>
+<span class="linenos">26</span><span class="w">    </span><span class="p">[</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="w"> </span><span class="p">],</span>
+<span class="linenos">27</span><span class="w">    </span><span class="p">[</span><span class="w"> </span><span class="mf">-10.0</span><span class="p">,</span><span class="w"> </span><span class="mf">44.0</span><span class="p">,</span><span class="w"> </span><span class="mf">41.0</span><span class="p">,</span><span class="w"> </span><span class="mf">84.0</span><span class="p">,</span><span class="w"> </span><span class="mf">125.0</span><span class="p">,</span><span class="w"> </span><span class="mf">206.0</span><span class="p">,</span><span class="w"> </span><span class="mf">312.0</span><span class="p">,</span><span class="w"> </span><span class="mf">420.0</span><span class="w"> </span><span class="p">],</span>
+<span class="linenos">28</span><span class="w">    </span><span class="p">[</span><span class="w"> </span><span class="mf">6.0</span><span class="p">,</span><span class="w"> </span><span class="mf">10.0</span><span class="p">,</span><span class="w"> </span><span class="mf">-2.0</span><span class="p">,</span><span class="w"> </span><span class="mf">-5.0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">6.0</span><span class="p">,</span><span class="w"> </span><span class="mf">-11.0</span><span class="p">,</span><span class="w"> </span><span class="mf">7.0</span><span class="w"> </span><span class="p">],</span>
+<span class="linenos">29</span><span class="w">    </span><span class="p">[</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="w"> </span><span class="p">]</span>
+<span class="linenos">30</span><span class="w">  </span><span class="p">],</span>
+<span class="linenos">31</span><span class="w">  </span><span class="nt">&quot;thickness_a&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">68202.516</span><span class="p">,</span>
+<span class="linenos">32</span><span class="w">  </span><span class="nt">&quot;thickness_b&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">-6.395</span><span class="p">,</span>
+<span class="linenos">33</span><span class="w">  </span><span class="nt">&quot;thickness_c&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">149665.172</span><span class="p">,</span>
+<span class="linenos">34</span><span class="w">  </span><span class="nt">&quot;mag_orientation&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span>
+<span class="linenos">35</span><span class="w">  </span><span class="nt">&quot;open_position&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">39965.0</span><span class="p">,</span>
+<span class="linenos">36</span><span class="w">  </span><span class="nt">&quot;closed_position&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">41634.0</span><span class="p">,</span>
+<span class="linenos">37</span><span class="w">  </span><span class="nt">&quot;spad_scale&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">45.829</span><span class="p">,</span>
+<span class="linenos">38</span><span class="w">  </span><span class="nt">&quot;spad_offset&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">-100.0</span><span class="p">,</span>
+<span class="linenos">39</span><span class="w">  </span><span class="nt">&quot;spad_yint&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">6.805</span><span class="p">,</span>
+<span class="linenos">40</span><span class="w">  </span><span class="nt">&quot;blink_mode&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="linenos">41</span><span class="w">  </span><span class="nt">&quot;pilot_blink&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="linenos">42</span><span class="w">  </span><span class="nt">&quot;status_blink&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">43</span><span class="w">  </span><span class="nt">&quot;shutdown_time (s)&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1800</span><span class="p">,</span>
+<span class="linenos">44</span><span class="w">  </span><span class="nt">&quot;usb_on&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="linenos">45</span><span class="w">  </span><span class="nt">&quot;pix_pin&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span>
+<span class="linenos">46</span><span class="w">  </span><span class="nt">&quot;par_map&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="linenos">47</span><span class="w">    </span><span class="p">[</span><span class="w"> </span><span class="mi">58</span><span class="p">,</span><span class="w"> </span><span class="mi">95</span><span class="p">,</span><span class="w"> </span><span class="mi">131</span><span class="p">,</span><span class="w"> </span><span class="mi">203</span><span class="p">,</span><span class="w"> </span><span class="mi">351</span><span class="p">,</span><span class="w"> </span><span class="mi">351</span><span class="p">,</span><span class="w"> </span><span class="mi">351</span><span class="w"> </span><span class="p">],</span>
+<span class="linenos">48</span><span class="w">    </span><span class="p">[</span><span class="w"> </span><span class="mi">64</span><span class="p">,</span><span class="w"> </span><span class="mi">101</span><span class="p">,</span><span class="w"> </span><span class="mi">136</span><span class="p">,</span><span class="w"> </span><span class="mi">206</span><span class="p">,</span><span class="w"> </span><span class="mi">348</span><span class="p">,</span><span class="w"> </span><span class="mi">771</span><span class="p">,</span><span class="w"> </span><span class="mi">1477</span><span class="w"> </span><span class="p">],</span>
+<span class="linenos">49</span><span class="w">    </span><span class="p">[</span><span class="w"> </span><span class="mi">39</span><span class="p">,</span><span class="w"> </span><span class="mi">248</span><span class="p">,</span><span class="w"> </span><span class="mi">455</span><span class="p">,</span><span class="w"> </span><span class="mi">870</span><span class="p">,</span><span class="w"> </span><span class="mi">1699</span><span class="p">,</span><span class="w"> </span><span class="mi">3054</span><span class="p">,</span><span class="w"> </span><span class="mi">3054</span><span class="w"> </span><span class="p">],</span>
+<span class="linenos">50</span><span class="w">    </span><span class="p">[</span><span class="w"> </span><span class="mi">127</span><span class="p">,</span><span class="w"> </span><span class="mi">371</span><span class="p">,</span><span class="w"> </span><span class="mi">615</span><span class="p">,</span><span class="w"> </span><span class="mi">1101</span><span class="p">,</span><span class="w"> </span><span class="mi">2075</span><span class="p">,</span><span class="w"> </span><span class="mi">4995</span><span class="p">,</span><span class="w"> </span><span class="mi">9862</span><span class="w"> </span><span class="p">],</span>
+<span class="linenos">51</span><span class="w">    </span><span class="p">[</span><span class="w"> </span><span class="mi">150</span><span class="p">,</span><span class="w"> </span><span class="mi">177</span><span class="p">,</span><span class="w"> </span><span class="mi">203</span><span class="p">,</span><span class="w"> </span><span class="mi">257</span><span class="p">,</span><span class="w"> </span><span class="mi">363</span><span class="p">,</span><span class="w"> </span><span class="mi">683</span><span class="p">,</span><span class="w"> </span><span class="mi">1217</span><span class="w"> </span><span class="p">],</span>
+<span class="linenos">52</span><span class="w">    </span><span class="p">[</span><span class="w"> </span><span class="mi">150</span><span class="p">,</span><span class="w"> </span><span class="mi">417</span><span class="p">,</span><span class="w"> </span><span class="mi">683</span><span class="p">,</span><span class="w"> </span><span class="mi">1217</span><span class="p">,</span><span class="w"> </span><span class="mi">2283</span><span class="p">,</span><span class="w"> </span><span class="mi">4095</span><span class="p">,</span><span class="w"> </span><span class="mi">4095</span><span class="w"> </span><span class="p">],</span>
+<span class="linenos">53</span><span class="w">    </span><span class="p">[</span><span class="w"> </span><span class="mi">73</span><span class="p">,</span><span class="w"> </span><span class="mi">127</span><span class="p">,</span><span class="w"> </span><span class="mi">180</span><span class="p">,</span><span class="w"> </span><span class="mi">286</span><span class="p">,</span><span class="w"> </span><span class="mi">497</span><span class="p">,</span><span class="w"> </span><span class="mi">1132</span><span class="p">,</span><span class="w"> </span><span class="mi">1859</span><span class="w"> </span><span class="p">],</span>
+<span class="linenos">54</span><span class="w">    </span><span class="p">[</span><span class="w"> </span><span class="mi">150</span><span class="p">,</span><span class="w"> </span><span class="mi">283</span><span class="p">,</span><span class="w"> </span><span class="mi">417</span><span class="p">,</span><span class="w"> </span><span class="mi">683</span><span class="p">,</span><span class="w"> </span><span class="mi">1217</span><span class="p">,</span><span class="w"> </span><span class="mi">2817</span><span class="p">,</span><span class="w"> </span><span class="mi">4095</span><span class="w"> </span><span class="p">],</span>
+<span class="linenos">55</span><span class="w">    </span><span class="p">[</span><span class="w"> </span><span class="mi">150</span><span class="p">,</span><span class="w"> </span><span class="mi">417</span><span class="p">,</span><span class="w"> </span><span class="mi">683</span><span class="p">,</span><span class="w"> </span><span class="mi">1217</span><span class="p">,</span><span class="w"> </span><span class="mi">2283</span><span class="p">,</span><span class="w"> </span><span class="mi">4095</span><span class="p">,</span><span class="w"> </span><span class="mi">4095</span><span class="w"> </span><span class="p">],</span>
+<span class="linenos">56</span><span class="w">    </span><span class="p">[</span><span class="w"> </span><span class="mi">150</span><span class="p">,</span><span class="w"> </span><span class="mi">283</span><span class="p">,</span><span class="w"> </span><span class="mi">417</span><span class="p">,</span><span class="w"> </span><span class="mi">683</span><span class="p">,</span><span class="w"> </span><span class="mi">1217</span><span class="p">,</span><span class="w"> </span><span class="mi">2817</span><span class="p">,</span><span class="w"> </span><span class="mi">4095</span><span class="w"> </span><span class="p">]</span>
+<span class="linenos">57</span><span class="w">  </span><span class="p">],</span>
+<span class="linenos">58</span><span class="w">  </span><span class="nt">&quot;detector_offsets&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="mf">8.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">-84.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="w"> </span><span class="p">],</span>
+<span class="linenos">59</span><span class="w">  </span><span class="nt">&quot;par_tweak&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.749</span>
+<span class="linenos">60</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="get-device-settings">
+<h3>Get Device Settings<a class="headerlink" href="#get-device-settings" title="Link to this heading">¶</a></h3>
+<p>The device’s settings can be viewed using the <code class="docutils literal notranslate"><span class="pre">print_memory</span></code> command like in the example above, but there
+is also a dedicated function for it. The code example below shows how to use this function.</p>
+<p>In addition, the  <code class="xref py py-func docutils literal notranslate"><span class="pre">view()</span></code> of the <a class="reference internal" href="modules/measurement.html#module-jii_multispeq.measurement" title="jii_multispeq.measurement"><code class="xref py py-mod docutils literal notranslate"><span class="pre">measurement</span></code></a> module is
+used to print it out in a more convinient way.</p>
+<div class="literal-block-wrapper docutils container" id="local-device-info-1">
+<div class="code-block-caption"><span class="caption-text"><em>Example:</em> Getting the device settings from a connected MultispeQ device.</span><a class="headerlink" href="#local-device-info-1" title="Link to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">jii_multispeq.device</span> <span class="k">as</span> <span class="nn">_device</span>
+<span class="hll"><span class="linenos"> 2</span><span class="kn">import</span> <span class="nn">jii_multispeq.measurement</span> <span class="k">as</span> <span class="nn">_measurement</span>
+</span><span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="c1">## Establish connection</span>
+<span class="linenos"> 5</span><span class="n">_connection</span> <span class="o">=</span> <span class="n">_device</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span> <span class="s2">&quot;/com1&quot;</span> <span class="p">)</span>
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span><span class="c1">## Test if connection is open and device is communicating</span>
+<span class="linenos"> 8</span><span class="k">if</span> <span class="n">_device</span><span class="o">.</span><span class="n">is_connected</span><span class="p">(</span> <span class="n">_connection</span> <span class="p">):</span>
+<span class="linenos"> 9</span>
+<span class="linenos">10</span>  <span class="c1">## Send the command for device settings (memory)</span>
+<span class="hll"><span class="linenos">11</span>  <span class="n">response</span><span class="p">,</span> <span class="n">crc32</span> <span class="o">=</span> <span class="n">_device</span><span class="o">.</span><span class="n">get_memory</span><span class="p">(</span> <span class="n">_connection</span> <span class="p">)</span>
+</span><span class="linenos">12</span>
+<span class="linenos">13</span>  <span class="c1">## View response as a table</span>
+<span class="hll"><span class="linenos">14</span>  <span class="n">_measurement</span><span class="o">.</span><span class="n">view</span><span class="p">(</span> <span class="n">response</span> <span class="p">)</span>
+</span><span class="linenos">15</span>
+<span class="linenos">16</span><span class="c1">## Close the connection</span>
+<span class="linenos">17</span><span class="n">_device</span><span class="o">.</span><span class="n">disconnect</span><span class="p">(</span> <span class="n">_connection</span> <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="local-device-info-2">
+<div class="code-block-caption"><span class="caption-text"><em>Example:</em> Settings from a connected MultispeQ device.</span><a class="headerlink" href="#local-device-info-2" title="Link to this code">¶</a></div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span>Parameter<span class="w">          </span>Value<span class="w">        </span>Type
+<span class="linenos"> 2</span>-----------------<span class="w">  </span>-----------<span class="w">  </span>---------------
+<span class="linenos"> 3</span>bleed3<span class="w">             </span>n/a<span class="w">          </span>&lt;class<span class="w"> </span><span class="s1">&#39;list&#39;</span>&gt;
+<span class="linenos"> 4</span>blink_mode<span class="w">         </span><span class="m">0</span><span class="w">            </span>&lt;class<span class="w"> </span><span class="s1">&#39;int&#39;</span>&gt;
+<span class="linenos"> 5</span>calTimes<span class="w">           </span>n/a<span class="w">          </span>&lt;class<span class="w"> </span><span class="s1">&#39;list&#39;</span>&gt;
+<span class="linenos"> 6</span>closed_position<span class="w">    </span><span class="m">41634</span>.0<span class="w">      </span>&lt;class<span class="w"> </span><span class="s1">&#39;float&#39;</span>&gt;
+<span class="linenos"> 7</span>compiled<span class="w">           </span>n/a<span class="w">          </span>&lt;class<span class="w"> </span><span class="s1">&#39;list&#39;</span>&gt;
+<span class="linenos"> 8</span>detector_offsets<span class="w">   </span>n/a<span class="w">          </span>&lt;class<span class="w"> </span><span class="s1">&#39;list&#39;</span>&gt;
+<span class="linenos"> 9</span>device_id<span class="w">          </span><span class="m">01</span>:12:53:##<span class="w">  </span>&lt;class<span class="w"> </span><span class="s1">&#39;str&#39;</span>&gt;
+<span class="linenos">10</span>device_mod<span class="w">         </span><span class="m">0</span><span class="w">            </span>&lt;class<span class="w"> </span><span class="s1">&#39;int&#39;</span>&gt;
+<span class="linenos">11</span>device_name<span class="w">        </span>MultispeQ<span class="w">    </span>&lt;class<span class="w"> </span><span class="s1">&#39;str&#39;</span>&gt;
+<span class="linenos">12</span>device_version<span class="w">     </span><span class="m">2</span><span class="w">            </span>&lt;class<span class="w"> </span><span class="s1">&#39;int&#39;</span>&gt;
+<span class="linenos">13</span>firmware<span class="w">           </span><span class="m">2</span>.3465<span class="w">       </span>&lt;class<span class="w"> </span><span class="s1">&#39;float&#39;</span>&gt;
+<span class="linenos">14</span>light_slope_all<span class="w">    </span>n/a<span class="w">          </span>&lt;class<span class="w"> </span><span class="s1">&#39;list&#39;</span>&gt;
+<span class="linenos">15</span>light_slope_b<span class="w">      </span>n/a<span class="w">          </span>&lt;class<span class="w"> </span><span class="s1">&#39;list&#39;</span>&gt;
+<span class="linenos">16</span>light_slope_g<span class="w">      </span>n/a<span class="w">          </span>&lt;class<span class="w"> </span><span class="s1">&#39;list&#39;</span>&gt;
+<span class="linenos">17</span>light_slope_r<span class="w">      </span>n/a<span class="w">          </span>&lt;class<span class="w"> </span><span class="s1">&#39;list&#39;</span>&gt;
+<span class="linenos">18</span>light_yint<span class="w">         </span>n/a<span class="w">          </span>&lt;class<span class="w"> </span><span class="s1">&#39;list&#39;</span>&gt;
+<span class="linenos">19</span>mag_address<span class="w">        </span><span class="m">14</span><span class="w">           </span>&lt;class<span class="w"> </span><span class="s1">&#39;int&#39;</span>&gt;
+<span class="linenos">20</span>mag_orientation<span class="w">    </span><span class="m">0</span>.0<span class="w">          </span>&lt;class<span class="w"> </span><span class="s1">&#39;float&#39;</span>&gt;
+<span class="linenos">21</span>mag_x_scale<span class="w">        </span><span class="m">800</span>.0<span class="w">        </span>&lt;class<span class="w"> </span><span class="s1">&#39;float&#39;</span>&gt;
+<span class="linenos">22</span>mag_y_scale<span class="w">        </span><span class="m">837</span>.0<span class="w">        </span>&lt;class<span class="w"> </span><span class="s1">&#39;float&#39;</span>&gt;
+<span class="linenos">23</span>mag_z_scale<span class="w">        </span><span class="m">694</span>.0<span class="w">        </span>&lt;class<span class="w"> </span><span class="s1">&#39;float&#39;</span>&gt;
+<span class="linenos">24</span>max_PAR<span class="w">            </span>n/a<span class="w">          </span>&lt;class<span class="w"> </span><span class="s1">&#39;list&#39;</span>&gt;
+<span class="linenos">25</span>open_position<span class="w">      </span><span class="m">39965</span>.0<span class="w">      </span>&lt;class<span class="w"> </span><span class="s1">&#39;float&#39;</span>&gt;
+<span class="linenos">26</span>par_map<span class="w">            </span>n/a<span class="w">          </span>&lt;class<span class="w"> </span><span class="s1">&#39;list&#39;</span>&gt;
+<span class="linenos">27</span>par_tweak<span class="w">          </span><span class="m">0</span>.749<span class="w">        </span>&lt;class<span class="w"> </span><span class="s1">&#39;float&#39;</span>&gt;
+<span class="linenos">28</span>pilot_blink<span class="w">        </span><span class="m">0</span><span class="w">            </span>&lt;class<span class="w"> </span><span class="s1">&#39;int&#39;</span>&gt;
+<span class="linenos">29</span>pix_pin<span class="w">            </span><span class="m">14</span><span class="w">           </span>&lt;class<span class="w"> </span><span class="s1">&#39;int&#39;</span>&gt;
+<span class="linenos">30</span>shutdown_time<span class="w"> </span><span class="o">(</span>s<span class="o">)</span><span class="w">  </span><span class="m">1800</span><span class="w">         </span>&lt;class<span class="w"> </span><span class="s1">&#39;int&#39;</span>&gt;
+<span class="linenos">31</span>spad_offset<span class="w">        </span>-100.0<span class="w">       </span>&lt;class<span class="w"> </span><span class="s1">&#39;float&#39;</span>&gt;
+<span class="linenos">32</span>spad_scale<span class="w">         </span><span class="m">45</span>.829<span class="w">       </span>&lt;class<span class="w"> </span><span class="s1">&#39;float&#39;</span>&gt;
+<span class="linenos">33</span>spad_yint<span class="w">          </span><span class="m">6</span>.805<span class="w">        </span>&lt;class<span class="w"> </span><span class="s1">&#39;float&#39;</span>&gt;
+<span class="linenos">34</span>status_blink<span class="w">       </span><span class="m">1</span><span class="w">            </span>&lt;class<span class="w"> </span><span class="s1">&#39;int&#39;</span>&gt;
+<span class="linenos">35</span>thickness_a<span class="w">        </span><span class="m">68202</span>.516<span class="w">    </span>&lt;class<span class="w"> </span><span class="s1">&#39;float&#39;</span>&gt;
+<span class="linenos">36</span>thickness_b<span class="w">        </span>-6.395<span class="w">       </span>&lt;class<span class="w"> </span><span class="s1">&#39;float&#39;</span>&gt;
+<span class="linenos">37</span>thickness_c<span class="w">        </span><span class="m">149665</span>.172<span class="w">   </span>&lt;class<span class="w"> </span><span class="s1">&#39;float&#39;</span>&gt;
+<span class="linenos">38</span>usb_on<span class="w">             </span><span class="m">0</span><span class="w">            </span>&lt;class<span class="w"> </span><span class="s1">&#39;int&#39;</span>&gt;
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="modules/analysis.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Analysis</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="protocols.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Protocols</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2024 - Jan Ingenhousz Institute
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Measurements</a><ul>
+<li><a class="reference internal" href="#connect-a-multispeq">Connect a MultispeQ</a><ul>
+<li><a class="reference internal" href="#available-ports">Available Ports</a></li>
+<li><a class="reference internal" href="#establish-a-connection">Establish a Connection</a></li>
+<li><a class="reference internal" href="#test-the-connection">Test the Connection</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#take-a-measurement">Take a Measurement</a><ul>
+<li><a class="reference internal" href="#save-measurement-to-disk">Save Measurement to Disk</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#load-saved-measurement-s">Load Saved Measurement(s)</a><ul>
+<li><a class="reference internal" href="#file-summary">File Summary</a></li>
+<li><a class="reference internal" href="#load-files">Load Files</a></li>
+<li><a class="reference internal" href="#recursive-loading">Recursive Loading</a></li>
+<li><a class="reference internal" href="#process-data">Process Data</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tl-dr">TL;DR</a><ul>
+<li><a class="reference internal" href="#send-a-command">Send a Command</a></li>
+<li><a class="reference internal" href="#get-device-settings">Get Device Settings</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=e3a6060d"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=5fa4622c"></script>
+    </body>
+</html>

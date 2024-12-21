@@ -1,0 +1,13 @@
+Parameter        Value                             Type
+---------------  --------------------------------  ---------------
+created_at       2024-12-21T10:38:11.498360+01:00  <class 'str'>
+device_battery   95                                <class 'int'>
+device_firmware  2.3465                            <class 'float'>
+device_id        01:12:53:##                       <class 'str'>
+device_name      MultispeQ                         <class 'str'>
+device_version   2                                 <class 'str'>
+md5_measurement  3565bc573416002424c6072bdfb033f2  <class 'str'>
+md5_protocol     b133a7f804cd1d1608da0577b3d89f72  <class 'str'>
+notes            Single SPAD meaurement            <class 'str'>
+protocol         n/a                               <class 'list'>
+SPAD             24.548                            <class 'float'>

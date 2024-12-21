@@ -23,19 +23,20 @@ serial port to take measurements and analyze the returned raw data.
 
    install
    getting-started
-   working-with-protocols
-   example-protocols
+   projects
+   protocols
+   measurements
 
 .. toctree::
    :hidden:
    :maxdepth: 2
    :caption: Modules
 
-   analysis
-   device
-   measurement
-   project
-   protocol
+   modules/analysis
+   modules/device
+   modules/measurement
+   modules/project
+   modules/protocol
 
 .. toctree::
    :maxdepth: 1

@@ -203,16 +203,17 @@
   <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../getting-started.html">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../working-with-protocols.html">Working with Protocols</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../example-protocols.html">Example Protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../projects.html">Online - Projects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../protocols.html">Protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../measurements.html">Measurements</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Modules</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../analysis.html">Analysis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../device.html">Device</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../measurement.html">Measurement</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../project.html">Project</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../protocol.html">Protocol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/analysis.html">Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/device.html">Device</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/measurement.html">Measurement</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/project.html">Project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/protocol.html">Protocol</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Resources</span></p>
 <ul>
@@ -262,7 +263,7 @@
 <span class="kn">import</span> <span class="nn">json</span>
 
 <div class="viewcode-block" id="get_protocol">
-<a class="viewcode-back" href="../../../protocol.html#jii_multispeq.protocol.protocol.get_protocol">[docs]</a>
+<a class="viewcode-back" href="../../../modules/protocol.html#jii_multispeq.protocol.protocol.get_protocol">[docs]</a>
 <span class="k">def</span> <span class="nf">get_protocol</span><span class="p">(</span> <span class="n">project</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mi">0</span> <span class="p">):</span>
 <span class="w">  </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">  Return the protocol for a project given the project information.</span>
@@ -305,7 +306,7 @@
 
 
 <div class="viewcode-block" id="get_protocol_name">
-<a class="viewcode-back" href="../../../protocol.html#jii_multispeq.protocol.protocol.get_protocol_name">[docs]</a>
+<a class="viewcode-back" href="../../../modules/protocol.html#jii_multispeq.protocol.protocol.get_protocol_name">[docs]</a>
 <span class="k">def</span> <span class="nf">get_protocol_name</span><span class="p">(</span><span class="n">project</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mi">0</span> <span class="p">):</span>
 <span class="w">  </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">  Get the protocol name from the provided Project.</span>
@@ -341,7 +342,7 @@
 
 
 <div class="viewcode-block" id="get_subprotocol_labels">
-<a class="viewcode-back" href="../../../protocol.html#jii_multispeq.protocol.protocol.get_subprotocol_labels">[docs]</a>
+<a class="viewcode-back" href="../../../modules/protocol.html#jii_multispeq.protocol.protocol.get_subprotocol_labels">[docs]</a>
 <span class="k">def</span> <span class="nf">get_subprotocol_labels</span><span class="p">(</span> <span class="n">protocol</span><span class="o">=</span><span class="kc">None</span> <span class="p">):</span>
 <span class="w">  </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">  Returns a list of labels for each subprotocol. In case a sub-protocol has no</span>
@@ -379,7 +380,7 @@
 
 
 <div class="viewcode-block" id="get_subprotocols_by_label">
-<a class="viewcode-back" href="../../../protocol.html#jii_multispeq.protocol.protocol.get_subprotocols_by_label">[docs]</a>
+<a class="viewcode-back" href="../../../modules/protocol.html#jii_multispeq.protocol.protocol.get_subprotocols_by_label">[docs]</a>
 <span class="k">def</span> <span class="nf">get_subprotocols_by_label</span><span class="p">(</span> <span class="n">protocol</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;&quot;</span> <span class="p">):</span>
 <span class="w">  </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">  Returns a list of sub_protocols in a protocol with given label value</span>
@@ -416,7 +417,7 @@
 
 
 <div class="viewcode-block" id="get_subprotocol_by_index">
-<a class="viewcode-back" href="../../../protocol.html#jii_multispeq.protocol.protocol.get_subprotocol_by_index">[docs]</a>
+<a class="viewcode-back" href="../../../modules/protocol.html#jii_multispeq.protocol.protocol.get_subprotocol_by_index">[docs]</a>
 <span class="k">def</span> <span class="nf">get_subprotocol_by_index</span><span class="p">(</span> <span class="n">protocol</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mi">0</span> <span class="p">):</span>
 <span class="w">  </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">  Returns a list of sub_protocols in a protocol with given label value</span>
@@ -486,7 +487,7 @@
       
     </aside>
   </div>
-</div><script src="../../../_static/documentation_options.js?v=01f34227"></script>
+</div><script src="../../../_static/documentation_options.js?v=e3a6060d"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=5fa4622c"></script>

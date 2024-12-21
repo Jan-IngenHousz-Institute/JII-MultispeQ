@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Working with Protocols" href="working-with-protocols.html" /><link rel="prev" title="Installation" href="install.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Online - Projects" href="projects.html" /><link rel="prev" title="Installation" href="install.html" />
 
     <link rel="shortcut icon" href="_static/favicon.png"/><!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
         <title>Getting Started - JII - MultispeQ</title>
@@ -204,16 +204,17 @@
   <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="working-with-protocols.html">Working with Protocols</a></li>
-<li class="toctree-l1"><a class="reference internal" href="example-protocols.html">Example Protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projects.html">Online - Projects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="protocols.html">Protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="measurements.html">Measurements</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Modules</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="device.html">Device</a></li>
-<li class="toctree-l1"><a class="reference internal" href="measurement.html">Measurement</a></li>
-<li class="toctree-l1"><a class="reference internal" href="project.html">Project</a></li>
-<li class="toctree-l1"><a class="reference internal" href="protocol.html">Protocol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/analysis.html">Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/device.html">Device</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/measurement.html">Measurement</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/project.html">Project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/protocol.html">Protocol</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Resources</span></p>
 <ul>
@@ -261,369 +262,27 @@
         <article role="main" id="furo-main-content">
           <section id="getting-started">
 <h1>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading">¶</a></h1>
-<p>If you have successfully installed the <code class="docutils literal notranslate"><span class="pre">JII-MultispeQ</span></code> library, you can start analyzing data from a <code class="docutils literal notranslate"><span class="pre">Project</span></code> using the MultispeQ.
-All you need to access your data is the <code class="docutils literal notranslate"><span class="pre">ID</span></code> of the project you are interested in. You can find this <code class="docutils literal notranslate"><span class="pre">ID</span></code> on the project’s page.</p>
+<p>If you have successfully installed the <code class="docutils literal notranslate"><span class="pre">JII-MultispeQ</span></code> library, you can start working with MultispeQ data. This includes
+downloading and analyzing data from <code class="docutils literal notranslate"><span class="pre">Project</span></code> online, as well as taking measurements with the MultispeQ and using local data.</p>
+<section id="projects-online">
+<h2>Projects (Online)<a class="headerlink" href="#projects-online" title="Link to this heading">¶</a></h2>
+<p>To download and analyze a from online <code class="docutils literal notranslate"><span class="pre">Projects</span></code> you require their <code class="docutils literal notranslate"><span class="pre">ID</span></code>. All you need to do is go to the project’s page and
+copy the <code class="docutils literal notranslate"><span class="pre">Project</span> <span class="pre">ID</span></code> from the menu on the left side. This <code class="docutils literal notranslate"><span class="pre">ID</span></code> can then be used with the <a class="reference internal" href="modules/project.html#module-jii_multispeq.project" title="jii_multispeq.project"><code class="xref py py-mod docutils literal notranslate"><span class="pre">project</span></code></a>
+module to download the project information and data for analysis.</p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
+<p><strong>User Account</strong></p>
 <p>To access MultispeQ data, you just need a <a class="reference external" href="https://photosynq.org">PhotosynQ, Inc. Account</a> and the project’s <code class="docutils literal notranslate"><span class="pre">ID</span></code>.</p>
 </div>
-<section id="project-data-information">
-<h2>Project Data &amp; Information<a class="headerlink" href="#project-data-information" title="Link to this heading">¶</a></h2>
-<p>The code below is an example on how to download the MultispeQ data collected for a project as well as the information about the project.</p>
-<div class="literal-block-wrapper docutils container" id="project-data-tutorial-0">
-<div class="code-block-caption"><span class="caption-text">examples/python/project-data.py</span><a class="headerlink" href="#project-data-tutorial-0" title="Link to this code">¶</a></div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="kn">import</span> <span class="nn">jii_multispeq.project</span> <span class="k">as</span> <span class="nn">project</span>
-<span class="linenos">2</span>
-<span class="hll"><span class="linenos">3</span><span class="n">email</span> <span class="o">=</span> <span class="s2">&quot;your-email@domain.com&quot;</span>
-</span><span class="hll"><span class="linenos">4</span><span class="n">projectId</span> <span class="o">=</span> <span class="mi">29652</span>
-</span><span class="linenos">5</span>
-<span class="linenos">6</span><span class="c1">## Get the project data and information</span>
-<span class="linenos">7</span><span class="n">df</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">email</span><span class="p">,</span> <span class="n">projectId</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<p>You start by importing the <a class="reference internal" href="project.html#module-jii_multispeq.project" title="jii_multispeq.project"><code class="xref py py-mod docutils literal notranslate"><span class="pre">project</span></code></a> module from the <code class="docutils literal notranslate"><span class="pre">JII-MultispeQ</span></code> package as <code class="docutils literal notranslate"><span class="pre">project</span></code>.</p>
-<p>Next you create two variables <code class="docutils literal notranslate"><span class="pre">email</span></code> and <code class="docutils literal notranslate"><span class="pre">projectId</span></code> with the respective values relevant for your data analysis (highlighted rows).</p>
-<p>The following step is using the <code class="xref py py-func docutils literal notranslate"><span class="pre">download()</span></code> function from the <a class="reference internal" href="project.html#module-jii_multispeq.project" title="jii_multispeq.project"><code class="xref py py-mod docutils literal notranslate"><span class="pre">project</span></code></a> module to download the MultispeQ data.
-If you run the code for the first time, you will be prompted to enter your <code class="docutils literal notranslate"><span class="pre">Password</span></code> to authenticate and download the data.
-When all data has been downloaded, two files will be generated in the same folder as your script that you are running. The next time you run
-the scipt it will load the data from your local files instead of downloading them again.</p>
-<p>You see that the <code class="xref py py-func docutils literal notranslate"><span class="pre">download()</span></code> function returns two variables, <code class="docutils literal notranslate"><span class="pre">df</span></code> holding a list of dataframes
-(<a class="reference external" href="https://pandas.pydata.org/">Pandas</a>) and the project information (<code class="docutils literal notranslate"><span class="pre">dict</span></code>)</p>
-<p><em>Example of files for a data analysis</em>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;your project directory&gt;/
-├── PhotosynQ_123.json     # Project Information
-├── PhotosynQ_123.pickle   # Project Data (dataframes)
-└── &lt;your script&gt;.py       # can be a *.jpynb as well
-</pre></div>
-</div>
+</section>
+<section id="measurements-local">
+<h2>Measurements (Local)<a class="headerlink" href="#measurements-local" title="Link to this heading">¶</a></h2>
+<p>If you start an experiment on your local computer, you can use the <a class="reference internal" href="modules/device.html#module-jii_multispeq.device" title="jii_multispeq.device"><code class="xref py py-mod docutils literal notranslate"><span class="pre">device</span></code></a> and <a class="reference internal" href="modules/measurement.html#module-jii_multispeq.measurement" title="jii_multispeq.measurement"><code class="xref py py-mod docutils literal notranslate"><span class="pre">measurement</span></code></a>
+modules to connect and control a MultispeQ and take measurements that get saved to your local drive.</p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>If you want to share your analysis with somebody not signed up with <a class="reference external" href="https://photosynq.org">PhotosynQ</a>, you can share the two data files together with your analysis.
-The analysis will require to sign again to download the data.</p>
-<p><strong>Pro-Tip:</strong> You can use the code below to load data locally, if you provide data files and don’t want to share your email address.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">download</span><span class="p">(</span> <span class="n">projectId</span><span class="o">=</span><span class="n">projectId</span> <span class="p">)</span>
-</pre></div>
+<p>Local measurements can not be submitted to the online platform since the protocols and anlysis are not compatible!</p>
 </div>
-</div>
-<section id="the-project-info">
-<h3>The Project (<code class="docutils literal notranslate"><span class="pre">info</span></code>)<a class="headerlink" href="#the-project-info" title="Link to this heading">¶</a></h3>
-<p>In the previous example we use the <code class="xref py py-func docutils literal notranslate"><span class="pre">download()</span></code> function to access and save the project’s MultispeQ data and information.
-The functions below allow you to view the information about the project.</p>
-<section id="project-information">
-<h4>Project Information<a class="headerlink" href="#project-information" title="Link to this heading">¶</a></h4>
-<p>Using the <code class="xref py py-func docutils literal notranslate"><span class="pre">print_info()</span></code> (alias: <code class="xref py py-func docutils literal notranslate"><span class="pre">show()</span></code>) function of the <a class="reference internal" href="project.html#module-jii_multispeq.project" title="jii_multispeq.project"><code class="xref py py-mod docutils literal notranslate"><span class="pre">project</span></code></a> module,
-a summary can be printed to view the project’s information.</p>
-<div class="literal-block-wrapper docutils container" id="project-data-tutorial-1">
-<div class="code-block-caption"><span class="caption-text">View the information about the selected project</span><a class="headerlink" href="#project-data-tutorial-1" title="Link to this code">¶</a></div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">## Print the project information</span>
-<span class="n">project</span><span class="o">.</span><span class="n">print_info</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="literal-block-wrapper docutils container" id="project-data-tutorial-output-1">
-<div class="code-block-caption"><span class="caption-text"><strong>Output:</strong> Information about the selected Project</span><a class="headerlink" href="#project-data-tutorial-output-1" title="Link to this code">¶</a></div>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>===========================
-  D1 screen 2 (ID: 29652)
-===========================
-
-URL: https://photosynq.org/projects/d1-screen-2
-
-Basic Info:
------------
-Datasets:    399
-Created:     2024-09-09T13:59:57.452Z
-Last Update: 2024-09-10T06:59:47.674Z
-Locations:
- - Wageningen, NL (51.97, 5.6667)
-
-Project Creator:
-----------------
-Name:      Thekla von Bismarck
-Institute: Jan IngenHousz Institute
-URL:       https://photosynq.org/users/thekla-von-bismarck
-
-Project Details:
-----------------
-PIRK screen in D1
-Directions: 
-None
-
-Meta Data:
-----------
- * Plant? - Short Answer
-   Unique Inputs: 38
- * Replicate # - Short Answer
-   Unique Inputs: 8
-
-Protocol(s):
-------------
- * PIRK - FIELD Fluor red act orange PIRK wPSI DMK 2024_TB3 (ID: 3356)
-   Post-illumination relaxation kinetics with fluorescence and P700 with fixed 
-   intensities (100, 500)
-</pre></div>
-</div>
-</div>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>If you would like to see the protocol code used by the MultispeQ as well, set the <code class="docutils literal notranslate"><span class="pre">show_code</span></code> variable to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">project</span><span class="o">.</span><span class="n">print_info</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</section>
-<section id="protocol-information">
-<h4>Protocol Information<a class="headerlink" href="#protocol-information" title="Link to this heading">¶</a></h4>
-<p>The information about the protocol used in the project is stored inside the <code class="docutils literal notranslate"><span class="pre">info</span></code> variable as well. In addition to the <a class="reference internal" href="project.html#module-jii_multispeq.project" title="jii_multispeq.project"><code class="xref py py-mod docutils literal notranslate"><span class="pre">project</span></code></a> module,
-also the <code class="xref py py-mod docutils literal notranslate"></code> module is required.</p>
-<div class="literal-block-wrapper docutils container" id="project-data-tutorial-2">
-<div class="code-block-caption"><span class="caption-text">Get the protocol name and code</span><a class="headerlink" href="#project-data-tutorial-2" title="Link to this code">¶</a></div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="hll"><span class="kn">import</span> <span class="nn">jii_multispeq.protocol</span> <span class="k">as</span> <span class="nn">protocol</span>
-</span>
-<span class="c1">## Get Protocol Name</span>
-<span class="n">protocol_name</span> <span class="o">=</span>  <span class="n">protocol</span><span class="o">.</span><span class="n">get_protocol_name</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">protocol_name</span><span class="p">)</span>
-
-<span class="c1">## Get Protocol Code</span>
-<span class="n">protocol_code</span> <span class="o">=</span> <span class="n">protocol</span><span class="o">.</span><span class="n">get_protocol</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">protocol_code</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="literal-block-wrapper docutils container" id="project-data-tutorial-output-2-1">
-<div class="code-block-caption"><span class="caption-text"><strong>Output:</strong> Information about the selected Project</span><a class="headerlink" href="#project-data-tutorial-output-2-1" title="Link to this code">¶</a></div>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>PIRK - FIELD Fluor red act orange PIRK wPSI DMK 2024_TB3
-</pre></div>
-</div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The example assumes, that the project has only one protocol. In case your project has more than one protocol, a specific protocol
-can be selected adding the index position of the protocol to the function as well.</p>
-</div>
-<div class="literal-block-wrapper docutils container" id="project-data-tutorial-output-2-2">
-<div class="code-block-caption"><span class="caption-text"><strong>Output:</strong> Information about the selected Project</span><a class="headerlink" href="#project-data-tutorial-output-2-2" title="Link to this code">¶</a></div>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">[{</span><span class="nt">&quot;_protocol_set_&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="nt">&quot;averages&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
-<span class="w">                      </span><span class="nt">&quot;check_battery&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
-<span class="w">                      </span><span class="nt">&quot;do_once&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
-<span class="w">                      </span><span class="nt">&quot;label&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;no_leaf_baseline&quot;</span><span class="p">,</span>
-<span class="w">                      </span><span class="nt">&quot;par_led_start_on_open&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">},</span>
-<span class="w">                     </span><span class="p">{</span><span class="nt">&quot;bleed_correction&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
-<span class="w">                      </span><span class="nt">&quot;do_once&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
-<span class="w">                      </span><span class="nt">&quot;par_led_start_on_close&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">},</span>
-<span class="w">                     </span><span class="p">{</span><span class="nt">&quot;autogain&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">50000</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">50000</span><span class="p">]],</span>
-<span class="w">                      </span><span class="nt">&quot;do_once&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
-<span class="w">                      </span><span class="nt">&quot;e_time&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
-<span class="w">                      </span><span class="nt">&quot;environmental&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[[</span><span class="s2">&quot;light_intensity&quot;</span><span class="p">],</span>
-<span class="w">                                        </span><span class="p">[</span><span class="s2">&quot;temperature_humidity_pressure&quot;</span><span class="p">],</span>
-<span class="w">                                        </span><span class="p">[</span><span class="s2">&quot;temperature_humidity_pressure2&quot;</span><span class="p">],</span>
-<span class="w">                                        </span><span class="p">[</span><span class="s2">&quot;contactless_temp&quot;</span><span class="p">],</span>
-<span class="w">                                        </span><span class="p">[</span><span class="s2">&quot;compass_and_angle&quot;</span><span class="p">]],</span>
-<span class="w">                      </span><span class="nt">&quot;label&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;env&quot;</span><span class="p">},</span>
-<span class="w">                     </span><span class="p">{</span><span class="nt">&quot;detectors&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">],</span>
-<span class="w">                                    </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">],</span>
-<span class="w">                                    </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">],</span>
-<span class="w">                                    </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">],</span>
-<span class="w">                                    </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">]],</span>
-<span class="w">                      </span><span class="nt">&quot;e_time&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
-<span class="w">                      </span><span class="nt">&quot;label&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;PIRK&quot;</span><span class="p">,</span>
-<span class="w">                      </span><span class="nt">&quot;nonpulsed_lights&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">],</span>
-<span class="w">                                           </span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">],</span>
-<span class="w">                                           </span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">],</span>
-<span class="w">                                           </span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">],</span>
-<span class="w">                                           </span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">]],</span>
-<span class="w">                      </span><span class="nt">&quot;nonpulsed_lights_brightness&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[[</span><span class="s2">&quot;@s0&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">],</span>
-<span class="w">                                                      </span><span class="p">[</span><span class="s2">&quot;@s0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;@n1:0&quot;</span><span class="p">],</span>
-<span class="w">                                                      </span><span class="p">[</span><span class="s2">&quot;@s0&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">],</span>
-<span class="w">                                                      </span><span class="p">[</span><span class="s2">&quot;@s0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;@n1:1&quot;</span><span class="p">],</span>
-<span class="w">                                                      </span><span class="p">[</span><span class="s2">&quot;@s0&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">],</span>
-<span class="w">                                                      </span><span class="p">[</span><span class="s2">&quot;@s0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;@n1:2&quot;</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">],</span>
-<span class="w">                                                      </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;@n1:2&quot;</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">],</span>
-<span class="w">                                                      </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;@n1:2&quot;</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">],</span>
-<span class="w">                                                      </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;@n1:2&quot;</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">],</span>
-<span class="w">                                                      </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;@n1:2&quot;</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">],</span>
-<span class="w">                                                      </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;@n1:2&quot;</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">]],</span>
-<span class="w">                      </span><span class="nt">&quot;pre_illumination&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;@s0&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">10000</span><span class="p">],</span>
-<span class="w">                      </span><span class="nt">&quot;protocol_averages&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
-<span class="w">                      </span><span class="nt">&quot;protocol_repeats&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
-<span class="w">                      </span><span class="nt">&quot;pulse_distance&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">1000</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span>
-<span class="w">                                         </span><span class="mi">1000</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span>
-<span class="w">                                         </span><span class="mi">1000</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">],</span>
-<span class="w">                      </span><span class="nt">&quot;pulse_length&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[[</span><span class="s2">&quot;a_d0&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;a_d1&quot;</span><span class="p">],</span>
-<span class="w">                                       </span><span class="p">[</span><span class="s2">&quot;a_d0&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;a_d1&quot;</span><span class="p">],</span>
-<span class="w">                                       </span><span class="p">[</span><span class="s2">&quot;a_d0&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;a_d1&quot;</span><span class="p">],</span>
-<span class="w">                                       </span><span class="p">[</span><span class="s2">&quot;a_d0&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;a_d1&quot;</span><span class="p">],</span>
-<span class="w">                                       </span><span class="p">[</span><span class="s2">&quot;a_d0&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;a_d1&quot;</span><span class="p">],</span>
-<span class="w">                                       </span><span class="p">[</span><span class="s2">&quot;a_d0&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;a_d1&quot;</span><span class="p">],</span>
-<span class="w">                                       </span><span class="p">[</span><span class="s2">&quot;a_d0&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;a_d1&quot;</span><span class="p">],</span>
-<span class="w">                                       </span><span class="p">[</span><span class="s2">&quot;a_d0&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;a_d1&quot;</span><span class="p">],</span>
-<span class="w">                                       </span><span class="p">[</span><span class="s2">&quot;a_d0&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;a_d1&quot;</span><span class="p">],</span>
-<span class="w">                                       </span><span class="p">[</span><span class="s2">&quot;a_d0&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;a_d1&quot;</span><span class="p">],</span>
-<span class="w">                                       </span><span class="p">[</span><span class="s2">&quot;a_d0&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;a_d1&quot;</span><span class="p">],</span>
-<span class="w">                                       </span><span class="p">[</span><span class="s2">&quot;a_d0&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;a_d1&quot;</span><span class="p">],</span>
-<span class="w">                                       </span><span class="p">[</span><span class="s2">&quot;a_d0&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;a_d1&quot;</span><span class="p">],</span>
-<span class="w">                                       </span><span class="p">[</span><span class="s2">&quot;a_d0&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;a_d1&quot;</span><span class="p">],</span>
-<span class="w">                                       </span><span class="p">[</span><span class="s2">&quot;a_d0&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;a_d1&quot;</span><span class="p">],</span>
-<span class="w">                                       </span><span class="p">[</span><span class="s2">&quot;a_d0&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;a_d1&quot;</span><span class="p">],</span>
-<span class="w">                                       </span><span class="p">[</span><span class="s2">&quot;a_d0&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;a_d1&quot;</span><span class="p">]],</span>
-<span class="w">                      </span><span class="nt">&quot;pulsed_lights&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[[</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">],</span>
-<span class="w">                                        </span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">],</span>
-<span class="w">                                        </span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">],</span>
-<span class="w">                                        </span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">],</span>
-<span class="w">                                        </span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">],</span>
-<span class="w">                                        </span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">]],</span>
-<span class="w">                      </span><span class="nt">&quot;pulsed_lights_brightness&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[[</span><span class="s2">&quot;a_b0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;@n4:0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;a_b1&quot;</span><span class="p">],</span>
-<span class="w">                                                   </span><span class="p">[</span><span class="s2">&quot;a_b0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;@n4:0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;a_b1&quot;</span><span class="p">],</span>
-<span class="w">                                                   </span><span class="p">[</span><span class="s2">&quot;a_b0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;@n4:0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;a_b1&quot;</span><span class="p">],</span>
-<span class="w">                                                   </span><span class="p">[</span><span class="s2">&quot;a_b0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;@n4:0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;a_b1&quot;</span><span class="p">],</span>
-<span class="w">                                                   </span><span class="p">[</span><span class="s2">&quot;a_b0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;@n4:0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;a_b1&quot;</span><span class="p">],</span>
-<span class="w">                                                   </span><span class="p">[</span><span class="s2">&quot;a_b0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;@n4:0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;a_b1&quot;</span><span class="p">],</span>
-<span class="w">                                                   </span><span class="p">[</span><span class="s2">&quot;a_b0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;@n4:0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;a_b1&quot;</span><span class="p">],</span>
-<span class="w">                                                   </span><span class="p">[</span><span class="s2">&quot;a_b0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;@n4:0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;a_b1&quot;</span><span class="p">],</span>
-<span class="w">                                                   </span><span class="p">[</span><span class="s2">&quot;a_b0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;@n4:0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;a_b1&quot;</span><span class="p">],</span>
-<span class="w">                                                   </span><span class="p">[</span><span class="s2">&quot;a_b0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;@n4:0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;a_b1&quot;</span><span class="p">],</span>
-<span class="w">                                                   </span><span class="p">[</span><span class="s2">&quot;a_b0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;@n4:0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;a_b1&quot;</span><span class="p">],</span>
-<span class="w">                                                   </span><span class="p">[</span><span class="s2">&quot;a_b0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;@n4:0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;a_b1&quot;</span><span class="p">],</span>
-<span class="w">                                                   </span><span class="p">[</span><span class="s2">&quot;a_b0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;@n4:0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;a_b1&quot;</span><span class="p">],</span>
-<span class="w">                                                   </span><span class="p">[</span><span class="s2">&quot;a_b0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;@n4:0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;a_b1&quot;</span><span class="p">],</span>
-<span class="w">                                                   </span><span class="p">[</span><span class="s2">&quot;a_b0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;@n4:0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;a_b1&quot;</span><span class="p">],</span>
-<span class="w">                                                   </span><span class="p">[</span><span class="s2">&quot;a_b0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;@n4:0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;a_b1&quot;</span><span class="p">],</span>
-<span class="w">                                                   </span><span class="p">[</span><span class="s2">&quot;a_b0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;@n4:0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;a_b1&quot;</span><span class="p">]],</span>
-<span class="w">                      </span><span class="nt">&quot;pulses&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;@n1:4&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;@n1:3&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;@n1:4&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;@n1:3&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;@n1:4&quot;</span><span class="p">,</span>
-<span class="w">                                 </span><span class="s2">&quot;@n1:3&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;@n1:5&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;@n1:3&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;@n1:5&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;@n1:3&quot;</span><span class="p">,</span>
-<span class="w">                                 </span><span class="s2">&quot;@n1:6&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;@n1:3&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;@n1:7&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;@n1:3&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;@n1:7&quot;</span><span class="p">,</span>
-<span class="w">                                 </span><span class="s2">&quot;@n1:3&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;@n1:5&quot;</span><span class="p">]},</span>
-<span class="w">                     </span><span class="p">{</span><span class="nt">&quot;detectors&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[[</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span>
-<span class="w">                      </span><span class="nt">&quot;e_time&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
-<span class="w">                      </span><span class="nt">&quot;label&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;PAM&quot;</span><span class="p">,</span>
-<span class="w">                      </span><span class="nt">&quot;nonpulsed_lights&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">9</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">9</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">9</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">],</span>
-<span class="w">                                           </span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">9</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">9</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">9</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">],</span>
-<span class="w">                                           </span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">9</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">]],</span>
-<span class="w">                      </span><span class="nt">&quot;nonpulsed_lights_brightness&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[[</span><span class="s2">&quot;@s0&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">],</span>
-<span class="w">                                                      </span><span class="p">[</span><span class="s2">&quot;@n2:0&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">2000</span><span class="p">],</span>
-<span class="w">                                                      </span><span class="p">[</span><span class="s2">&quot;@n2:1&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">2000</span><span class="p">],</span>
-<span class="w">                                                      </span><span class="p">[</span><span class="s2">&quot;@n2:2&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">2000</span><span class="p">],</span>
-<span class="w">                                                      </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">-400</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">],</span>
-<span class="w">                                                      </span><span class="p">[</span><span class="s2">&quot;@s0&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">]],</span>
-<span class="w">                      </span><span class="nt">&quot;pre_illumination&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;@s0&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">5000</span><span class="p">],</span>
-<span class="w">                      </span><span class="nt">&quot;protocol_averages&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
-<span class="w">                      </span><span class="nt">&quot;protocol_repeats&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
-<span class="w">                      </span><span class="nt">&quot;pulse_distance&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">1500</span><span class="p">,</span><span class="w"> </span><span class="mi">1500</span><span class="p">,</span><span class="w"> </span><span class="mi">1500</span><span class="p">,</span><span class="w"> </span><span class="mi">1500</span><span class="p">,</span><span class="w"> </span><span class="mi">30000</span><span class="p">,</span><span class="w"> </span><span class="mi">1500</span><span class="p">,</span>
-<span class="w">                                         </span><span class="mi">1500</span><span class="p">],</span>
-<span class="w">                      </span><span class="nt">&quot;pulse_length&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[[</span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;a_d0&quot;</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;a_d0&quot;</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;a_d0&quot;</span><span class="p">],</span>
-<span class="w">                                       </span><span class="p">[</span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;a_d0&quot;</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;a_d0&quot;</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;a_d0&quot;</span><span class="p">],</span>
-<span class="w">                                       </span><span class="p">[</span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;a_d0&quot;</span><span class="p">]],</span>
-<span class="w">                      </span><span class="nt">&quot;pulsed_lights&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[[</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">],</span>
-<span class="w">                                        </span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">]],</span>
-<span class="w">                      </span><span class="nt">&quot;pulsed_lights_brightness&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[[</span><span class="s2">&quot;@n4:0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;a_b0&quot;</span><span class="p">],</span>
-<span class="w">                                                   </span><span class="p">[</span><span class="s2">&quot;@n4:0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;a_b0&quot;</span><span class="p">],</span>
-<span class="w">                                                   </span><span class="p">[</span><span class="s2">&quot;@n4:0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;a_b0&quot;</span><span class="p">],</span>
-<span class="w">                                                   </span><span class="p">[</span><span class="s2">&quot;@n4:0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;a_b0&quot;</span><span class="p">],</span>
-<span class="w">                                                   </span><span class="p">[</span><span class="s2">&quot;@n4:0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;a_b0&quot;</span><span class="p">],</span>
-<span class="w">                                                   </span><span class="p">[</span><span class="s2">&quot;@n4:0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;a_b0&quot;</span><span class="p">],</span>
-<span class="w">                                                   </span><span class="p">[</span><span class="s2">&quot;@n4:0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;a_b0&quot;</span><span class="p">]],</span>
-<span class="w">                      </span><span class="nt">&quot;pulses&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">40</span><span class="p">,</span><span class="w"> </span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">40</span><span class="p">]},</span>
-<span class="w">                     </span><span class="p">{</span><span class="nt">&quot;label&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;spad&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;spad&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">]},</span>
-<span class="w">                     </span><span class="p">{</span><span class="nt">&quot;e_time&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;label&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;finish&quot;</span><span class="p">}],</span>
-<span class="w">  </span><span class="nt">&quot;protocol_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3356</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;set_repeats&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#l0&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;share&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;v_arrays&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[[</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">500</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">500</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span><span class="w"> </span><span class="mi">2000</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">30</span><span class="p">,</span><span class="w"> </span><span class="mi">15</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">40</span><span class="p">,</span><span class="w"> </span><span class="mi">80</span><span class="p">],</span>
-<span class="w">               </span><span class="p">[</span><span class="mi">8000</span><span class="p">,</span><span class="w"> </span><span class="mi">6000</span><span class="p">,</span><span class="w"> </span><span class="mi">4000</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">1000</span><span class="p">,</span><span class="w"> </span><span class="mi">4000</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">800</span><span class="p">]]}]</span>
-</pre></div>
-</div>
-</div>
-</section>
-</section>
-<section id="the-dataframes-df">
-<h3>The Dataframes (<code class="docutils literal notranslate"><span class="pre">df</span></code>)<a class="headerlink" href="#the-dataframes-df" title="Link to this heading">¶</a></h3>
-<p>When collecting the protocol information, the protocol name was stored in the <code class="docutils literal notranslate"><span class="pre">protocol_name</span></code> variable. Now we can use the name to access the dataframe
-by the protocol name from the <code class="docutils literal notranslate"><span class="pre">df</span></code> dictionary. In the example, there is only one dataframe inside the <code class="docutils literal notranslate"><span class="pre">df</span></code> dictionary.</p>
-<div class="literal-block-wrapper docutils container" id="project-data-tutorial-3">
-<div class="code-block-caption"><span class="caption-text">Get a dataframe and it’s information</span><a class="headerlink" href="#project-data-tutorial-3" title="Link to this code">¶</a></div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">## Get Protocol&#39;s dataframe with its information</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">protocol_name</span><span class="p">]</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;verbose&#39;</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-<div class="literal-block-wrapper docutils container" id="project-data-tutorial-output-3">
-<div class="code-block-caption"><span class="caption-text"><strong>Output:</strong> Information about the selected dataframe</span><a class="headerlink" href="#project-data-tutorial-output-3" title="Link to this code">¶</a></div>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
-Int64Index: 399 entries, 0 to 398
-Data columns (total 14 columns):
-#   Column       Non-Null Count  Dtype 
----  ------       --------------  ----- 
-0   datum_id     399 non-null    object
-1   time         399 non-null    object
-2   user_id      399 non-null    object
-3   device_id    399 non-null    object
-4   status       399 non-null    object
-5   notes        399 non-null    object
-6   longitude    399 non-null    object
-7   latitude     399 non-null    object
-8   Plant?       399 non-null    object
-9   Replicate #  399 non-null    object
-10  set_repeats  399 non-null    object
-11  v_arrays     399 non-null    object
-12  ri           399 non-null    object
-13  set          399 non-null    object
-dtypes: object(14)
-memory usage: 46.8+ KB
-</pre></div>
-</div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Most of the time, there is only one dataframe inside the <code class="docutils literal notranslate"><span class="pre">df</span></code> dictionary. But Projects can have multiple Protocols as well as data
-that was added later on (“Custom Data”), which would be stored in a separate dataframe. You can use the code below to quickly check if
-there are multiple dataframes in your <code class="docutils literal notranslate"><span class="pre">df</span></code> dictionary.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span> <span class="n">df</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</section>
-<section id="full-example">
-<h3>Full Example<a class="headerlink" href="#full-example" title="Link to this heading">¶</a></h3>
-<p>To summarize, this is the full example to download MultispeQ data from a Project, view the Project’s information,
-get the Protocol’s name and code and access the protocols dataframe.</p>
-<div class="literal-block-wrapper docutils container" id="project-data-tutorial-4">
-<div class="code-block-caption"><span class="caption-text">examples/python/project-data.py</span><a class="headerlink" href="#project-data-tutorial-4" title="Link to this code">¶</a></div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Download Project Data from PhotosynQ, Inc.</span>
-
-<span class="sd">A local copy of the data frames and the Project Information</span>
-<span class="sd">gets saved in the same directory as the file executed by default.</span>
-<span class="sd">&quot;&quot;&quot;</span>
-
-<span class="kn">import</span> <span class="nn">jii_multispeq.project</span> <span class="k">as</span> <span class="nn">project</span>
-<span class="kn">import</span> <span class="nn">jii_multispeq.protocol</span> <span class="k">as</span> <span class="nn">protocol</span>
-
-<span class="n">email</span> <span class="o">=</span> <span class="s2">&quot;your-email@domain.com&quot;</span>
-<span class="n">projectId</span> <span class="o">=</span> <span class="mi">29652</span>
-
-<span class="c1">## Get the project data and information</span>
-<span class="n">df</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">email</span><span class="p">,</span> <span class="n">projectId</span><span class="p">)</span>
-
-<span class="c1">## Print the project information</span>
-<span class="n">project</span><span class="o">.</span><span class="n">print_info</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
-
-<span class="c1">## Get Protocol Name</span>
-<span class="n">protocol_name</span> <span class="o">=</span>  <span class="n">protocol</span><span class="o">.</span><span class="n">get_protocol_name</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">protocol_name</span><span class="p">)</span>
-
-<span class="c1">## Get Protocol Code</span>
-<span class="n">protocol_code</span> <span class="o">=</span> <span class="n">protocol</span><span class="o">.</span><span class="n">get_protocol</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">protocol_code</span><span class="p">)</span>
-
-<span class="c1">## Get Protocol&#39;s dataframe with its information</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">protocol_name</span><span class="p">]</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;verbose&#39;</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-<p>Download Example: <a class="reference download internal" download="" href="_downloads/442b8abc5acf588ea88fa07e13175db7/project-data.py"><code class="xref download docutils literal notranslate"><span class="pre">python</span> <span class="pre">script</span> <span class="pre">[.py]</span></code></a> <a class="reference download internal" download="" href="_downloads/4776a5d11fb35cd297e4f7425c535ae2/project-data.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Jupyter</span> <span class="pre">Notebook</span> <span class="pre">[.ipynb]</span></code></a></p>
-</section>
 </section>
 </section>
 
@@ -632,12 +291,12 @@ get the Protocol’s name and code and access the protocols dataframe.</p>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="working-with-protocols.html">
+          <a class="next-page" href="projects.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Working with Protocols</div>
+                <div class="title">Online - Projects</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
@@ -683,16 +342,8 @@ get the Protocol’s name and code and access the protocols dataframe.</p>
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Getting Started</a><ul>
-<li><a class="reference internal" href="#project-data-information">Project Data &amp; Information</a><ul>
-<li><a class="reference internal" href="#the-project-info">The Project (<code class="docutils literal notranslate"><span class="pre">info</span></code>)</a><ul>
-<li><a class="reference internal" href="#project-information">Project Information</a></li>
-<li><a class="reference internal" href="#protocol-information">Protocol Information</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#the-dataframes-df">The Dataframes (<code class="docutils literal notranslate"><span class="pre">df</span></code>)</a></li>
-<li><a class="reference internal" href="#full-example">Full Example</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#projects-online">Projects (Online)</a></li>
+<li><a class="reference internal" href="#measurements-local">Measurements (Local)</a></li>
 </ul>
 </li>
 </ul>
@@ -704,7 +355,7 @@ get the Protocol’s name and code and access the protocols dataframe.</p>
       
     </aside>
   </div>
-</div><script src="_static/documentation_options.js?v=01f34227"></script>
+</div><script src="_static/documentation_options.js?v=e3a6060d"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/furo.js?v=5fa4622c"></script>

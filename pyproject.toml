@@ -24,6 +24,7 @@ dependencies = [
   "numpy",
   "photosynq_py @ git+https://github.com/Photosynq/PhotosynQ-Python.git",
   "tabulate",
+  "pyserial"
 ]
 
 [project.optional-dependencies]

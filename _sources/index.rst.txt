@@ -26,6 +26,7 @@ serial port to take measurements and analyze the returned raw data.
    projects
    protocols
    measurements
+   porting
 
 .. toctree::
    :hidden:

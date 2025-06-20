@@ -1,0 +1,871 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="./">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Analysis" href="modules/analysis.html" /><link rel="prev" title="Measurements" href="measurements.html" />
+
+    <link rel="shortcut icon" href="_static/favicon.png"/><!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
+        <title>Code Porting - JII - MultispeQ</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=354aac6f" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=302659d7" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">JII - MultispeQ</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="_static/jan-ingenhousz-institute-logo.webp" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">JII - MultispeQ</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projects.html">Online - Projects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="protocols.html">Protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="measurements.html">Measurements</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Code Porting</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules/analysis.html">Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/device.html">Device</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/measurement.html">Measurement</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/project.html">Project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/protocol.html">Protocol</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Resources</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://www.jan-ingenhousz-institute.org">Jan Ingenhousz Institute</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/Jan-IngenHousz-Institute">GitHub</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="_sources/porting.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="code-porting">
+<h1>Code Porting<a class="headerlink" href="#code-porting" title="Link to this heading">¶</a></h1>
+<p>The PhotosynQ platform provides numerous measurement protocols for use with MultispeQ devices. Each protocol contains JSON-encoded instructions that define how the MultispeQ performs measurements and can be used directly without modification.</p>
+<p>However, analyzing the data stream returned by MultispeQ devices requires custom scripts or macros. Since the PhotosynQ platform uses JavaScript for data analysis, these scripts must be converted to Python for use in Python-based workflows.</p>
+<p>Beyond standard JavaScript functions, PhotosynQ provides specialized helper functions for common operations and mathematical computations not available in JavaScript’s native Math object. When porting code to Python, these helper functions can typically be replaced with native Python functions or established libraries like NumPy and SciPy.</p>
+<p>The following reference lists will assist in converting JavaScript analysis code to Python, particularly when working with PhotosynQ’s custom <a class="reference external" href="https://github.com/Photosynq/helpers">helper functions</a>.</p>
+<section id="array-functions">
+<h2>Array Functions<a class="headerlink" href="#array-functions" title="Link to this heading">¶</a></h2>
+<p>MultispeQ devices record fluorescence and absorbance traces as one-dimensional arrays of numerical values. When measurements involve multiple LEDs, the recorded data from all LEDs is combined into a single array where values cycle through each LED in sequence. For example, if LEDs 1, 2, and 3 are used during measurement, the resulting trace array follows the pattern [1,2,3,1,2,3,…], with each position representing data from the corresponding LED.</p>
+<p>The functions listed below simplify the process of extracting individual LED traces from these combined arrays. For additional details on trace data structure and analysis, consult the <a class="reference external" href="help.photosynq.com">PhotosynQ Help documentation</a>.</p>
+<div class="table-wrapper colwidths-given docutils container" id="id2">
+<table class="docutils align-default" id="id2">
+<caption><span class="caption-text">JavaScript Helper Functions</span><a class="headerlink" href="#id2" title="Link to this table">¶</a></caption>
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 30.0%" />
+<col style="width: 40.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>JavaScript</p></th>
+<th class="head"><p>Python</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="code highlight javascript docutils literal highlight-javascript"><span class="nx">ArrayNth</span><span class="p">(</span><span class="nx">array</span><span class="p">,</span><span class="w"> </span><span class="nx">size</span><span class="p">,</span><span class="w"> </span><span class="nx">start</span><span class="p">);</span></code></p></td>
+<td><p><code class="code highlight python docutils literal highlight-python"><span class="n">array</span><span class="p">[</span><span class="n">start</span><span class="p">::</span><span class="n">step</span><span class="p">]</span></code></p></td>
+<td><p>Extract every n-th element from an array.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="code highlight javascript docutils literal highlight-javascript"><span class="nx">ArrayRange</span><span class="p">(</span><span class="nx">start</span><span class="p">,</span><span class="w"> </span><span class="nx">stop</span><span class="p">,</span><span class="w"> </span><span class="nx">step</span><span class="p">);</span></code></p></td>
+<td><p><code class="code highlight python docutils literal highlight-python"><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span></code></p></td>
+<td><p>Generate an array of arithmetic progressions. <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.arange.html">numpy.arange</a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="code highlight javascript docutils literal highlight-javascript"><span class="nx">ArrayRange</span><span class="p">(</span><span class="nx">start</span><span class="p">,</span><span class="w"> </span><span class="nx">stop</span><span class="p">,</span><span class="w"> </span><span class="nx">step</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;x2&quot;</span><span class="p">);</span></code></p></td>
+<td><p><code class="code highlight python docutils literal highlight-python"><span class="p">[</span><span class="n">x</span> <span class="o">**</span> <span class="mi">2</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">,</span> <span class="n">step</span><span class="p">)]</span></code></p></td>
+<td><p>Generate a progression and transform numbers. (e.g. <cite>x²</cite>  )</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="code highlight javascript docutils literal highlight-javascript"><span class="nx">ArrayUnZip</span><span class="p">(</span><span class="nx">array</span><span class="p">);</span></code></p></td>
+<td><p><code class="code highlight python docutils literal highlight-python"><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">array</span><span class="p">)</span></code> </p>
+<p><code class="code highlight python docutils literal highlight-python"><span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">y</span><span class="p">)}</span></code></p>
+</td>
+<td><p>This function transforms an array of [x, y] pairs into an object with an array of x and an array of y values. <a class="reference external" href="https://docs.python.org/3/library/functions.html#zip">zip</a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="code highlight javascript docutils literal highlight-javascript"><span class="nx">ArrayZip</span><span class="p">(</span><span class="nx">array_x</span><span class="p">,</span><span class="w"> </span><span class="nx">array_y</span><span class="p">);</span></code></p></td>
+<td><p><code class="code highlight python docutils literal highlight-python"><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">array_x</span><span class="p">,</span> <span class="n">array_y</span><span class="p">)]</span></code></p></td>
+<td><p>This function transforms two lists into one list of x,y pairs</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="mathmatical-functions">
+<h2>Mathmatical Functions<a class="headerlink" href="#mathmatical-functions" title="Link to this heading">¶</a></h2>
+<div class="table-wrapper colwidths-given docutils container" id="id3">
+<table class="docutils align-default" id="id3">
+<caption><span class="caption-text">JavaScript Helper Functions</span><a class="headerlink" href="#id3" title="Link to this table">¶</a></caption>
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 30.0%" />
+<col style="width: 40.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>JavaScript</p></th>
+<th class="head"><p>Python</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="code highlight javascript docutils literal highlight-javascript"><span class="nx">MathLN</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span></code></p></td>
+<td><p><code class="code highlight python docutils literal highlight-python"><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></code></p></td>
+<td><p>Returns the natural logarithm (base E) of a number <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.log.html">numpy.log</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="code highlight javascript docutils literal highlight-javascript"><span class="nx">MathLOG</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span></code></p></td>
+<td><p><code class="code highlight python docutils literal highlight-python"><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></code></p></td>
+<td><p>Returns the logarithm (base 10) of a number <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.log10.html">numpy.log10</a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="code highlight javascript docutils literal highlight-javascript"><span class="nx">MathMAX</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span></code></p></td>
+<td><p><code class="code highlight python docutils literal highlight-python"><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">array</span><span class="p">)</span></code></p></td>
+<td><p>Get the maximum value from an array of numbers <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.max.html">numpy.max</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="code highlight javascript docutils literal highlight-javascript"><span class="nx">MathMEAN</span><span class="p">(</span><span class="nx">array</span><span class="p">);</span></code></p></td>
+<td><p><code class="code highlight python docutils literal highlight-python"><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">array</span><span class="p">)</span></code></p></td>
+<td><p>Calculate the mean from an array of numbers <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.mean.html">numpy.mean</a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="code highlight javascript docutils literal highlight-javascript"><span class="nx">MathMEDIAN</span><span class="p">(</span><span class="nx">array</span><span class="p">);</span></code></p></td>
+<td><p><code class="code highlight python docutils literal highlight-python"><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">array</span><span class="p">)</span></code></p></td>
+<td><p>Calculate the median from an array of numbers <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.median.html">numpy.median</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="code highlight javascript docutils literal highlight-javascript"><span class="nx">MathMIN</span><span class="p">(</span><span class="nx">array</span><span class="p">);</span></code></p></td>
+<td><p><code class="code highlight python docutils literal highlight-python"><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">array</span><span class="p">)</span></code></p></td>
+<td><p>Get the minimum value from an array of numbers <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.min.html">numpy.min</a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="code highlight javascript docutils literal highlight-javascript"><span class="nx">MathROUND</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span><span class="w"> </span><span class="nx">decimals</span><span class="p">);</span></code></p></td>
+<td><p><code class="code highlight python docutils literal highlight-python"><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">decimals</span><span class="p">)</span></code></p></td>
+<td><p>Round a given number (float) to a set number of decimals <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.round.html">numpy.round</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="code highlight javascript docutils literal highlight-javascript"><span class="nx">MathSTDERR</span><span class="p">(</span><span class="nx">array</span><span class="p">);</span></code></p></td>
+<td><p><code class="code highlight python docutils literal highlight-python"><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">array</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">array</span><span class="p">))</span></code></p></td>
+<td><p>Calculate the standard error from an array of numbers</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="code highlight javascript docutils literal highlight-javascript"><span class="nx">MathSTDEV</span><span class="p">(</span><span class="nx">array</span><span class="p">);</span></code></p></td>
+<td><p><code class="code highlight python docutils literal highlight-python"><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">array</span><span class="p">)</span></code></p></td>
+<td><p>Calculate the standard deviation (population) from an array of numbers <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.std.html">numpy.std</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="code highlight javascript docutils literal highlight-javascript"><span class="nx">MathSTDEVS</span><span class="p">(</span><span class="nx">array</span><span class="p">);</span></code></p></td>
+<td><p><code class="code highlight python docutils literal highlight-python"><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></code></p></td>
+<td><p>Calculate the standard deviation (sample) from an array of numbers <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.std.html">numpy.std</a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="code highlight javascript docutils literal highlight-javascript"><span class="nx">MathSUM</span><span class="p">(</span><span class="nx">array</span><span class="p">);</span></code></p></td>
+<td><p><code class="code highlight python docutils literal highlight-python"><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">array</span><span class="p">)</span></code></p></td>
+<td><p>Calculate the sum from an array of numbers <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.sum.html">numpy.sum</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="code highlight javascript docutils literal highlight-javascript"><span class="nx">MathVARIANCE</span><span class="p">(</span><span class="nx">array</span><span class="p">);</span></code></p></td>
+<td><p><code class="code highlight python docutils literal highlight-python"><span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></code></p></td>
+<td><p>Calculate the variance from an array of numbers <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.var.html">numpy.var</a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="regression-functions">
+<h2>Regression Functions<a class="headerlink" href="#regression-functions" title="Link to this heading">¶</a></h2>
+<div class="table-wrapper colwidths-given docutils container" id="id4">
+<table class="docutils align-default" id="id4">
+<caption><span class="caption-text"><strong>MathEXPINVREG</strong>, Fit exponential decay to Y = Y0 + Ae^(-x/t). A and t are the fitted variables, the provided input array needs to be an array of x,y pairs.</span><a class="headerlink" href="#id4" title="Link to this table">¶</a></caption>
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Language</p></th>
+<th class="head"><p>Code</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>JavaScript</p></td>
+<td><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">MathEXPINVREG</span><span class="p">(</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">[</span><span class="nx">x1</span><span class="p">,</span><span class="nx">y1</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="nx">x2</span><span class="p">,</span><span class="nx">y2</span><span class="p">],</span><span class="w"> </span><span class="p">...,</span><span class="w"> </span><span class="p">[</span><span class="nx">xn</span><span class="p">,</span><span class="nx">yn</span><span class="p">]</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">);</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>Python</p></td>
+<td><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">curve_fit</span>
+
+<span class="k">def</span> <span class="nf">exponential_decay</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">asymptote</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Exponential decay function: y = A * exp(x * t) + asymptote&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">A</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="n">asymptote</span>
+
+<span class="c1"># Fit the curve</span>
+<span class="n">popt</span><span class="p">,</span> <span class="n">pcov</span> <span class="o">=</span> <span class="n">curve_fit</span><span class="p">(</span><span class="n">exponential_decay</span><span class="p">,</span> <span class="n">x_data</span><span class="p">,</span> <span class="n">y_data</span><span class="p">,</span>
+                      <span class="n">p0</span><span class="o">=</span><span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>  <span class="c1"># Initial parameter guesses</span>
+
+<span class="n">A</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">asymptote</span> <span class="o">=</span> <span class="n">popt</span>
+
+<span class="c1"># Generate fitted points</span>
+<span class="n">y_fitted</span> <span class="o">=</span> <span class="n">exponential_decay</span><span class="p">(</span><span class="n">x_data</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">asymptote</span><span class="p">)</span>
+
+<span class="c1"># Calculate R-squared</span>
+<span class="n">ss_res</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">y_data</span> <span class="o">-</span> <span class="n">y_fitted</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">ss_tot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">y_data</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">y_data</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">r_squared</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">ss_res</span> <span class="o">/</span> <span class="n">ss_tot</span><span class="p">)</span>
+
+<span class="c1"># Results equivalent to your JS function</span>
+<span class="n">results</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;parameters&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">A</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">asymptote</span><span class="p">],</span>
+    <span class="s1">&#39;fitted_points&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">x_data</span><span class="p">,</span> <span class="n">y_fitted</span><span class="p">)),</span>
+    <span class="s1">&#39;r_squared&#39;</span><span class="p">:</span> <span class="n">r_squared</span><span class="p">,</span>
+    <span class="s1">&#39;lifetime&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="n">t</span><span class="p">,</span>
+    <span class="s1">&#39;slope&#39;</span><span class="p">:</span> <span class="o">-</span><span class="n">A</span> <span class="o">*</span> <span class="n">t</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="table-wrapper colwidths-given docutils container" id="id5">
+<table class="docutils align-default" id="id5">
+<caption><span class="caption-text"><strong>MathLINREG</strong>, Function to perform a simple linear regression (y = mx +b), returning slope, y-intercent, correlation coefficient (R) and coefficient of determination (R²).</span><a class="headerlink" href="#id5" title="Link to this table">¶</a></caption>
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Language</p></th>
+<th class="head"><p>Code</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>JavaScript</p></td>
+<td><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">MathLINREG</span><span class="p">([</span><span class="nx">x1</span><span class="p">,</span><span class="w"> </span><span class="nx">x2</span><span class="p">,</span><span class="w"> </span><span class="p">...,</span><span class="w"> </span><span class="nx">xn</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="nx">y1</span><span class="p">,</span><span class="w"> </span><span class="nx">y2</span><span class="p">,</span><span class="w"> </span><span class="p">...,</span><span class="w"> </span><span class="nx">yn</span><span class="p">]);</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>Python</p></td>
+<td><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">scipy</span> <span class="kn">import</span> <span class="nn">stats</span>
+<span class="n">slope</span><span class="p">,</span> <span class="n">intercept</span><span class="p">,</span> <span class="n">r_value</span><span class="p">,</span> <span class="n">p_value</span><span class="p">,</span> <span class="n">std_err</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">linregress</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="table-wrapper colwidths-given docutils container" id="id6">
+<table class="docutils align-default" id="id6">
+<caption><span class="caption-text"><strong>MathMULTREG</strong>, Multiple Linear Regression</span><a class="headerlink" href="#id6" title="Link to this table">¶</a></caption>
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Language</p></th>
+<th class="head"><p>Code</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>JavaScript</p></td>
+<td><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">MathMULTREG</span><span class="p">(</span><span class="w"> </span><span class="p">[</span>
+<span class="w">  </span><span class="p">[</span><span class="w"> </span><span class="p">[</span><span class="nx">x1</span><span class="p">,</span><span class="nx">y1</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="nx">x2</span><span class="p">,</span><span class="nx">y2</span><span class="p">],</span><span class="w"> </span><span class="p">...,</span><span class="w"> </span><span class="p">[</span><span class="nx">xn</span><span class="p">,</span><span class="nx">yn</span><span class="p">]</span><span class="w"> </span><span class="p">],</span>
+<span class="w">  </span><span class="p">[</span><span class="w"> </span><span class="p">[</span><span class="nx">x1</span><span class="p">,</span><span class="nx">y1</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="nx">x2</span><span class="p">,</span><span class="nx">y2</span><span class="p">],</span><span class="w"> </span><span class="p">...,</span><span class="w"> </span><span class="p">[</span><span class="nx">xn</span><span class="p">,</span><span class="nx">yn</span><span class="p">]</span><span class="w"> </span><span class="p">]</span>
+<span class="p">]);</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>Python</p></td>
+<td><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LinearRegression</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">r2_score</span>
+
+<span class="c1"># Extract features (X) and target (y)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">point</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">point</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)]</span> <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">input_raw</span><span class="p">])</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">point</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">input_raw</span><span class="p">])</span>
+
+<span class="c1"># Fit the model</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="c1"># Get predictions</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="c1"># Results equivalent to your JS function</span>
+<span class="n">results</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;rsquared&#39;</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span>  <span class="c1"># or r2_score(y, y_pred)</span>
+    <span class="s1">&#39;slopes&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">model</span><span class="o">.</span><span class="n">intercept_</span><span class="p">]</span> <span class="o">+</span> <span class="n">model</span><span class="o">.</span><span class="n">coef_</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>  <span class="c1"># [intercept, coef1, coef2, ...]</span>
+    <span class="s1">&#39;points&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">y_pred</span><span class="o">.</span><span class="n">tolist</span><span class="p">()]</span>  <span class="c1"># [features, predictions]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="table-wrapper colwidths-given docutils container" id="id7">
+<table class="docutils align-default" id="id7">
+<caption><span class="caption-text"><strong>MathPOLYREG</strong>, Polynomial fit to y = a0 + a1x + a2x^2 + a3x^3….</span><a class="headerlink" href="#id7" title="Link to this table">¶</a></caption>
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Language</p></th>
+<th class="head"><p>Code</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>JavaScript</p></td>
+<td><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">MathPOLYREG</span><span class="p">(</span><span class="w"> </span><span class="p">[</span>
+<span class="w">  </span><span class="p">[</span><span class="w"> </span><span class="p">[</span><span class="nx">x1</span><span class="p">,</span><span class="nx">y1</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="nx">x2</span><span class="p">,</span><span class="nx">y2</span><span class="p">],</span><span class="w"> </span><span class="p">...,</span><span class="w"> </span><span class="p">[</span><span class="nx">xn</span><span class="p">,</span><span class="nx">yn</span><span class="p">]</span><span class="w"> </span><span class="p">],</span>
+<span class="w">  </span><span class="p">[</span><span class="w"> </span><span class="p">[</span><span class="nx">x1</span><span class="p">,</span><span class="nx">y1</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="nx">x2</span><span class="p">,</span><span class="nx">y2</span><span class="p">],</span><span class="w"> </span><span class="p">...,</span><span class="w"> </span><span class="p">[</span><span class="nx">xn</span><span class="p">,</span><span class="nx">yn</span><span class="p">]</span><span class="w"> </span><span class="p">]</span>
+<span class="p">],</span><span class="w"> </span><span class="nx">degree</span><span class="w"> </span><span class="p">);</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>Python</p></td>
+<td><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># Fit polynomial of specified degree</span>
+<span class="n">coefficients</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="n">x_data</span><span class="p">,</span> <span class="n">y_data</span><span class="p">,</span> <span class="n">degree</span><span class="p">)</span>
+
+<span class="c1"># Generate fitted points</span>
+<span class="n">y_fitted</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyval</span><span class="p">(</span><span class="n">coefficients</span><span class="p">,</span> <span class="n">x_data</span><span class="p">)</span>
+
+<span class="c1"># Calculate error (mean squared error)</span>
+<span class="n">error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">y_fitted</span> <span class="o">-</span> <span class="n">y_data</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y_data</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Results equivalent to your JS function</span>
+<span class="n">results</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;slopes&#39;</span><span class="p">:</span> <span class="n">coefficients</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>  <span class="c1"># [a_n, a_(n-1), ..., a_1, a_0]</span>
+    <span class="s1">&#39;points&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">x_data</span><span class="p">,</span> <span class="n">y_fitted</span><span class="p">)),</span>
+    <span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="n">error</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="table-wrapper colwidths-given docutils container" id="id8">
+<table class="docutils align-default" id="id8">
+<caption><span class="caption-text"><strong>NonLinearRegression</strong></span><a class="headerlink" href="#id8" title="Link to this table">¶</a></caption>
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Language</p></th>
+<th class="head"><p>Code</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>JavaScript <a class="reference external" href="https://help.photosynq.com/macros/provided-functions.html#nonlinearregression">Source</a></p></td>
+<td><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">NonLinearRegression</span><span class="p">(</span>
+<span class="w">  </span><span class="p">[</span>
+<span class="w">    </span><span class="p">[</span><span class="nx">x1</span><span class="p">,</span><span class="w"> </span><span class="nx">y1</span><span class="p">],</span>
+<span class="w">    </span><span class="p">[</span><span class="nx">x2</span><span class="p">,</span><span class="w"> </span><span class="nx">y2</span><span class="p">],</span>
+<span class="w">    </span><span class="p">...,</span>
+<span class="w">    </span><span class="p">[</span><span class="nx">xn</span><span class="p">,</span><span class="w"> </span><span class="nx">yn</span><span class="p">]</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">equation</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;b + a * e(- x / c)&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nx">initial</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="nx">a</span><span class="p">,</span><span class="w"> </span><span class="nx">b</span><span class="p">,</span><span class="w"> </span><span class="nx">c</span><span class="p">]</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">);</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>Python <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html#scipy.optimize.curve_fit">scipy.optimize.curve_fit</a></p></td>
+<td><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">curve_fit</span>
+
+<span class="k">def</span> <span class="nf">exp_func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
+  <span class="k">return</span> <span class="n">b</span> <span class="o">+</span> <span class="n">a</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span> <span class="o">/</span> <span class="n">c</span><span class="p">)</span>
+
+<span class="k">try</span><span class="p">:</span>
+ <span class="c1"># Fit the data</span>
+ <span class="n">popt</span><span class="p">,</span> <span class="n">pcov</span> <span class="o">=</span> <span class="n">curve_fit</span><span class="p">(</span><span class="n">exp_func</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">p0</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+ <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">popt</span>
+ <span class="o">...</span>
+
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+  <span class="k">pass</span>  <span class="c1"># Or handle the error as needed</span>
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="trace-transformation">
+<h2>Trace Transformation<a class="headerlink" href="#trace-transformation" title="Link to this heading">¶</a></h2>
+<p>If you have two traces of equal length or a trace and a number, the helper function <cite>TransformTrace</cite> allows to transform a given trace (array) based on the second input (array or number) and the provided function.</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Two arrays</span>
+<span class="nx">TransformTrace</span><span class="p">(</span><span class="s2">&quot;function&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">array_1</span><span class="p">,</span><span class="w"> </span><span class="nx">array_2</span><span class="p">);</span>
+
+<span class="c1">// One array and one number</span>
+<span class="nx">TransformTrace</span><span class="p">(</span><span class="s2">&quot;function&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">array_1</span><span class="p">,</span><span class="w"> </span><span class="nx">number</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Using Python this can be achieved using native code or the <cite>numpy</cite> module. The code provided shows examples based on the functions available in JavaScript.</p>
+<div class="table-wrapper colwidths-given docutils container" id="id9">
+<table class="docutils align-default" id="id9">
+<caption><span class="caption-text">TransformTrace, The function transforms a given array by providing a second same length array, or a single number.</span><a class="headerlink" href="#id9" title="Link to this table">¶</a></caption>
+<colgroup>
+<col style="width: 10.0%" />
+<col style="width: 50.0%" />
+<col style="width: 40.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Python Equivalent</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><cite>add</cite> or <cite>+</cite></p></td>
+<td><p><code class="code highlight python docutils literal highlight-python"><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">array_1</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">array_2</span><span class="p">)</span></code> </p>
+<p><code class="code highlight python docutils literal highlight-python"><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">array_1</span><span class="p">)</span> <span class="o">+</span> <span class="n">number</span></code></p>
+</td>
+<td><p>Add array or number to array</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>subtract</cite> or <cite>-</cite></p></td>
+<td><p><code class="code highlight python docutils literal highlight-python"><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">array_1</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">array_2</span><span class="p">)</span></code> </p>
+<p><code class="code highlight python docutils literal highlight-python"><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">array_1</span><span class="p">)</span> <span class="o">-</span> <span class="n">number</span></code></p>
+</td>
+<td><p>Subtract array or number from array</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>multiply</cite> or <cite>*</cite></p></td>
+<td><p><code class="code highlight python docutils literal highlight-python"><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">array_1</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">array_2</span><span class="p">)</span></code> </p>
+<p><code class="code highlight python docutils literal highlight-python"><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">array_1</span><span class="p">)</span> <span class="o">*</span> <span class="n">number</span></code></p>
+</td>
+<td><p>Multiply array with array or number</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>divide</cite> or <cite>/</cite></p></td>
+<td><p><code class="code highlight python docutils literal highlight-python"><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">array_1</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">array_2</span><span class="p">)</span></code> </p>
+<p><code class="code highlight python docutils literal highlight-python"><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">array_1</span><span class="p">)</span> <span class="o">/</span> <span class="n">number</span></code></p>
+</td>
+<td><p>Divide array by array or number</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>normToMin</cite></p></td>
+<td><p><code class="code highlight python docutils literal highlight-python"><span class="p">[</span><span class="n">x</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">array</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">array</span><span class="p">]</span></code></p></td>
+<td><p>Normalize to minimum</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>normToMax</cite></p></td>
+<td><p><code class="code highlight python docutils literal highlight-python"><span class="p">[</span><span class="n">x</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">array</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">array</span><span class="p">]</span></code></p></td>
+<td><p>Normalize to maximum</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>normToRange</cite></p></td>
+<td><p><code class="code highlight python docutils literal highlight-python"><span class="p">[(</span><span class="n">x</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">array</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">array</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">array</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">array</span><span class="p">]</span></code></p></td>
+<td><p>Normalize to the min/max range of the array</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>normToIdx</cite></p></td>
+<td><p><code class="code highlight python docutils literal highlight-python"><span class="p">[</span><span class="n">x</span><span class="o">/</span><span class="n">array</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">array</span><span class="p">]</span></code></p></td>
+<td><p>Normalize to number found at a specific position (index) in array</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>normToVal</cite></p></td>
+<td><p><code class="code highlight python docutils literal highlight-python"><span class="p">[</span><span class="n">x</span><span class="o">/</span><span class="n">value</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">array</span><span class="p">]</span></code></p></td>
+<td><p>Normalize to defined value</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>ma</cite></p></td>
+<td><p><code class="code highlight python docutils literal highlight-python"><span class="n">window_size</span><span class="o">=</span><span class="mi">3</span></code> </p>
+<p><code class="code highlight python docutils literal highlight-python"><span class="n">np</span><span class="o">.</span><span class="n">convolve</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">window_size</span><span class="p">)</span><span class="o">/</span><span class="n">window_size</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;valid&#39;</span><span class="p">)</span></code></p>
+</td>
+<td><p>Smoothing using a moving average with a selectable window size</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>sgf</cite></p></td>
+<td><p><code class="code highlight python docutils literal highlight-python"><span class="kn">from</span> <span class="nn">scipy.signal</span> <span class="kn">import</span> <span class="n">savgol_filter</span></code> </p>
+<p><code class="code highlight python docutils literal highlight-python"><span class="n">savgol_filter</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">window_length</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">polyorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span></code></p>
+</td>
+<td><p>Smoothing using a Savitzky-Golay Filter <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.savgol_filter.html#scipy.signal.savgol_filter">SciPy.signal</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>abs</cite></p></td>
+<td><p><code class="code highlight python docutils literal highlight-python"><span class="n">I0</span> <span class="o">=</span> <span class="n">array</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></code> </p>
+<p><code class="code highlight python docutils literal highlight-python"><span class="p">[</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">x</span><span class="o">/</span><span class="n">array</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">array</span><span class="p">]</span></code></p>
+</td>
+<td><p>Calculate the absorbance using the first value as I0 or a defined I0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="data-lookup">
+<h2>Data Lookup<a class="headerlink" href="#data-lookup" title="Link to this heading">¶</a></h2>
+<p>Function to look up data from sub protocols are implemented in this library and can be used the same way as their JavaScript equivalent.
+They are part of the <a class="reference internal" href="modules/analysis.html#module-jii_multispeq.analysis.basic" title="jii_multispeq.analysis.basic"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jii_multispeq.analysis.basic</span></code></a> module.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">## import the analysis module</span>
+<span class="kn">import</span> <span class="nn">jii_multispeq.analysis</span> <span class="k">as</span> <span class="nn">analysis</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">analysis</span><span class="o">.</span><span class="n">GetIndexByLabel</span><span class="p">()</span>
+
+<span class="c1">## import a specific function (similar to JavaScript code)</span>
+<span class="kn">import</span> <span class="nn">jii_multispeq.analysis.GetIndexByLabel</span> <span class="k">as</span> <span class="nn">GetIndexByLabel</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">GetIndexByLabel</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="table-wrapper docutils container" id="id10">
+<table class="docutils align-default" id="id10">
+<caption><span class="caption-text">Data Lookup Functions</span><a class="headerlink" href="#id10" title="Link to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="modules/analysis.html#jii_multispeq.analysis.basic.GetIndexByLabel" title="jii_multispeq.analysis.basic.GetIndexByLabel"><code class="xref py py-func docutils literal notranslate"><span class="pre">GetIndexByLabel</span></code></a></p></td>
+<td><p>Generate a protocol lookup table for a protocol set</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="modules/analysis.html#jii_multispeq.analysis.basic.GetLabelLookup" title="jii_multispeq.analysis.basic.GetLabelLookup"><code class="xref py py-func docutils literal notranslate"><span class="pre">GetLabelLookup</span></code></a></p></td>
+<td><p>Returns the protocol from within the protocol set matching the provided label</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="modules/analysis.html#jii_multispeq.analysis.basic.GetProtocolByLabel" title="jii_multispeq.analysis.basic.GetProtocolByLabel"><code class="xref py py-func docutils literal notranslate"><span class="pre">GetProtocolByLabel</span></code></a></p></td>
+<td><p>Find the positions for protocols within a protocol set matching the provided label</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="native-javascript-math-functions">
+<h2>Native JavaScript Math Functions<a class="headerlink" href="#native-javascript-math-functions" title="Link to this heading">¶</a></h2>
+<p>The native JavaScript Math Object provides methods for mathematical constants that can be used with Macros on the PhotosynQ platform and don’t require any additional import of libraries or functions.
+See <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math">JavaScript Math</a> for available methods and constants.</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Math Object as used in a PhotosynQ Macro</span>
+<span class="nb">Math</span><span class="p">.</span><span class="o">&lt;</span><span class="nx">name</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</section>
+<section id="native-javascript-functions">
+<h2>Native JavaScript Functions<a class="headerlink" href="#native-javascript-functions" title="Link to this heading">¶</a></h2>
+<p>Native JavaScript functions to manipulate arrays and their Python equivalent.</p>
+<div class="table-wrapper colwidths-given docutils container" id="id11">
+<table class="docutils align-default" id="id11">
+<caption><span class="caption-text">Native JavaScript Functions</span><a class="headerlink" href="#id11" title="Link to this table">¶</a></caption>
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 30.0%" />
+<col style="width: 40.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>JavaScript</p></th>
+<th class="head"><p>Python</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="code highlight javascript docutils literal highlight-javascript"><span class="nx">array</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="nx">start</span><span class="p">,</span><span class="nx">end</span><span class="p">);</span></code></p></td>
+<td><p><code class="code highlight python docutils literal highlight-python"><span class="n">array</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">]</span></code></p></td>
+<td><p>Copy part of an array</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="notifications">
+<h2>Notifications<a class="headerlink" href="#notifications" title="Link to this heading">¶</a></h2>
+<p>The functions <code class="code highlight javascript docutils literal highlight-javascript"><span class="nx">info</span><span class="p">(</span><span class="s2">&quot;Message&quot;</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="nx">output</span><span class="p">)</span></code>, <code class="code highlight javascript docutils literal highlight-javascript"><span class="nx">warning</span><span class="p">(</span><span class="s2">&quot;Message&quot;</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="nx">output</span><span class="p">)</span></code>, and <code class="code highlight javascript docutils literal highlight-javascript"><span class="nx">danger</span><span class="p">(</span><span class="s2">&quot;Message&quot;</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="nx">output</span><span class="p">)</span></code> add messages to the output of the macro by category. Currently they are not supported and can be replaced by <code class="code highlight python docutils literal highlight-python"><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Message&quot;</span><span class="p">)</span></code> to output issues.</p>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="modules/analysis.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Analysis</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="measurements.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Measurements</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2025 - Jan Ingenhousz Institute
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Code Porting</a><ul>
+<li><a class="reference internal" href="#array-functions">Array Functions</a></li>
+<li><a class="reference internal" href="#mathmatical-functions">Mathmatical Functions</a></li>
+<li><a class="reference internal" href="#regression-functions">Regression Functions</a></li>
+<li><a class="reference internal" href="#trace-transformation">Trace Transformation</a></li>
+<li><a class="reference internal" href="#data-lookup">Data Lookup</a></li>
+<li><a class="reference internal" href="#native-javascript-math-functions">Native JavaScript Math Functions</a></li>
+<li><a class="reference internal" href="#native-javascript-functions">Native JavaScript Functions</a></li>
+<li><a class="reference internal" href="#notifications">Notifications</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=e3a6060d"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=5fa4622c"></script>
+    </body>
+</html>

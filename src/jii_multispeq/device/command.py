@@ -182,8 +182,8 @@ def send_command ( connection=None, command="", verbose=False ):
 
 ## List of commands
 CMDS = [
-  "1053", "battery", "compiled", "configure_bluetooth", "device_info", "digital_write",
-  "expr", "flow_calibration_set_point", "flow_calibration_setting",
+  "1000", "1007", "1053", "battery", "compiled", "configure_bluetooth", "calibrate_magnetometer", "device_info",
+  "digital_write", "expr", "flow_calibration_set_point", "flow_calibration_setting",
   "flow_calibration_value", "flow_off", "flow_v", "get_flow",  "hall", "hello", "indicate",
   "indicate_off", "light", "memory", "on_5v", "p2p", "par_led", "print_all", "print_date",
   "print_magnetometer", "print_magnetometer_bias", "print_memory","pulse", "readonce",
@@ -194,6 +194,6 @@ CMDS = [
   "set_detector3_offset", "set_detector4_offset", "set_device_info", "set_energy_save_time",
   "set_flow", "set_led_par", "set_magnetometer", "set_magnetometer_bias", "set_op",
   "set_open_closed_positions", "set_par", "set_serial", "set_shutdown_time", "set_thickness",
-  "set_thickness_quick", "set_user_defined", "single_pulse", "sleep", "start_watchdog",
-  "stop_watchdog", "tcs_length", "temp", "testmode", "upgrade", "usb"
+  "set_thickness_quick", "set_user_defined", "single_pulse", "sleep", "spm", "start_watchdog",
+  "stop_watchdog", "tcs_length", "temp", "testmode", "upgrade", "usb", "usb_on", "xRb"
 ]

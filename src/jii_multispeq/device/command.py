@@ -30,31 +30,12 @@ def is_connected ( connection=None ):
     return False
 
   # Send handshake phrase
-  connection.write( "hello".encode() )
-
-  # Send linebreak to start command
-  connection.write( "\r\n".encode() )
-
-  # Data string
-  data = ""
-
-  # Read port
-  while True:
-    read = connection.readline()
-    
-    # Decode and append received data
-    data += read.decode()
-
-    # Stop reading when linebreak received
-    if "\n" in read.decode():
-      break
-
-  # Remove checksum if available
-  data, crc32 = strip_crc32( data )
+  data = send_command( connection, "hello" )
 
   connection.timeout = None
 
-  if data == 'MultispeQ Ready':
+  # Test if phrase MultispeQ Ready was received
+  if data.strip() == 'MultispeQ Ready':
     print("MultispeQ found")
     return True
   

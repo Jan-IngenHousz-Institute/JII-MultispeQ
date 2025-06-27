@@ -18,3 +18,11 @@ Commands
    :members:
    :undoc-members:
    :show-inheritance:
+
+Settings
+--------
+
+.. automodule:: jii_multispeq.device.settings
+   :members:
+   :undoc-members:
+   :show-inheritance:

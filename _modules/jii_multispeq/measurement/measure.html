@@ -210,11 +210,11 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Modules</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules/analysis.html">Analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/device.html">Device</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/protocol.html">Protocol</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/measurement.html">Measurement</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/project.html">Project</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules/protocol.html">Protocol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/analysis.html">Analysis</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Resources</span></p>
 <ul>
@@ -261,6 +261,7 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
@@ -326,13 +327,19 @@
 
   <span class="c1"># Check if the protocol is a dictionary and stringify</span>
   <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span> <span class="n">protocol</span><span class="p">,</span> <span class="p">(</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="p">):</span>
-    <span class="n">protocol</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span> <span class="n">protocol</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">protocol</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span> <span class="n">protocol</span><span class="p">,</span> <span class="n">separators</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="s1">&#39;:&#39;</span><span class="p">))</span>
+
+  <span class="c1"># Flush input buffer</span>
+  <span class="n">connection</span><span class="o">.</span><span class="n">reset_input_buffer</span><span class="p">()</span>
 
   <span class="c1"># Write the protocol to the Instrument</span>
   <span class="n">connection</span><span class="o">.</span><span class="n">write</span><span class="p">(</span> <span class="n">protocol</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span> <span class="p">)</span>
 
   <span class="c1"># Send linebreak to start protocol</span>
   <span class="n">connection</span><span class="o">.</span><span class="n">write</span><span class="p">(</span> <span class="s2">&quot;</span><span class="se">\r\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span> <span class="p">)</span>
+
+  <span class="c1"># Ensure data is actually sent before reading</span>
+  <span class="n">connection</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
 
   <span class="c1"># Data string</span>
   <span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
@@ -342,11 +349,19 @@
 
   <span class="c1"># Read port</span>
   <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-    <span class="n">data</span> <span class="o">+=</span> <span class="n">connection</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+    <span class="c1"># Check if data is in the buffer</span>
+    <span class="k">if</span> <span class="n">connection</span><span class="o">.</span><span class="n">in_waiting</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+      
+      <span class="c1"># Read bytes in buffer</span>
+      <span class="n">chunk</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">connection</span><span class="o">.</span><span class="n">in_waiting</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+      <span class="n">data</span> <span class="o">+=</span> <span class="n">chunk</span>
     
-    <span class="c1"># Stop reading when linebreak received</span>
-    <span class="k">if</span> <span class="n">prog</span><span class="o">.</span><span class="n">search</span><span class="p">(</span> <span class="n">data</span> <span class="p">):</span>
-      <span class="k">break</span>
+      <span class="c1"># Stop reading when linebreak received</span>
+      <span class="k">if</span> <span class="n">prog</span><span class="o">.</span><span class="n">search</span><span class="p">(</span> <span class="n">data</span> <span class="p">):</span>
+        <span class="k">break</span>
+
+    <span class="c1"># Small delay to prevent excessive CPU usage</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
 
   <span class="c1"># Remove linebreaks and split crc and data</span>
   <span class="n">data</span><span class="p">,</span> <span class="n">crc32</span> <span class="o">=</span> <span class="n">strip_crc32</span><span class="p">(</span> <span class="n">data</span> <span class="p">)</span>

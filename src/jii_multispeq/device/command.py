@@ -45,7 +45,7 @@ def is_connected ( connection=None ):
   
   return False
 
-def info ( connection=None, verbose=True ):
+def info ( connection=None, verbose=True, include_config=False ):
   """
   Get the MultispeQ instrument information.
 
@@ -53,11 +53,21 @@ def info ( connection=None, verbose=True ):
   :type connection: serial
   :param verbose: Print out data (default: True)
   :type verbose: bool
+  :param include_config: Include device config in printed information (default: False)
+  :type include_config: bool
 
   :return: Instrument Information
   :rtype: dict
 
+  :raises ValueError: if verbose is not a boolean
+  :raises ValueError: if baudrate is not a boolean
   """
+
+  if not isinstance(verbose, bool):
+    raise ValueError("Input for verbose needs to be True or False")
+
+  if not isinstance(include_config, bool):
+    raise ValueError("Input for include_config needs to be True or False")
 
   # Send command
   data = send_command( connection, "1007", False)
@@ -92,9 +102,10 @@ def info ( connection=None, verbose=True ):
     out = tabulate( data["settings"].items(), tablefmt="simple" )
     print(out)
 
-    print("\n## Configuration")
-    out = tabulate( data["configuration"].items(), tablefmt="simple")
-    print(out)
+    if include_config:
+      print("\n## Configuration")
+      out = tabulate( data["configuration"].items(), tablefmt="simple")
+      print(out)
 
   # Reset timeout
   connection.timeout = None
@@ -112,7 +123,6 @@ def get_memory ( connection=None, verbose=False ):
 
   :return: Instrument memory
   :rtype: dict
-
   """
 
   # Send command

@@ -148,7 +148,7 @@ def get_memory ( connection=None, verbose=False ):
 
   return data
 
-def send_command ( connection=None, command="", verbose=False ):
+def send_command ( connection=None, command="", verbose=False, is_silent=False ):
   """
   Send a command to a MultispeQ device.
 
@@ -156,6 +156,10 @@ def send_command ( connection=None, command="", verbose=False ):
   :type connection: serial
   :param command: Command
   :type command: str
+  :param verbose: Print output (default: False)
+  :type verbose: bool
+  :param is_silent: Command will not return a response (default: False)
+  :type is_silent: bool
   
   :return: Instrument output
   :rtype: str
@@ -171,6 +175,13 @@ def send_command ( connection=None, command="", verbose=False ):
   if not isinstance(command, str):
     raise ValueError("Provided command needs to be a string")
   
+  if not isinstance(verbose, bool):
+    raise ValueError("Input for verbose needs to be True or False")
+
+  if not isinstance(verbose, bool):
+    raise ValueError("Input for is_silent needs to be True or False")
+  
+
   # Check if the connection is open
   if not connection.is_open:
     raise Exception("Connection not open, connect device or port locked by other application")
@@ -201,6 +212,10 @@ def send_command ( connection=None, command="", verbose=False ):
   # Read port
   data = ""
   chunk = ""
+
+  if is_silent:
+    return data
+
   while True:
 
     if connection.in_waiting > 0:

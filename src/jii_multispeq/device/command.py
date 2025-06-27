@@ -41,45 +41,62 @@ def is_connected ( connection=None ):
   
   return False
 
-def get_memory ( connection=None, verbose=False ):
+def info ( connection=None, verbose=True ):
   """
-  Get the MultispeQ setting saved in its memory (EEPROM).
+  Get the MultispeQ instrument information.
 
   :param connection: Connection to the MultispeQ.
   :type connection: serial
+  :param verbose: Print out data (default: True)
+  :type verbose: bool
 
-  :return: Instrument data and CRC32 checksum
-  :rtype: dict, str
+  :return: Instrument Information
+  :rtype: dict
 
   """
 
-  # Set timeout to 0.01 
-  connection.timeout = .01
+  # Send command
+  data = send_command( connection, "1007", False)
 
-  # Send handshake phrase
-  connection.write( "print_memory".encode() )
+  # Sanitize quotes
+  data = sanitize( data )
 
-  # Send linebreak to start command
-  connection.write( "\r\n".encode() )
+  try:
+    data = json.loads(data)
+    pass
+  except json.JSONDecodeError as e:
+    print(e)
+    pass
 
-  # Data string
-  data = ""
+  # Display Information
+  if verbose and isinstance(data, dict):
+    name = "## %s (%s) " % (data["device_name"], data["device_version"])
 
-  # Regular expression to test for CRC32 checksum
-  prog = re.compile( REGEX_RETURN_END )
+    print( name )
+    print( "-" * (len(name)-1) )
 
-  # Read port
-  while True:
-    read = connection.readline()
-    
-    # Decode and append received data
-    data += read.decode()
+    tab = [
+      ['ID', data["device_id"]],
+      ['Firmware', data["device_firmware"]],
+      ['Battery [%]', data["device_battery"]]
+    ]
 
-    # Stop reading when linebreak received
-    if prog.search(data):
-      break
+    out = tabulate( tab , tablefmt="plain")
+    print(out)
 
-  data, crc32 = strip_crc32( data )
+    print("\n## Settings")
+    out = tabulate( data["settings"].items(), tablefmt="simple" )
+    print(out)
+
+    print("\n## Configuration")
+    out = tabulate( data["configuration"].items(), tablefmt="simple")
+    print(out)
+
+  # Reset timeout
+  connection.timeout = None
+
+  return data
+
 def get_memory ( connection=None, verbose=False ):
   """
   Get the MultispeQ setting saved in its memory (EEPROM).

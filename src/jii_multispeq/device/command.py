@@ -4,11 +4,12 @@ Commands are raw communication with the MultispeQ device.
 
 import json
 import re
+import time
 import warnings
 from tabulate import tabulate
 from jii_multispeq.measurement.checksum import strip_crc32
 from jii_multispeq.measurement.sanitize import sanitize
-from jii_multispeq.constants import REGEX_RETURN_END
+from jii_multispeq.constants import REGEX_RETURN_END, REGEX_RETURN_END_CLI
 
 def is_connected ( connection=None ):
   """
@@ -144,7 +145,7 @@ def send_command ( connection=None, command="", verbose=False ):
   
   # Check if the connection is open
   if not connection.is_open:
-    raise Exception("Connection not open, connect device to port first")
+    raise Exception("Connection not open, connect device or port locked by other application")
 
   # Set timeout to 0.01 
   connection.timeout = .01
@@ -152,9 +153,13 @@ def send_command ( connection=None, command="", verbose=False ):
   # Check if it is a known command
   prog = re.compile( r"|".join(CMDS) )
   if not prog.search( command ):
-    warnings.warn("Unknown command, it might not work.")
+    warnings.warn("Unknown command, device or script might get stuck.")
 
+  prog_cli = re.compile( REGEX_RETURN_END_CLI, re.MULTILINE )
   prog = re.compile( REGEX_RETURN_END )
+
+  # Flush input buffer
+  connection.reset_input_buffer()
 
   # Send command
   connection.write( command.encode() )
@@ -162,18 +167,30 @@ def send_command ( connection=None, command="", verbose=False ):
   # Send linebreak to start command
   connection.write( "\r\n".encode() )
 
+  # Ensure data is actually sent before reading
+  connection.flush()
+
   # Read port
   data = ""
+  chunk = ""
   while True:
-    read = connection.readline().decode()
-    data += read
 
-    if verbose is True and (read != ""):
-      print(read)
+    if connection.in_waiting > 0:
+      chunk = connection.read(connection.in_waiting).decode()
+      data += chunk
 
-    # Stop reading when linebreak received
-    if prog.search(data):
-      break
+      if verbose is True:
+        print(chunk)
+
+      # Stop reading when linebreak received
+      if prog.search(chunk) or prog_cli.search(chunk):
+
+        # Brief wait to ensure no more data is coming
+        time.sleep(0.05)
+            
+        # Final check - if no more data waiting, we're done
+        if connection.in_waiting == 0:
+          break
 
   # Reset timeout
   connection.timeout = None

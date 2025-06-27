@@ -33,11 +33,11 @@ serial port to take measurements and analyze the returned raw data.
    :maxdepth: 2
    :caption: Modules
 
-   modules/analysis
    modules/device
+   modules/protocol
    modules/measurement
    modules/project
-   modules/protocol
+   modules/analysis
 
 .. toctree::
    :maxdepth: 1

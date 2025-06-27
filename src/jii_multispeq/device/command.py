@@ -80,6 +80,22 @@ def get_memory ( connection=None, verbose=False ):
       break
 
   data, crc32 = strip_crc32( data )
+def get_memory ( connection=None, verbose=False ):
+  """
+  Get the MultispeQ setting saved in its memory (EEPROM).
+
+  :param connection: Connection to the MultispeQ.
+  :type connection: serial
+  :param verbose: Print out data (default: False)
+  :type verbose: bool
+
+  :return: Instrument memory
+  :rtype: dict
+
+  """
+
+  # Send command
+  data = send_command( connection, "print_memory", False)
 
   # Sanitize quotes
   data = sanitize( data )
@@ -99,7 +115,7 @@ def get_memory ( connection=None, verbose=False ):
   # Reset timeout
   connection.timeout = None
 
-  return data, crc32
+  return data
 
 def send_command ( connection=None, command="", verbose=False ):
   """

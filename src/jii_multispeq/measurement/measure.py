@@ -4,6 +4,7 @@ a serial port. The returned data can be analyzed and viewed.
 """
 
 import datetime
+import time
 import json
 import re
 import warnings
@@ -67,13 +68,19 @@ def measure ( connection=None, protocol=[{}], filename='auto', notes="", directo
 
   # Check if the protocol is a dictionary and stringify
   if isinstance( protocol, (dict, list) ):
-    protocol = json.dumps( protocol, indent=None)
+    protocol = json.dumps( protocol, separators=(',', ':'))
+
+  # Flush input buffer
+  connection.reset_input_buffer()
 
   # Write the protocol to the Instrument
   connection.write( protocol.encode() )
 
   # Send linebreak to start protocol
   connection.write( "\r\n".encode() )
+
+  # Ensure data is actually sent before reading
+  connection.flush()
 
   # Data string
   data = ""
@@ -83,11 +90,19 @@ def measure ( connection=None, protocol=[{}], filename='auto', notes="", directo
 
   # Read port
   while True:
-    data += connection.readline().decode()
+    # Check if data is in the buffer
+    if connection.in_waiting > 0:
+      
+      # Read bytes in buffer
+      chunk = connection.read(connection.in_waiting).decode()
+      data += chunk
     
-    # Stop reading when linebreak received
-    if prog.search( data ):
-      break
+      # Stop reading when linebreak received
+      if prog.search( data ):
+        break
+
+    # Small delay to prevent excessive CPU usage
+    time.sleep(0.01)
 
   # Remove linebreaks and split crc and data
   data, crc32 = strip_crc32( data )

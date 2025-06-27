@@ -21,7 +21,11 @@ def is_connected ( connection=None ):
   :return: True if a MultispeQ is connected, otherwise False
   :rtype: bool
 
+  :raises ValueError: if no connection is defined
   """
+
+  if connection is None:
+    raise ValueError("A connection for the MultispeQ needs to be defined")
 
   # Set timeout to 0.01 
   connection.timeout = .01

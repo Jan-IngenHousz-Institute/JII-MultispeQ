@@ -12,7 +12,13 @@ import hashlib
 import os
 import pandas as pd
 
-from jii_multispeq.constants import REGEX_RETURN_END
+try:
+  from ipywidgets import IntProgress
+  from IPython.display import display
+  import time
+except ImportError as e:
+    pass  # module doesn't exist, deal with it.
+
 from jii_multispeq.constants import REGEX_RETURN_END, REGEX_RETURN_USER_INPUT
 from jii_multispeq.measurement.sanitize import sanitize
 
@@ -20,7 +26,7 @@ from tabulate import tabulate
 
 from jii_multispeq.measurement.checksum import strip_crc32
 
-def measure ( connection=None, protocol=[{}], filename='auto', notes="", directory="./local/" ):
+def measure ( connection=None, protocol=[{}], filename='auto', notes="", directory="./local/", progressbar=True ):
   """
   Take a measurement using a MultispeQ connected via a serial connection (USB or Bluetooth).
 
@@ -34,6 +40,8 @@ def measure ( connection=None, protocol=[{}], filename='auto', notes="", directo
   :type notes: str
   :param directory: Directory the measurement is saved in. Default directory is "local".
   :type directory: str
+  :param progressbar: Display progress bar. Default setting is True.
+  :type directory: bool
 
   :return: The MultispeQ data is returned on success, otherwise None.
   :rtype: str
@@ -87,7 +95,27 @@ def measure ( connection=None, protocol=[{}], filename='auto', notes="", directo
   data = ""
 
   # Regular expression to test for CRC32 checksum
-  prog = re.compile( REGEX_RETURN_END, re.M | re.I )
+  str_end = re.compile( REGEX_RETURN_END, re.M | re.I )
+
+  # Regular expression to test for protocol breaks for user input
+  str_input = re.compile( REGEX_RETURN_USER_INPUT, re.I )
+
+  # Add progress bar
+  f = None
+  if progressbar:
+    try:
+      p_max_count = count_sub_protocols(protocol)
+      f = IntProgress(
+        min=0,
+        max=p_max_count, 
+        description='Loading:',
+        bar_style='', # 'success', 'info', 'warning', 'danger' or ''
+        style={'bar_color': 'rgb(67,134,134)'},
+        orientation='horizontal'
+      ) # instantiate the bar
+      display(f) # display the bar
+    except ImportError as e:
+      pass
 
   # Read port
   while True:
@@ -115,9 +143,15 @@ def measure ( connection=None, protocol=[{}], filename='auto', notes="", directo
         # Send data to device 
         connection.write( ( "%s+" % user_input).encode() )
 
+      # Test if chunk was a sub-protocol
+      if f is not None:
+        f.value = f.value + 1
     
       # Stop reading when linebreak received
-      if prog.search( data ):
+      if str_end.search( chunk ):
+        if f is not None:
+          f.value = p_max_count
+          f.description = "Done"
         break
 
     # Small delay to prevent excessive CPU usage
@@ -322,3 +356,53 @@ def to_df ( data=None, append=None ):
   df = pd.DataFrame( data )
 
   return df
+
+
+def count_sub_protocols(protocol = None):
+  length = None
+  try:
+    if not isinstance(protocol, (dict,list) ):
+      protocol = json.loads(protocol)
+  except:
+    return length
+
+  if len(protocol) > 0:
+    pIdx = 0
+    protocol_count = []
+    if "_protocol_set_" in protocol[pIdx]:
+      ## Get the minimum Protocol length
+      length = len(protocol[0]["_protocol_set_"])
+
+      ## Check for v_arrays
+      v_arrays = None
+      if "v_arrays" in protocol[pIdx]:
+        v_arrays = protocol[pIdx]["v_arrays"]
+
+      ## Check for set_repeats
+      set_repeats = 1
+      if "set_repeats" in protocol[pIdx]:
+        set_repeats = protocol[pIdx]["set_repeats"]
+
+        ## Check if repeats are a variable referencing v_arrays
+        if isinstance(set_repeats, str) and set_repeats.startswith('#l') and v_arrays is not None:
+          array_index = int(set_repeats[2:])
+          set_repeats = len(v_arrays[array_index])
+
+      ## Test if sub-protocols have protocol_repeats
+      for sp in protocol[pIdx]["_protocol_set_"]:
+        if "do_once" in sp:
+          protocol_count.append(1)
+        if "protocol_repeats" in sp:
+
+          p_repeats = sp["protocol_repeats"]
+          ## Check if repeats are a variable referencing v_arrays
+          if isinstance(p_repeats, str) and p_repeats.startswith('#l') and v_arrays is not None:
+            array_index = int(p_repeats[2:])
+            p_repeats = len(v_arrays[array_index])
+
+          protocol_count.append(p_repeats * set_repeats)
+        else:
+          protocol_count.append(1)
+
+    length = sum(protocol_count)
+  return length

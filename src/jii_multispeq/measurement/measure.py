@@ -13,6 +13,7 @@ import os
 import pandas as pd
 
 from jii_multispeq.constants import REGEX_RETURN_END
+from jii_multispeq.constants import REGEX_RETURN_END, REGEX_RETURN_USER_INPUT
 from jii_multispeq.measurement.sanitize import sanitize
 
 from tabulate import tabulate
@@ -96,6 +97,24 @@ def measure ( connection=None, protocol=[{}], filename='auto', notes="", directo
       # Read bytes in buffer
       chunk = connection.read(connection.in_waiting).decode()
       data += chunk
+
+      # Check if data stream is interrupted for user input
+      if str_input.search( data ):
+        input_match = str_input.search( data )
+        input_action, input_message = input_match.groups()
+
+        # Show input dialog triggered by protocol command alert, etc. (legacy)
+        try:
+          user_input = input( "%s (%s)" % ( input_message, input_action ) )
+        except:
+          # Send empty string to have device continue
+          user_input = "Warning: No user input available."
+          print(user_input)
+          pass
+
+        # Send data to device 
+        connection.write( ( "%s+" % user_input).encode() )
+
     
       # Stop reading when linebreak received
       if prog.search( data ):

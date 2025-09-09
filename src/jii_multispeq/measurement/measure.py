@@ -251,15 +251,17 @@ def analyze ( data=None, fn=None ):
       if isinstance( data['sample'], list ) and len(data['sample']) > 0:
 
         ## Now check if the first element in the sample list is a list as well that has an element
-        # if isinstance( data['sample'][0], list ) and len(data['sample'][0]) > 0:
+        if isinstance( data['sample'][0], list ) and len(data['sample'][0]) > 0:
           
-          ## Seems like it is the standard format
-          # output = fn( data['sample'][0][0] )
-          
-          ## TODO: Not sure if we should add data back or how we address it...
-          # And the raw data
-          # for key in data['sample'][0][0].keys():
-          #   output[key] = data['sample'][0][0].get(key, None)
+          ## Seems like it is the legacy format
+          ## The data gets flattened to match the new format
+          tmp = []
+          for item in data['sample']:
+            if isinstance(item, list):
+              tmp.extend(item)
+            else:
+              tmp.append(item)
+          data['sample'] = tmp
         
         output = fn( data['sample'][0] )
 

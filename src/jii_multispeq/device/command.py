@@ -148,7 +148,7 @@ def get_memory ( connection=None, verbose=False ):
 
   return data
 
-def send_command ( connection=None, command="", verbose=False, is_silent=False ):
+def send_command ( connection=None, command="", verbose=False, is_silent=False, timeout=2.0 ):
   """
   Send a command to a MultispeQ device.
 
@@ -160,6 +160,8 @@ def send_command ( connection=None, command="", verbose=False, is_silent=False )
   :type verbose: bool
   :param is_silent: Command will not return a response (default: False)
   :type is_silent: bool
+  :param timeout: Maximum time to wait for response in seconds (default: 2.0)
+  :type timeout: float
   
   :return: Instrument output
   :rtype: str
@@ -167,6 +169,7 @@ def send_command ( connection=None, command="", verbose=False, is_silent=False )
   :raises ValueError: if no connection is defined
   :raises ValueError: if command is not provided as a string
   :raises Exception: if connection is not open or device connected
+  :raises TimeoutError: if no response received within timeout period
   """
 
   if connection is None:
@@ -178,13 +181,16 @@ def send_command ( connection=None, command="", verbose=False, is_silent=False )
   if not isinstance(verbose, bool):
     raise ValueError("Input for verbose needs to be True or False")
 
-  if not isinstance(verbose, bool):
+  if not isinstance(is_silent, bool):
     raise ValueError("Input for is_silent needs to be True or False")
   
 
   # Check if the connection is open
   if not connection.is_open:
     raise Exception("Connection not open, connect device or port locked by other application")
+
+  # Store original timeout to restore later
+  original_timeout = connection.timeout
 
   # Set timeout to 0.01 
   connection.timeout = .01
@@ -212,6 +218,7 @@ def send_command ( connection=None, command="", verbose=False, is_silent=False )
   # Read port
   data = ""
   chunk = ""
+  start_time = time.time()
 
   if is_silent:
     return data
@@ -235,12 +242,20 @@ def send_command ( connection=None, command="", verbose=False, is_silent=False )
         if connection.in_waiting == 0:
           break
 
+    elapsed_time = time.time() - start_time
+
+    if elapsed_time > timeout and len(data) == 0:
+      raise TimeoutError(f"No response received within {timeout} seconds")
+
+    if elapsed_time > timeout and len(data) > 0:
+      break
+
   # Reset timeout
   connection.timeout = None
 
   return data
 
-## List of commands
+## List of known commands
 CMDS = [
   "1000", "1007", "1053", "battery", "compiled", "configure_bluetooth", "calibrate_magnetometer", "device_info",
   "digital_write", "expr", "flow_calibration_set_point", "flow_calibration_setting",

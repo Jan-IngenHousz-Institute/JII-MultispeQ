@@ -24,11 +24,12 @@ dependencies = [
   "numpy",
   "photosynq_py @ git+https://github.com/Photosynq/PhotosynQ-Python.git",
   "tabulate",
-  "pyserial"
+  "pyserial",
+  "ipywidgets"
 ]
 
 [project.optional-dependencies]
-docs = ["sphinx", "sphinx-rtd-theme", "myst-parser"]
+docs = ["sphinx", "sphinx-rtd-theme", "myst-parser", "toml"]
 
 [project.urls]
 Source = "https://github.com/Jan-IngenHousz-Institute/JII-MultispeQ"

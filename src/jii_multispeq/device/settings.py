@@ -185,7 +185,7 @@ def power_off(connection):
   send_command( connection, command="sleep", verbose=True, is_silent=True )
 
 
-def check_caliq_connection(connection):
+def check_caliq_connection(connection, verbose=False):
   """
   Check if the CaliQ and Instrument are properly communicating.
     
@@ -194,7 +194,9 @@ def check_caliq_connection(connection):
 
   :return: None
   """
-  data = send_command( connection, command="xRb+128+", verbose=True )
+  data = send_command( connection, command="xRb+128+", verbose=verbose )
 
-  if data.strip() == '0':
+  if data.strip() == '1':
     print('CaliQ device connected')
+  else:
+    print('No CaliQ device detected')

@@ -19,17 +19,29 @@ classifiers = [
   "Programming Language :: Python :: 3",
 ]
 dependencies = [
-  "requests",
-  "pandas",
-  "numpy",
+  "requests>=2.32",
+  "pandas>=1.4",
+  "numpy>=1.22",
   "photosynq_py @ git+https://github.com/Photosynq/PhotosynQ-Python.git",
-  "tabulate",
-  "pyserial",
-  "ipywidgets"
+  "tabulate>=0.9",
+  "pyserial>=3.5",
+  "ipywidgets>=7.6",
 ]
 
 [project.optional-dependencies]
-docs = ["sphinx", "sphinx-rtd-theme", "myst-parser", "toml"]
+docs = [
+  "sphinx>=7.2,<8.0",
+  "furo>=2023.9",
+  "myst-parser>=3.0",
+  "matplotlib>=3.8",
+  "tabulate>=0.9",
+  "toml>=0.10",
+  "sphinx-copybutton>=0.5",
+  "sphinxcontrib-mermaid>=1.0",
+  "sphinxext-opengraph>=0.9",
+  "sphinx-toolbox>=4.0"
+]
+
 
 [project.urls]
 Source = "https://github.com/Jan-IngenHousz-Institute/JII-MultispeQ"

@@ -6,10 +6,11 @@
 import os
 import sys
 import toml
-from setuptools_scm import get_version
+# from setuptools_scm import get_version
 # from importlib.metadata import version as get_version
+from datetime import datetime
 
-sys.path.insert(0, os.path.abspath('../../src/jii_multispeq'))
+sys.path.insert(0, os.path.abspath('../..'))
 
 config = toml.load("../../pyproject.toml")
 
@@ -17,7 +18,7 @@ config = toml.load("../../pyproject.toml")
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = config["tool"]["sphinx"]["project"]
-copyright = "%Y - "  + config["tool"]["sphinx"]["copyright"]
+copyright = "%s - %s" % (datetime.now().year, config["tool"]["sphinx"]["copyright"])
 author = config["tool"]["sphinx"]["author"]
 # release = get_version(root=os.path.dirname(__file__), relative_to=__file__)
 # release = get_version(root='../../', relative_to=__file__)

@@ -5,12 +5,14 @@ Establish serial communication with MultispeQ device.
 import serial
 from tabulate import tabulate
 import serial.tools.list_ports as list_ports
+import re
+from jii_multispeq.device.command import is_connected
 
 def connect ( port=None, baudrate=115200, timeout=None ):
   """
   Connect a MultspeQ device to a serial port.
 
-  :param port: Port the MultisepQ is connected to.
+  :param port: Port the MultisepQ is connected to (use "_auto_" to try to connect automatically).
   :type port: str
   :param baudrate: Set the baudrate. Default is 115,200.
   :type baudrate: int
@@ -38,8 +40,24 @@ def connect ( port=None, baudrate=115200, timeout=None ):
 
   if not timeout is None and not isinstance(timeout, float):
     raise ValueError("Timeout needs to be defined as a float")
+  
+  if port == "_auto_":
+    for p in list_ports.comports():
+      if re.search(r'COM[0-9]{1,3}|\/dev\/cu\.usb*|\/dev\/tty[A-Za-z]*', p.device):
+        try:
+          print('Try', p.device)
+          connection = serial.Serial( port=p.device, baudrate=baudrate, timeout=timeout )
+          if connection.is_open and is_connected(connection):
+            return connection
+          else:
+            connection.close()
+        except:
+          connection.close()
+          pass
+    raise serial.SerialException("No Device found")
 
-  connection = serial.Serial( port=port, baudrate=baudrate, timeout=timeout )
+  else:
+    connection = serial.Serial( port=port, baudrate=baudrate, timeout=timeout )
 
   if not connection.is_open:
     raise serial.SerialException("Device not connected")
